@@ -20,7 +20,7 @@ SKYDIVE_AGENT_LISTEN=${SKYDIVE_AGENT_LISTEN:-"127.0.0.1:8081"}
 SKYDIVE_CONFIG_FILE=${SKYDIVE_CONFIG_FILE:-"/tmp/skydive.yaml"}
 
 # List of agent probes to be used by the agent 
-SKYDIVE_AGENT_PROBES=${SKYDIVE_AGENT_PROBES:-"netlink netns"}
+SKYDIVE_AGENT_PROBES=${SKYDIVE_AGENT_PROBES:-"netlink netns ovsdb"}
 
 # Remote port for ovsdb server.
 OVSDB_REMOTE_PORT=6640
@@ -59,7 +59,7 @@ function join {
 }
 
 function get_probes_for_config {
-   printf "%s" "$(join '    -' '' $SKYDIVE_AGENT_PROBES)";
+   printf "%s" "$(join '      -' '' $SKYDIVE_AGENT_PROBES)";
 }
 
 function configure_skydive {
@@ -68,8 +68,10 @@ analyzer:
   listen: $SKYDIVE_ANALYZER_LISTEN
 
 agent:
+  analyzers: $SKYDIVE_ANALYZER_LISTEN
   listen: $SKYDIVE_AGENT_LISTEN
-  probes:
+  topology:
+    probes:
 $(get_probes_for_config)
 
 ovs:
