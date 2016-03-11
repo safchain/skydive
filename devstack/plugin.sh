@@ -34,7 +34,9 @@ function install_go {
    fi
 
    if [ ! -d $GOROOT ]; then
-       mkdir -p $GOROOT
+       sudo mkdir -p $GOROOT
+       safe_chown -R $STACK_USER $GOROOT
+       safe_chmod 0755 $GOROOT
        curl -s -L https://storage.googleapis.com/golang/go$GO_VERSION.linux-$arch.tar.gz | tar -C `dirname $GOROOT` -xzf -
    fi
    export GOROOT=$GOROOT
