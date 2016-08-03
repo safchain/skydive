@@ -7,6 +7,10 @@ go:
 sudo: required
 dist: trusty
 
+env:
+  global:
+  # Github token: travis encrypt GH_TOKEN=XXXXXX
+  - secure: s4GCvyUse8bxEc8VOVnvNbM4qFZiT0N2KQpSxlBpJXI+N33vPRR2CUO0mNRdpe+Z+mGo2Ng19UY+ZsBD2id2EAb96waA0fgK3tZMSmBeGlGPtFP+S6KWT2kZPoNVwyEEpSjClY1VU4HPrJ3Q4K1hfFd6M/xejUnF/bc1kKZoqkM5IEJlEEe8e9+pzO8MPB1BEBTvr/6nxQkzgfdg1ck8FuK/VvBubHmJzBjZrapaanBxkJcAKqpgSpPaZmenaj7BuDpbpdTGsBdh/4MY65Ce6XYA/soRxHwOxqJK+UY3g9Zq0DWLTM3yqVhjslzDQ/+fXQsk44FNei0VJoNDEuLY257177DTiXFf/qOlfVTb0qHYIJV0DeWt27lP/f3CpEbtA+bnNhzePOE+VnWBJL93CgpgFWwCQZxethiWuEtsCXuObkgNs3svU3Y6lWU+9VPR5+OtiMTnx0jKg+R/7ttGbUVF5huMV85Er7tgqzdikoXsikgsP89PGWzXMChxAuJaSihfa6of6aZUQCcWqsjbmjpr2M0XwTSnA2xJJIYyzOzDqKIWIKNfLuTvOggAcCfNRI8jEFuDzS06Z2vkljkLPflgpJgWwrrJBhhhYcZHN1YZ/XBy9AsKCoIdZL4JP40amCx0hXwU83JslH6o/wv3rEICVEyVZXRcRfF2cBRIryg=
 before_install:
     - sudo apt-get -qq update
     - sudo apt-get install -y openvswitch-switch unzip docker.io libpcap0.8-dev
@@ -19,4 +23,23 @@ script:
     - make install
     - make test GOFLAGS=-race VERBOSE=true TIMEOUT=1m
     - make test.functionals GOFLAGS=-race GORACE="history_size=5" VERBOSE=true TIMEOUT=2m
-    - ./coverage.sh --coveralls
+    #- ./coverage.sh --coveralls
+
+before_deploy:
+    - git config --global user.email "builds@travis-ci.com"
+    - git config --global user.name "Travis CI"
+    - export GIT_TAG=$TRAVIS_BRANCH.$TRAVIS_BUILD_NUMBER
+    - git tag $GIT_TAG -a -m "Generated tag from TravisCI for build $TRAVIS_BUILD_NUMBER"
+    - git config credential.helper "store --file=.git/credentials"
+    - echo "https://${GH_TOKEN}:@github.com" > .git/credentials
+    - git push --tags > /dev/null 2>&1
+
+deploy:
+    provider: releases
+    api_key:
+        secure: s4GCvyUse8bxEc8VOVnvNbM4qFZiT0N2KQpSxlBpJXI+N33vPRR2CUO0mNRdpe+Z+mGo2Ng19UY+ZsBD2id2EAb96waA0fgK3tZMSmBeGlGPtFP+S6KWT2kZPoNVwyEEpSjClY1VU4HPrJ3Q4K1hfFd6M/xejUnF/bc1kKZoqkM5IEJlEEe8e9+pzO8MPB1BEBTvr/6nxQkzgfdg1ck8FuK/VvBubHmJzBjZrapaanBxkJcAKqpgSpPaZmenaj7BuDpbpdTGsBdh/4MY65Ce6XYA/soRxHwOxqJK+UY3g9Zq0DWLTM3yqVhjslzDQ/+fXQsk44FNei0VJoNDEuLY257177DTiXFf/qOlfVTb0qHYIJV0DeWt27lP/f3CpEbtA+bnNhzePOE+VnWBJL93CgpgFWwCQZxethiWuEtsCXuObkgNs3svU3Y6lWU+9VPR5+OtiMTnx0jKg+R/7ttGbUVF5huMV85Er7tgqzdikoXsikgsP89PGWzXMChxAuJaSihfa6of6aZUQCcWqsjbmjpr2M0XwTSnA2xJJIYyzOzDqKIWIKNfLuTvOggAcCfNRI8jEFuDzS06Z2vkljkLPflgpJgWwrrJBhhhYcZHN1YZ/XBy9AsKCoIdZL4JP40amCx0hXwU83JslH6o/wv3rEICVEyVZXRcRfF2cBRIryg=
+    file: "{$GOPATH}/bin/skydive"
+    skip_cleanup: true
+    on:
+        tags: false
+        all_branches: true

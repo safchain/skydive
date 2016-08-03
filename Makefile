@@ -95,3 +95,6 @@ doc:
 
 doctest:
 	hugo server run -t hugo-material-docs -s doc -b http://localhost:1313/skydive
+
+docker-image: install
+	sudo -E docker build -t skydive/skydive -f contrib/docker/Dockerfile ${GOPATH}
