@@ -39,15 +39,27 @@ import (
 	"github.com/skydive-project/skydive/logging"
 )
 
-const indexVersion = 2
+const indexVersion = 3
 
 const mapping = `
-{"mappings":{"flow":{"dynamic_templates":[
-	{"notanalyzed_graph":{"match":"*NodeUUID","mapping":{"type":"string","index":"not_analyzed"}}},
-	{"notanalyzed_layers":{"match":"LayersPath","mapping":{"type":"string","index":"not_analyzed"}}},
-	{"start_epoch":{"match":"Start","mapping":{"type":"date", "format": "epoch_second"}}},
-	{"last_epoch":{"match":"Last","mapping":{"type":"date", "format": "epoch_second"}}}
-]}}}
+{"mappings":{
+        "flow":{
+                "dynamic_templates":[
+                        {"notanalyzed_graph":{"match":"*NodeUUID","mapping":{"type":"string","index":"not_analyzed"}}},
+                        {"notanalyzed_layers":{"match":"LayersPath","mapping":{"type":"string","index":"not_analyzed"}}},
+                        {"start_epoch":{"match":"Start","mapping":{"type":"date", "format": "epoch_second"}}},
+                        {"last_epoch":{"match":"Last","mapping":{"type":"date", "format": "epoch_second"}}}
+                ]
+        },
+        "metric": {
+                "dynamic_templates":[
+                        {"start_epoch":{"match":"Timestamp","mapping":{"type":"date", "format": "epoch_second"}}}
+                ],
+                "_parent": {
+      "type": "flow"
+    }
+  }
+}}
 `
 
 type ElasticSearchStorage struct {
@@ -61,11 +73,63 @@ func (c *ElasticSearchStorage) StoreFlows(flows []*flow.Flow) error {
 		return errors.New("ElasticSearchStorage is not yet started")
 	}
 
-	for _, flow := range flows {
-		err := c.indexer.Index("skydive", "flow", flow.UUID, "", "", nil, flow)
+	for _, f := range flows {
+		flat := struct {
+			UUID          string
+			LayersPath    string
+			TrackingID    string
+			ProbeNodeUUID string
+			IfSrcNodeUUID string
+			IfDstNodeUUID string
+			Start         int64
+			Last          int64
+		}{
+			UUID:          f.UUID,
+			LayersPath:    f.LayersPath,
+			TrackingID:    f.TrackingID,
+			ProbeNodeUUID: f.ProbeNodeUUID,
+			IfSrcNodeUUID: f.IfSrcNodeUUID,
+			IfDstNodeUUID: f.IfDstNodeUUID,
+			Start:         f.Statistics.Start,
+			Last:          f.Statistics.Last,
+		}
+
+		err := c.indexer.Index("skydive", "flow", f.UUID, "", "", nil, flat)
 		if err != nil {
 			logging.GetLogger().Errorf("Error while indexing: %s", err.Error())
 			continue
+		}
+
+		//c.connection.IndexWithParameters(index, _type, id, parentId, version, op_type, routing, timestamp, ttl, percolate, timeout, refresh, args, data)
+		now := time.Now().Unix()
+		for _, endpoint := range f.Statistics.Endpoints {
+			metric := struct {
+				FlowUUID  string
+				Type      string
+				ABValue   string
+				ABPackets uint64
+				ABBytes   uint64
+				BAValue   string
+				BAPackets uint64
+				BABytes   uint64
+				Timestamp int64
+			}{
+				FlowUUID:  f.UUID,
+				Type:      endpoint.Type.String(),
+				ABValue:   endpoint.AB.Value,
+				ABPackets: endpoint.AB.Packets,
+				ABBytes:   endpoint.AB.Bytes,
+				BAValue:   endpoint.BA.Value,
+				BAPackets: endpoint.BA.Packets,
+				BABytes:   endpoint.BA.Bytes,
+				Timestamp: now,
+			}
+
+			_, err = c.connection.IndexWithParameters("skydive", "metric", "", f.UUID, 0, "", "", "", 0, "", "", false, nil, metric)
+			if err != nil {
+				logging.GetLogger().Errorf("Error while indexing: %s", err.Error())
+				continue
+			}
 		}
 	}
 
