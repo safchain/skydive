@@ -250,7 +250,7 @@ func (u *NetLinkProbe) getLinkIPV4Addr(link netlink.Link) string {
 		ipv4 = append(ipv4, addr.IPNet.String())
 	}
 
-	return strings.Join(ipv4, ", ")
+	return strings.Join(ipv4, ",")
 }
 
 func (u *NetLinkProbe) addLinkToTopology(link netlink.Link) {
