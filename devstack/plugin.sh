@@ -41,7 +41,7 @@ SKYDIVE_CONFIG_FILE=${SKYDIVE_CONFIG_FILE:-"/tmp/skydive.yaml"}
 SKYDIVE_AGENT_PROBES=${SKYDIVE_AGENT_PROBES:-"netlink netns ovsdb neutron fabric"}
 
 # Remote port for ovsdb server.
-SKYDIVE_OVSDB_REMOTE_PORT=6640
+SKYDIVE_OVSDB_REMOTE_PORT=${SKYDIVE_OVSDB_REMOTE_PORT:-}
 
 # Default log level
 SKYDIVE_LOGLEVEL=${SKYDIVE_LOGLEVEL:-INFO}
@@ -132,10 +132,11 @@ agent:
 $(get_probes_for_config)
 EOF
     if [ "x$PUBLIC_INTERFACE" != "x" ]; then
-      cat >> $SKYDIVE_CONFIG_FILE <<- EOF
+        cat >> $SKYDIVE_CONFIG_FILE <<- EOF
     fabric:
       - TOR[Name=TOR Switch, Type=switch] -> PORT_${LOCAL_HOSTNAME}[Name=${LOCAL_HOSTNAME} Port, Type=port]
       - PORT_${LOCAL_HOSTNAME} -> local/${PUBLIC_INTERFACE}
+
 EOF
     fi
     cat >> $SKYDIVE_CONFIG_FILE <<- EOF
@@ -151,28 +152,41 @@ openstack:
   tenant_name: admin
   region_name: RegionOne
 
+EOF
+
+    if [ "x$SKYDIVE_OVSDB_REMOTE_PORT" != "x" ]; then
+        cat >> $SKYDIVE_CONFIG_FILE <<- EOF
 ovs:
   ovsdb: $SKYDIVE_OVSDB_REMOTE_PORT
 
+EOF
+    fi
+
+    cat >> $SKYDIVE_CONFIG_FILE <<- EOF
 etcd:
   servers:
     - $SKYDIVE_AGENT_ETCD
+
 EOF
 
     if [ "x$SKYDIVE_ANALYZER_LISTEN" != "x" ]; then
         cat >> $SKYDIVE_CONFIG_FILE <<- EOF
-
 analyzer:
   listen: $SKYDIVE_ANALYZER_LISTEN
   storage: $SKYDIVE_STORAGE
 
-logging:
-  default: $SKYDIVE_LOGLEVEL
 EOF
     fi
 
+    cat >> $SKYDIVE_CONFIG_FILE <<- EOF
+logging:
+  default: $SKYDIVE_LOGLEVEL
+EOF
+
     if is_service_enabled skydive-agent ; then
-        sudo ovs-appctl -t ovsdb-server ovsdb-server/add-remote "ptcp:$SKYDIVE_OVSDB_REMOTE_PORT:127.0.0.1"
+        if [ "x$SKYDIVE_OVSDB_REMOTE_PORT" != "x" ]; then
+            sudo ovs-appctl -t ovsdb-server ovsdb-server/add-remote "ptcp:$SKYDIVE_OVSDB_REMOTE_PORT:127.0.0.1"
+        fi
     fi
 }
 
