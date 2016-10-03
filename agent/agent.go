@@ -69,7 +69,7 @@ func (a *Agent) Start() {
 	}
 
 	if addr != "" {
-		waitAnalyzer(addr, port)
+		//waitAnalyzer(addr, port)
 		authOptions := &shttp.AuthenticationOpts{
 			Username: config.GetConfig().GetString("agent.analyzer_username"),
 			Password: config.GetConfig().GetString("agent.analyzer_password"),

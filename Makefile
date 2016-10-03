@@ -35,7 +35,7 @@ test.functionals.cleanup:
 	rm -f tests/functionals
 
 test.functionals.compile: govendor
-	govendor test ${GOFLAGS} ${VERBOSE_FLAGS} -timeout ${TIMEOUT} -c -o tests/functionals ./tests/
+	go test ${GOFLAGS} ${VERBOSE_FLAGS} -timeout ${TIMEOUT} -c -o tests/functionals ./tests/
 
 test.functionals.run:
 ifneq ($(VERBOSE_FLAGS),)
@@ -58,7 +58,7 @@ test: govendor
 
 govendor:
 	go get github.com/kardianos/govendor
-	govendor sync
+	#govendor sync
 
 fmt: govendor
 	@echo "+ $@"

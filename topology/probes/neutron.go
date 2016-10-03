@@ -49,6 +49,7 @@ type NeutronMapper struct {
 }
 
 type Attributes struct {
+	PortID	    string
 	NetworkID   string
 	NetworkName string
 	TenantID    string
@@ -122,6 +123,7 @@ func (mapper *NeutronMapper) retrieveAttributes(metadata graph.Metadata) (*Attri
 	}
 
 	a := &Attributes{
+		PortID:	     port.ID,
 		NetworkID:   port.NetworkID,
 		NetworkName: network.Name,
 		TenantID:    port.TenantID,
@@ -165,6 +167,10 @@ func (mapper *NeutronMapper) updateNode(node *graph.Node, attrs *Attributes) {
 	defer tr.Commit()
 
 	tr.AddMetadata("Manager", "neutron")
+
+	if attrs.PortID != "" {
+		tr.AddMetadata("Neutron/PortID", attrs.PortID)
+	}
 
 	if attrs.TenantID != "" {
 		tr.AddMetadata("Neutron/TenantID", attrs.TenantID)
