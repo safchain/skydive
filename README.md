@@ -15,6 +15,8 @@ topology and flows informations.
 
 ## Quick start
 
+### Docker Compose
+
 To quick set up a working environment, [Docker Compose](https://docs.docker.com/compose/)
 can be used to automatically start an Elasticsearch container, a Skydive analyzer
 container and a Skydive agent container.
@@ -29,6 +31,15 @@ Open a browser to http://localhost:8082 to access the analyzer Web UI.
 You can also use the Skydive [command line client](https://skydive-project.github.io/skydive/getting-started/client/) with:
 ```console
 docker run -ti skydive/skydive client topology query --gremlin "g.V()"
+```
+
+### All-in-one
+
+You can also download the latest release and use the all-in-one mode which will
+start an Agent and an Analyzer at once.
+
+```console
+sudo skydive allinone [-c skydive.yml]
 ```
 
 ## Documentation
