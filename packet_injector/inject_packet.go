@@ -23,6 +23,8 @@
 package packet_injector
 
 import (
+	"errors"
+	"fmt"
 	"net"
 	"strings"
 
@@ -38,7 +40,10 @@ import (
 )
 
 var (
-	options gopacket.SerializeOptions
+	options = gopacket.SerializeOptions{
+		ComputeChecksums: true,
+		FixLengths:       true,
+	}
 )
 
 type PacketParams struct {
@@ -48,7 +53,7 @@ type PacketParams struct {
 	Message    string
 }
 
-func InjectPacket(pp *PacketParams, g *graph.Graph) {
+func InjectPacket(pp *PacketParams, g *graph.Graph) error {
 	srcnode := g.GetNode(pp.SourceNode)
 	dstnode := g.GetNode(pp.DestNode)
 
@@ -57,51 +62,43 @@ func InjectPacket(pp *PacketParams, g *graph.Graph) {
 
 	srcIP := getIP(srcdata["IPV4"].(string))
 	if srcIP == nil {
-		logging.GetLogger().Errorf("Source Node doesn't have proper IP")
-		return
+		return errors.New("Source Node doesn't have proper IP")
 	}
 
 	dstIP := getIP(dstdata["IPV4"].(string))
 	if dstIP == nil {
-		logging.GetLogger().Errorf("Destination Node doesn't have proper IP")
-		return
+		return errors.New("Destination Node doesn't have proper IP")
 	}
 
 	srcMAC, err := net.ParseMAC(srcdata["MAC"].(string))
 	if err != nil || srcMAC == nil {
-		logging.GetLogger().Errorf("Source Node doesn't have proper MAC")
-		return
+		return errors.New("Source Node doesn't have proper MAC")
 	}
+
 	dstMAC, err := net.ParseMAC(dstdata["MAC"].(string))
 	if err != nil || dstMAC == nil {
-		logging.GetLogger().Errorf("Destination Node doesn't have proper MAC")
-		return
+		return errors.New("Destination Node doesn't have proper MAC")
 	}
 
 	//create packet
 	buffer := gopacket.NewSerializeBuffer()
-	ipLayer := &layers.IPv4{SrcIP: srcIP, DstIP: dstIP}
-	ethLayer := &layers.Ethernet{SrcMAC: srcMAC, DstMAC: dstMAC}
+	ipLayer := &layers.IPv4{Version: 4, SrcIP: srcIP, DstIP: dstIP}
+	ethLayer := &layers.Ethernet{EthernetType: layers.EthernetTypeIPv4, SrcMAC: srcMAC, DstMAC: dstMAC}
 
 	switch pp.Type {
-	case "tcp":
-		gopacket.SerializeLayers(buffer, options,
-			ethLayer,
-			ipLayer,
-			&layers.TCP{},
-			gopacket.Payload([]byte(pp.Message)),
-		)
 	case "icmp":
-		fallthrough
-	default:
+		ipLayer.Protocol = layers.IPProtocolICMPv4
 		gopacket.SerializeLayers(buffer, options,
 			ethLayer,
 			ipLayer,
-			&layers.ICMPv4{TypeCode: 0},
+			&layers.ICMPv4{
+				TypeCode: layers.CreateICMPv4TypeCode(layers.ICMPv4TypeEchoRequest, 0),
+			},
 			gopacket.Payload([]byte(pp.Message)),
 		)
+	default:
+		return fmt.Errorf("Unsupported traffic type '%s'", pp.Type)
 	}
-	packet := buffer.Bytes()
 
 	newns, origns, err := topology.SetNetNSByNode(g, srcnode)
 	if err != nil {
@@ -112,16 +109,16 @@ func InjectPacket(pp *PacketParams, g *graph.Graph) {
 
 	handle, err := pcap.OpenLive(srcdata["Name"].(string), 1024, false, 2000)
 	if err != nil {
-		logging.GetLogger().Errorf("Not able to open the source node")
-		return
+		return fmt.Errorf("Unable to open the source node: %s", err.Error())
 	}
 	defer handle.Close()
 
-	err = handle.WritePacketData(packet)
-	if err != nil {
-		logging.GetLogger().Errorf("Write Error: %v", err)
-		return
+	packet := buffer.Bytes()
+	if err := handle.WritePacketData(packet); err != nil {
+		return fmt.Errorf("Write error: %s", err.Error())
 	}
+
+	return nil
 }
 
 func getIP(cidr string) net.IP {
