@@ -26,15 +26,13 @@ import (
 	"errors"
 	"fmt"
 	"net"
+	"runtime"
 	"strings"
 
 	"github.com/google/gopacket"
 	"github.com/google/gopacket/layers"
 	"github.com/google/gopacket/pcap"
 
-	"github.com/vishvananda/netns"
-
-	"github.com/skydive-project/skydive/logging"
 	"github.com/skydive-project/skydive/topology"
 	"github.com/skydive-project/skydive/topology/graph"
 )
@@ -100,12 +98,14 @@ func InjectPacket(pp *PacketParams, g *graph.Graph) error {
 		return fmt.Errorf("Unsupported traffic type '%s'", pp.Type)
 	}
 
-	newns, origns, err := topology.SetNetNSByNode(g, srcnode)
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
+	nscontext, err := topology.NewNetNSContextByNode(g, srcnode)
 	if err != nil {
-		logging.GetLogger().Errorf("Not able to jump into source netns")
+		return err
 	}
-	defer newns.Close()
-	defer netns.Set(origns)
+	defer nscontext.Close()
 
 	handle, err := pcap.OpenLive(srcdata["Name"].(string), 1024, false, 2000)
 	if err != nil {

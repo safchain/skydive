@@ -29,8 +29,6 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/vishvananda/netns"
-
 	"github.com/google/gopacket"
 	"github.com/google/gopacket/layers"
 	"github.com/google/gopacket/pcap"
@@ -95,8 +93,6 @@ func (p *GoPacketProbe) start() {
 	go p.packetsToChan(ch)
 
 	timer := time.NewTicker(100 * time.Millisecond)
-	defer timer.Stop()
-
 	feedFlowTable := func() {
 		select {
 		case packet, ok := <-ch:
@@ -144,12 +140,11 @@ func (p *GoPacketProbesHandler) RegisterProbe(n *graph.Node, capture *api.Captur
 		return fmt.Errorf("Already registered %s", ifName)
 	}
 
-	newns, origns, err := topology.SetNetNSByNode(p.graph, n)
+	nscontext, err := topology.NewNetNSContextByNode(p.graph, n)
 	if err != nil {
 		return err
 	}
-	defer newns.Close()
-	defer netns.Set(origns)
+	defer nscontext.Close()
 
 	probe := &GoPacketProbe{
 		NodeUUID:  id,
