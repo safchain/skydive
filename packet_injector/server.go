@@ -41,11 +41,36 @@ type PacketInjectorServer struct {
 }
 
 func (pis *PacketInjectorServer) injectPacket(msg shttp.WSMessage) {
-	var pip PacketParams
-	if err := json.Unmarshal([]byte(*msg.Obj), &pip); err != nil {
+	params := struct {
+		SrcNode interface{}
+		DstNode interface{}
+		Type    string
+		Message string
+	}{}
+	if err := json.Unmarshal([]byte(*msg.Obj), &params); err != nil {
 		logging.GetLogger().Errorf("Unable to decode packet inject param message %v", msg)
 		return
 	}
+
+	var srcNode graph.Node
+	if err := srcNode.Decode(params.SrcNode); err != nil {
+		logging.GetLogger().Errorf("Failed to inject packet: %s", err.Error())
+		return
+	}
+
+	var dstNode graph.Node
+	if err := dstNode.Decode(params.DstNode); err != nil {
+		logging.GetLogger().Errorf("Failed to inject packet: %s", err.Error())
+		return
+	}
+
+	pip := PacketParams{
+		SrcNode: &srcNode,
+		DstNode: &dstNode,
+		Type:    params.Type,
+		Message: params.Message,
+	}
+
 	if err := InjectPacket(&pip, pis.Graph); err != nil {
 		logging.GetLogger().Errorf("Failed to inject packet: %s", err.Error())
 	}

@@ -29,7 +29,6 @@ import (
 	"strings"
 
 	"github.com/abbot/go-http-auth"
-
 	shttp "github.com/skydive-project/skydive/http"
 	"github.com/skydive-project/skydive/logging"
 	"github.com/skydive-project/skydive/packet_injector"
@@ -52,7 +51,6 @@ type PacketParamsReq struct {
 }
 
 func (pi *PacketInjectorApi) injectPacket(w http.ResponseWriter, r *auth.AuthenticatedRequest) {
-	var pp packet_injector.PacketParams
 	decoder := json.NewDecoder(r.Body)
 	var ppr PacketParamsReq
 	err := decoder.Decode(&ppr)
@@ -86,10 +84,12 @@ func (pi *PacketInjectorApi) injectPacket(w http.ResponseWriter, r *auth.Authent
 		return
 	}
 
-	pp.SourceNode = srcNode.ID
-	pp.DestNode = dstNode.ID
-	pp.Type = ppr.MsgType
-	pp.Message = ppr.Message
+	pp := packet_injector.PacketParams{
+		SrcNode: srcNode,
+		DstNode: dstNode,
+		Type:    ppr.MsgType,
+		Message: ppr.Message,
+	}
 
 	host := srcNode.Host()
 	if !pi.PIClient.InjectPacket(host, &pp) {

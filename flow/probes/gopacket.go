@@ -25,6 +25,7 @@ package probes
 import (
 	"fmt"
 	"io"
+	"runtime"
 	"sync"
 	"sync/atomic"
 	"time"
@@ -36,8 +37,8 @@ import (
 	"github.com/skydive-project/skydive/common"
 	"github.com/skydive-project/skydive/flow"
 	"github.com/skydive-project/skydive/logging"
-	"github.com/skydive-project/skydive/topology"
 	"github.com/skydive-project/skydive/topology/graph"
+	"github.com/vishvananda/netns"
 )
 
 type packetHandle interface {
@@ -140,11 +141,45 @@ func (p *GoPacketProbesHandler) RegisterProbe(n *graph.Node, capture *api.Captur
 		return fmt.Errorf("Already registered %s", ifName)
 	}
 
-	nscontext, err := topology.NewNetNSContextByNode(p.graph, n)
+	/*nscontext, err := topology.NewNetNSContextByNode(p.graph, n)
+	defer nscontext.Close()
+
 	if err != nil {
 		return err
+	}*/
+
+	nodes := p.graph.LookupShortestPath(n, graph.Metadata{"Type": "host"}, graph.Metadata{"RelationType": "ownership"})
+	if len(nodes) == 0 {
+		return fmt.Errorf("Failed to determine probePath for %s", ifName)
 	}
-	defer nscontext.Close()
+
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
+	origns, err := netns.Get()
+	if err != nil {
+		return fmt.Errorf("Error while getting current ns: %s", err.Error())
+	}
+	defer origns.Close()
+
+	for _, node := range nodes {
+		if node.Metadata()["Type"] == "netns" {
+			name := node.Metadata()["Name"].(string)
+			path := node.Metadata()["Path"].(string)
+			logging.GetLogger().Debugf("Switching to namespace %s (path: %s)", name, path)
+
+			newns, err := netns.GetFromPath(path)
+			if err != nil {
+				return fmt.Errorf("Error while opening ns %s (path: %s): %s", name, path, err.Error())
+			}
+			defer newns.Close()
+
+			if err := netns.Set(newns); err != nil {
+				return fmt.Errorf("Error while switching from root ns to %s (path: %s): %s", name, path, err.Error())
+			}
+			defer netns.Set(origns)
+		}
+	}
 
 	probe := &GoPacketProbe{
 		NodeUUID:  id,

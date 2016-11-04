@@ -69,6 +69,11 @@ func GraphPath(g *graph.Graph, n *graph.Node) string {
 }
 
 func (n *NetNSContext) Close() {
+	if n == nil {
+		runtime.UnlockOSThread()
+		return
+	}
+
 	netns.Set(n.origns)
 	n.newns.Close()
 	n.origns.Close()

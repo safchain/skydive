@@ -32,8 +32,9 @@ import (
 	"github.com/google/gopacket"
 	"github.com/google/gopacket/layers"
 	"github.com/google/gopacket/pcap"
+	"github.com/vishvananda/netns"
 
-	"github.com/skydive-project/skydive/topology"
+	"github.com/skydive-project/skydive/logging"
 	"github.com/skydive-project/skydive/topology/graph"
 )
 
@@ -45,18 +46,15 @@ var (
 )
 
 type PacketParams struct {
-	SourceNode graph.Identifier `valid:"nonzero"`
-	DestNode   graph.Identifier `valid:"nonzero"`
-	Type       string
-	Message    string
+	SrcNode *graph.Node
+	DstNode *graph.Node
+	Type    string
+	Message string
 }
 
 func InjectPacket(pp *PacketParams, g *graph.Graph) error {
-	srcnode := g.GetNode(pp.SourceNode)
-	dstnode := g.GetNode(pp.DestNode)
-
-	srcdata := srcnode.Metadata()
-	dstdata := dstnode.Metadata()
+	srcdata := pp.SrcNode.Metadata()
+	dstdata := pp.DstNode.Metadata()
 
 	srcIP := getIP(srcdata["IPV4"].(string))
 	if srcIP == nil {
@@ -98,14 +96,45 @@ func InjectPacket(pp *PacketParams, g *graph.Graph) error {
 		return fmt.Errorf("Unsupported traffic type '%s'", pp.Type)
 	}
 
+	/*nscontext, err := topology.NewNetNSContextByNode(p.graph, n)
+	defer nscontext.Close()
+
+	if err != nil {
+		return err
+	}*/
+
+	nodes := g.LookupShortestPath(pp.SrcNode, graph.Metadata{"Type": "host"}, graph.Metadata{"RelationType": "ownership"})
+	if len(nodes) == 0 {
+		return fmt.Errorf("Failed to determine probePath")
+	}
+
 	runtime.LockOSThread()
 	defer runtime.UnlockOSThread()
 
-	nscontext, err := topology.NewNetNSContextByNode(g, srcnode)
+	origns, err := netns.Get()
 	if err != nil {
-		return err
+		return fmt.Errorf("Error while getting current ns: %s", err.Error())
 	}
-	defer nscontext.Close()
+	defer origns.Close()
+
+	for _, node := range nodes {
+		if node.Metadata()["Type"] == "netns" {
+			name := node.Metadata()["Name"].(string)
+			path := node.Metadata()["Path"].(string)
+			logging.GetLogger().Debugf("Switching to namespace %s (path: %s)", name, path)
+
+			newns, err := netns.GetFromPath(path)
+			if err != nil {
+				return fmt.Errorf("Error while opening ns %s (path: %s): %s", name, path, err.Error())
+			}
+			defer newns.Close()
+
+			if err := netns.Set(newns); err != nil {
+				return fmt.Errorf("Error while switching from root ns to %s (path: %s): %s", name, path, err.Error())
+			}
+			defer netns.Set(origns)
+		}
+	}
 
 	handle, err := pcap.OpenLive(srcdata["Name"].(string), 1024, false, 2000)
 	if err != nil {
