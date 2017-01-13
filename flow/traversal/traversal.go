@@ -546,11 +546,7 @@ func (f *FlowTraversalStep) propertyStringValues(field string) *traversal.GraphT
 	var s []interface{}
 	for _, fl := range f.flowset.Flows {
 
-		v, err := fl.GetFieldString(field)
-		if err != nil {
-			return traversal.NewGraphTraversalValue(f.GraphTraversal, nil, err)
-		}
-		if v != "" {
+		if v, err := fl.GetFieldString(field); err == nil {
 			s = append(s, v)
 		}
 	}
