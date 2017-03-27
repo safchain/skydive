@@ -12,7 +12,7 @@ ifeq ($(VERBOSE), false)
 endif
 TIMEOUT?=1m
 TEST_PATTERN?=
-UT_PACKAGES=$(shell ${GOPATH}/bin/govendor list -no-status +local | grep -v '/tests')
+UT_PACKAGES?=$(shell ${GOPATH}/bin/govendor list -no-status +local | grep -v '/tests')
 FUNC_TESTS_CMD:="grep -e 'func Test${TEST_PATTERN}' tests/*.go | perl -pe 's|.*func (.*?)\(.*|\1|g' | shuf"
 FUNC_TESTS:=$(shell sh -c $(FUNC_TESTS_CMD))
 DOCKER_IMAGE?=skydive/skydive
