@@ -23,6 +23,7 @@ DOCKER_TAG?=devel
 DESTDIR?=$(shell pwd)
 COVERAGE?=0
 COVERAGE_MODE?=atomic
+COVERAGE_WD?="."
 
 .PHONY: all
 all: install
@@ -85,9 +86,10 @@ test.functionals: test.functionals.compile
 test: govendor genlocalfiles
 ifeq ($(COVERAGE), true)
 	set -v ; \
+	go get github.com/mattn/goveralls ; \
 	for pkg in ${UT_PACKAGES}; do \
 		if [ -n "$$pkg" ]; then \
-			coverfile="$$(echo $$pkg | tr / -).cover"; \
+			coverfile="${COVERAGE_WD}/$$(echo $$pkg | tr / -).cover"; \
 			${GOPATH}/bin/govendor test -tags "${TAGS} test" -covermode=${COVERAGE_MODE} -coverprofile="$$coverfile" ${VERBOSE_FLAGS} -timeout ${TIMEOUT} $$pkg; \
 		fi; \
 	done
