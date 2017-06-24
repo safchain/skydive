@@ -99,7 +99,7 @@ func (s *Server) initialize() (err error) {
 		}
 	}
 
-	var apiServer *api.APIServer
+	var apiServer *api.Server
 	if apiServer, err = api.NewAPI(s.HTTPServer, s.EtcdClient.KeysAPI, common.AnalyzerService); err != nil {
 		return
 	}

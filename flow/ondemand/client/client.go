@@ -298,7 +298,7 @@ func (o *OnDemandProbeClient) OnSwitchToMaster() {
 func (o *OnDemandProbeClient) OnSwitchToSlave() {
 }
 
-func (o *OnDemandProbeClient) onAPIWatcherEvent(action string, id string, resource api.APIResource) {
+func (o *OnDemandProbeClient) onAPIWatcherEvent(action string, id string, resource api.Resource) {
 	logging.GetLogger().Debugf("New watcher event %s for %s", action, id)
 	capture := resource.(*api.Capture)
 	switch action {

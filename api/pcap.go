@@ -34,6 +34,7 @@ import (
 	"github.com/skydive-project/skydive/logging"
 )
 
+// PcapAPI expose the pcap injector API
 type PcapAPI struct {
 	Storage storage.Storage
 }
@@ -84,6 +85,7 @@ func (p *PcapAPI) registerEndpoints(r *shttp.Server) {
 	r.RegisterRoutes(routes)
 }
 
+// RegisterPcapAPI register a new pcap injector API
 func RegisterPcapAPI(r *shttp.Server, store storage.Storage) {
 	p := &PcapAPI{
 		Storage: store,

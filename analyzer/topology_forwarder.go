@@ -61,7 +61,7 @@ func (p *TopologyForwarderPeer) getHostID() string {
 	contentReader := bytes.NewReader([]byte{})
 
 	var data []byte
-	var info api.APIInfo
+	var info api.Info
 
 	for {
 		resp, err := client.Request("GET", "api", contentReader, nil)

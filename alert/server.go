@@ -223,7 +223,7 @@ type AlertServer struct {
 	sync.RWMutex
 	Graph         *graph.Graph
 	WSServer      *shttp.WSServer
-	AlertHandler  api.APIHandler
+	AlertHandler  api.Handler
 	watcher       api.StoppableWatcher
 	graphAlerts   map[string]*GremlinAlert
 	alertTimers   map[string]chan bool
@@ -403,7 +403,7 @@ func (a *AlertServer) UnregisterAlert(id string) {
 	}
 }
 
-func (a *AlertServer) onAPIWatcherEvent(action string, id string, resource api.APIResource) {
+func (a *AlertServer) onAPIWatcherEvent(action string, id string, resource api.Resource) {
 	switch action {
 	case "init", "create", "set", "update":
 		if err := a.RegisterAlert(resource.(*api.Alert)); err != nil {
@@ -425,7 +425,7 @@ func (a *AlertServer) Stop() {
 	a.elector.Stop()
 }
 
-func NewAlertServer(ah api.APIHandler, wsServer *shttp.WSServer, parser *traversal.GremlinTraversalParser, etcdClient *etcd.EtcdClient) *AlertServer {
+func NewAlertServer(ah api.Handler, wsServer *shttp.WSServer, parser *traversal.GremlinTraversalParser, etcdClient *etcd.EtcdClient) *AlertServer {
 	elector := etcd.NewEtcdMasterElectorFromConfig(common.AnalyzerService, "alert-server", etcdClient)
 
 	as := &AlertServer{
