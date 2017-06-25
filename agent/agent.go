@@ -48,6 +48,7 @@ import (
 	"github.com/skydive-project/skydive/topology/graph/traversal"
 )
 
+// Agent object started on each hosts/namespaces
 type Agent struct {
 	shttp.DefaultWSClientEventHandler
 	Graph               *graph.Graph
@@ -65,6 +66,8 @@ type Agent struct {
 	TIDMapper           *topology.TIDMapper
 }
 
+// NewAnalyzerWSClientPool create a new http WebSocket client Pool
+// with authentification
 func NewAnalyzerWSClientPool() *shttp.WSAsyncClientPool {
 	wspool := shttp.NewWSAsyncClientPool()
 
@@ -89,6 +92,7 @@ func NewAnalyzerWSClientPool() *shttp.WSAsyncClientPool {
 	return wspool
 }
 
+// Start the agent services
 func (a *Agent) Start() {
 	var err error
 
@@ -144,6 +148,7 @@ func (a *Agent) Start() {
 	go a.WSAsyncClientPool.ConnectAll()
 }
 
+// Stop agent services
 func (a *Agent) Stop() {
 	if a.FlowProbeBundle != nil {
 		a.FlowProbeBundle.UnregisterAllProbes()
@@ -170,6 +175,7 @@ func (a *Agent) Stop() {
 	a.TIDMapper.Stop()
 }
 
+// NewAgent instanciate a new Agent aim to launch probes (topology and flow)
 func NewAgent() *Agent {
 	backend, err := graph.NewMemoryBackend()
 	if err != nil {
@@ -210,6 +216,8 @@ func NewAgent() *Agent {
 	}
 }
 
+// CreateRootNode create a graph.Node based on the host properties
+// aim to have an unique ID per host per container.
 func CreateRootNode(g *graph.Graph) *graph.Node {
 	hostID := config.GetConfig().GetString("host_id")
 	m := graph.Metadata{"Name": hostID, "Type": "host"}

@@ -31,6 +31,7 @@ import (
 	tprobes "github.com/skydive-project/skydive/topology/probes"
 )
 
+// NewTopologyProbeBundleFromConfig create a new topology probe.ProbeBundle based on configuration
 func NewTopologyProbeBundleFromConfig(g *graph.Graph, n *graph.Node, wspool *shttp.WSAsyncClientPool) (*probe.ProbeBundle, error) {
 	list := config.GetConfig().GetStringSlice("agent.topology.probes")
 	logging.GetLogger().Infof("Topology probes: %v", list)

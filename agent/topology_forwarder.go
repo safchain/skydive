@@ -53,6 +53,7 @@ func (t *TopologyForwarder) triggerResync() {
 	t.WSAsyncClientPool.SendWSMessageToMaster(shttp.NewWSMessage(graph.Namespace, graph.SyncReplyMsgType, t.Graph))
 }
 
+// OnConnected event
 func (t *TopologyForwarder) OnConnected(c *shttp.WSAsyncClient) {
 	if c == t.WSAsyncClientPool.MasterClient() {
 		// keep a track of the current master in order to detect master disconnection
@@ -63,6 +64,7 @@ func (t *TopologyForwarder) OnConnected(c *shttp.WSAsyncClient) {
 	}
 }
 
+// OnDisconnected event
 func (t *TopologyForwarder) OnDisconnected(c *shttp.WSAsyncClient) {
 	if c == t.master {
 		t.master = t.WSAsyncClientPool.MasterClient()
@@ -72,30 +74,37 @@ func (t *TopologyForwarder) OnDisconnected(c *shttp.WSAsyncClient) {
 	}
 }
 
+// OnNodeUpdated event
 func (t *TopologyForwarder) OnNodeUpdated(n *graph.Node) {
 	t.WSAsyncClientPool.SendWSMessageToMaster(shttp.NewWSMessage(graph.Namespace, graph.NodeUpdatedMsgType, n))
 }
 
+// OnNodeAdded event
 func (t *TopologyForwarder) OnNodeAdded(n *graph.Node) {
 	t.WSAsyncClientPool.SendWSMessageToMaster(shttp.NewWSMessage(graph.Namespace, graph.NodeAddedMsgType, n))
 }
 
+// OnNodeDeleted event
 func (t *TopologyForwarder) OnNodeDeleted(n *graph.Node) {
 	t.WSAsyncClientPool.SendWSMessageToMaster(shttp.NewWSMessage(graph.Namespace, graph.NodeDeletedMsgType, n))
 }
 
+// OnEdgeUpdated event
 func (t *TopologyForwarder) OnEdgeUpdated(e *graph.Edge) {
 	t.WSAsyncClientPool.SendWSMessageToMaster(shttp.NewWSMessage(graph.Namespace, graph.EdgeUpdatedMsgType, e))
 }
 
+// OnEdgeAdded event
 func (t *TopologyForwarder) OnEdgeAdded(e *graph.Edge) {
 	t.WSAsyncClientPool.SendWSMessageToMaster(shttp.NewWSMessage(graph.Namespace, graph.EdgeAddedMsgType, e))
 }
 
+// OnEdgeDeleted event
 func (t *TopologyForwarder) OnEdgeDeleted(e *graph.Edge) {
 	t.WSAsyncClientPool.SendWSMessageToMaster(shttp.NewWSMessage(graph.Namespace, graph.EdgeDeletedMsgType, e))
 }
 
+// NewTopologyForwarder is a mechanism aim to distribute all graph node notification to WebSocket client pool.
 func NewTopologyForwarder(host string, g *graph.Graph, wspool *shttp.WSAsyncClientPool) *TopologyForwarder {
 	t := &TopologyForwarder{
 		WSAsyncClientPool: wspool,
@@ -109,6 +118,7 @@ func NewTopologyForwarder(host string, g *graph.Graph, wspool *shttp.WSAsyncClie
 	return t
 }
 
+// NewTopologyForwarderFromConfig create a TopologyForwarder from configuration (using host_id)
 func NewTopologyForwarderFromConfig(g *graph.Graph, wspool *shttp.WSAsyncClientPool) *TopologyForwarder {
 	host := config.GetConfig().GetString("host_id")
 	return NewTopologyForwarder(host, g, wspool)
