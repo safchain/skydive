@@ -40,11 +40,11 @@ import (
 )
 
 const (
-	FLOW_TOKEN         traversal.Token = 1001
-	HOPS_TOKEN         traversal.Token = 1002
-	NODES_TOKEN        traversal.Token = 1003
-	CAPTURE_NODE_TOKEN traversal.Token = 1004
-	AGGREGATES_TOKEN   traversal.Token = 1005
+	traversalFlowToken        traversal.Token = 1001
+	traversalHopsToken        traversal.Token = 1002
+	traversalNodesToken       traversal.Token = 1003
+	traversalCaptureNodeToken traversal.Token = 1004
+	traversalAggregatesToken  traversal.Token = 1005
 )
 
 const (
@@ -556,11 +556,11 @@ func (f *FlowTraversalStep) Error() error {
 // NewFlowTraversalExtension create a new flow tranversal extension for Gremlin parser
 func NewFlowTraversalExtension(client *flow.TableClient, storage storage.Storage) *FlowTraversalExtension {
 	return &FlowTraversalExtension{
-		FlowToken:        FLOW_TOKEN,
-		HopsToken:        HOPS_TOKEN,
-		NodesToken:       NODES_TOKEN,
-		CaptureNodeToken: CAPTURE_NODE_TOKEN,
-		AggregatesToken:  AGGREGATES_TOKEN,
+		FlowToken:        traversalFlowToken,
+		HopsToken:        traversalHopsToken,
+		NodesToken:       traversalNodesToken,
+		CaptureNodeToken: traversalCaptureNodeToken,
+		AggregatesToken:  traversalAggregatesToken,
 		TableClient:      client,
 		Storage:          storage,
 	}
@@ -701,12 +701,12 @@ func (s *FlowGremlinTraversalStep) Exec(last traversal.GraphTraversalStep) (trav
 		}
 		graphTraversal.RUnlock()
 	default:
-		return nil, traversal.ExecutionError
+		return nil, traversal.ErrExecutionError
 	}
 
 	if context.TimeSlice != nil {
 		if s.Storage == nil {
-			return nil, storage.NoStorageConfigured
+			return nil, storage.ErrNoStorageConfigured
 		}
 
 		s.addTimeFilter(&flowSearchQuery, context.TimeSlice)
@@ -805,7 +805,7 @@ func (s *HopsGremlinTraversalStep) Exec(last traversal.GraphTraversalStep) (trav
 		return fts.Hops(s.context.Params...), nil
 	}
 
-	return nil, traversal.ExecutionError
+	return nil, traversal.ErrExecutionError
 }
 
 // Reduce hops step
@@ -829,7 +829,7 @@ func (s *NodesGremlinTraversalStep) Exec(last traversal.GraphTraversalStep) (tra
 		fts := last.(*FlowTraversalStep)
 		return fts.Nodes(s.context.Params...), nil
 	}
-	return nil, traversal.ExecutionError
+	return nil, traversal.ErrExecutionError
 }
 
 // Reduce Nodes step
@@ -854,7 +854,7 @@ func (s *CaptureNodeGremlinTraversalStep) Exec(last traversal.GraphTraversalStep
 		return fs.CaptureNode(s.context.Params...), nil
 	}
 
-	return nil, traversal.ExecutionError
+	return nil, traversal.ErrExecutionError
 }
 
 // Reduce Capture step
@@ -879,7 +879,7 @@ func (a *AggregatesGremlinTraversalStep) Exec(last traversal.GraphTraversalStep)
 		return mts.Aggregates(), nil
 	}
 
-	return nil, traversal.ExecutionError
+	return nil, traversal.ErrExecutionError
 }
 
 // Reduce Aggregates step

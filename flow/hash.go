@@ -41,6 +41,7 @@ func var8bin(v []byte) []byte {
 	return r
 }
 
+// HashFromValues calculate a unique symetric flow layer hash
 func HashFromValues(ab interface{}, ba interface{}) []byte {
 	var vab, vba uint64
 	var binab, binba []byte
@@ -96,6 +97,7 @@ func HashFromValues(ab interface{}, ba interface{}) []byte {
 	return hasher.Sum(nil)
 }
 
+// Hash calculate a unique symetric flow layer hash
 func (fl *FlowLayer) Hash() []byte {
 	if fl == nil {
 		return []byte{}
@@ -152,6 +154,7 @@ func (fl *FlowLayer) Hash() []byte {
 	return nil
 }
 
+// HashStr return the string (hexadecimal) of the current hash flow layer
 func (fl *FlowLayer) HashStr() string {
 	return hex.EncodeToString(fl.Hash())
 }

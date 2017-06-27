@@ -149,7 +149,7 @@ func InjectPacket(pp *PacketParams, g *graph.Graph) (string, error) {
 
 	packetData := buffer.Bytes()
 	packet := gopacket.NewPacket(packetData, layers.LayerTypeEthernet, gopacket.Default)
-	flowKey := flow.FlowKeyFromGoPacket(&packet, "").String()
+	flowKey := flow.KeyFromGoPacket(&packet, "").String()
 	flow := flow.NewFlow()
 	flow.Init(flowKey, common.UnixMillis(time.Now()), &packet, int64(len(packetData)), tid, "", 0, 0)
 

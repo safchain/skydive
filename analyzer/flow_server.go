@@ -62,16 +62,16 @@ type FlowServerConn struct {
 }
 
 type FlowServer struct {
-	Addr                 string
-	Port                 int
-	Storage              storage.Storage
-	FlowEnhancerPipeline *flow.FlowEnhancerPipeline
-	conn                 *FlowServerConn
-	state                int64
-	wgServer             sync.WaitGroup
-	wgFlowsHandlers      sync.WaitGroup
-	bulkInsert           int
-	bulkDeadline         int
+	Addr             string
+	Port             int
+	Storage          storage.Storage
+	EnhancerPipeline *flow.EnhancerPipeline
+	conn             *FlowServerConn
+	state            int64
+	wgServer         sync.WaitGroup
+	wgFlowsHandlers  sync.WaitGroup
+	bulkInsert       int
+	bulkDeadline     int
 }
 
 func (a *FlowServerConn) Mode() FlowConnectionType {
@@ -296,7 +296,7 @@ func NewFlowClientConn(addr *net.UDPAddr) (a *FlowClientConn, err error) {
 
 func (s *FlowServer) storeFlows(flows []*flow.Flow) {
 	if s.Storage != nil && len(flows) > 0 {
-		s.FlowEnhancerPipeline.Enhance(flows)
+		s.EnhancerPipeline.Enhance(flows)
 		s.Storage.StoreFlows(flows)
 
 		logging.GetLogger().Debugf("%d flows stored", len(flows))
@@ -402,8 +402,7 @@ func (s *FlowServer) Stop() {
 
 func NewFlowServer(addr string, port int, g *graph.Graph, store storage.Storage, probe *probe.ProbeBundle) (*FlowServer, error) {
 	cache := cache.New(time.Duration(600)*time.Second, time.Duration(600)*time.Second)
-
-	pipeline := flow.NewFlowEnhancerPipeline(enhancers.NewGraphFlowEnhancer(g, cache))
+	pipeline := flow.NewEnhancerPipeline(enhancers.NewGraphFlowEnhancer(g, cache))
 
 	// check that the neutron probe is loaded if so add the neutron flow enhancer
 	if probe.GetProbe("neutron") != nil {
@@ -414,11 +413,11 @@ func NewFlowServer(addr string, port int, g *graph.Graph, store storage.Storage,
 	deadline := config.GetConfig().GetInt("analyzer.storage.bulk_insert_deadline")
 
 	return &FlowServer{
-		Addr:                 addr,
-		Port:                 port,
-		Storage:              store,
-		FlowEnhancerPipeline: pipeline,
-		bulkInsert:           bulk,
-		bulkDeadline:         deadline,
+		Addr:             addr,
+		Port:             port,
+		Storage:          store,
+		EnhancerPipeline: pipeline,
+		bulkInsert:       bulk,
+		bulkDeadline:     deadline,
 	}, nil
 }
