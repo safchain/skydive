@@ -55,7 +55,7 @@ type SyncReplyMsg struct {
 
 func UnmarshalWSMessage(msg shttp.WSMessage) (string, interface{}, error) {
 	var obj interface{}
-	if err := common.JsonDecode(bytes.NewReader([]byte(*msg.Obj)), &obj); err != nil {
+	if err := common.JSONDecode(bytes.NewReader([]byte(*msg.Obj)), &obj); err != nil {
 		return "", msg, err
 	}
 

@@ -45,12 +45,15 @@ type Validator interface {
 var (
 	skydiveValidator = valid.NewValidator()
 
+	//IPNotValid validator
 	IPNotValid = func() error {
 		return valid.TextErr{Err: errors.New("Not a IP addr")}
 	}
+	// GremlinNotValid validator
 	GremlinNotValid = func(err error) error {
 		return valid.TextErr{Err: fmt.Errorf("Not a valid Gremlin expression: %s", err.Error())}
 	}
+	// BPFFilterNotValid validator
 	BPFFilterNotValid = func(err error) error {
 		return valid.TextErr{Err: fmt.Errorf("Not a valid BPF expression: %s", err.Error())}
 	}

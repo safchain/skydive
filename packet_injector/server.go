@@ -45,7 +45,7 @@ type PacketInjectorServer struct {
 
 func (pis *PacketInjectorServer) injectPacket(msg shttp.WSMessage) (string, error) {
 	var params PacketParams
-	if err := common.JsonDecode(bytes.NewBuffer([]byte(*msg.Obj)), &params); err != nil {
+	if err := common.JSONDecode(bytes.NewBuffer([]byte(*msg.Obj)), &params); err != nil {
 		return "", fmt.Errorf("Unable to decode packet inject param message %v", msg)
 	}
 

@@ -191,7 +191,7 @@ func (b *ElasticSearchBackend) updateTimes(i interface{}) bool {
 
 func (b *ElasticSearchBackend) hitToNode(source *json.RawMessage, node *Node) error {
 	var obj map[string]interface{}
-	if err := common.JsonDecode(bytes.NewReader([]byte(*source)), &obj); err != nil {
+	if err := common.JSONDecode(bytes.NewReader([]byte(*source)), &obj); err != nil {
 		return err
 	}
 	if err := node.Decode(obj); err != nil {
@@ -202,7 +202,7 @@ func (b *ElasticSearchBackend) hitToNode(source *json.RawMessage, node *Node) er
 
 func (b *ElasticSearchBackend) hitToEdge(source *json.RawMessage, edge *Edge) error {
 	var obj map[string]interface{}
-	if err := common.JsonDecode(bytes.NewReader([]byte(*source)), &obj); err != nil {
+	if err := common.JSONDecode(bytes.NewReader([]byte(*source)), &obj); err != nil {
 		return err
 	}
 	if err := edge.Decode(obj); err != nil {

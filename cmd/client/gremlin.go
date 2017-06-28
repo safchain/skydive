@@ -74,7 +74,7 @@ func (g *GremlinQueryHelper) Query(query string, values interface{}) error {
 		return fmt.Errorf("%s: %s", resp.Status, string(data))
 	}
 
-	if err = common.JsonDecode(resp.Body, values); err != nil {
+	if err = common.JSONDecode(resp.Body, values); err != nil {
 		return err
 	}
 

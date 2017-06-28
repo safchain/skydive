@@ -122,7 +122,7 @@ func (a *Server) RegisterAPIHandler(handler Handler) error {
 				// keep the original ID
 				id := resource.ID()
 
-				if err := common.JsonDecode(r.Body, &resource); err != nil {
+				if err := common.JSONDecode(r.Body, &resource); err != nil {
 					writeError(w, http.StatusBadRequest, err)
 					return
 				}
