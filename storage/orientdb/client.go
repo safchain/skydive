@@ -58,7 +58,7 @@ type ClientInterface interface {
 	DeleteDocumentClass(name string) error
 	GetDatabase() (Document, error)
 	CreateDatabase() (Document, error)
-	Sql(query string, result interface{}) error
+	SQL(query string, result interface{}) error
 	Search(query string) ([]Document, error)
 	Query(obj string, query *filters.SearchQuery, result interface{}) error
 	Connect() error
@@ -392,17 +392,17 @@ func (c *Client) GetDocumentClass(name string) (*DocumentClass, error) {
 func (c *Client) AlterProperty(className string, prop Property) error {
 	alterQuery := fmt.Sprintf("ALTER PROPERTY %s.%s", className, prop.Name)
 	if prop.Mandatory {
-		if err := c.Sql(alterQuery+" MANDATORY true", nil); err != nil && err != io.EOF {
+		if err := c.SQL(alterQuery+" MANDATORY true", nil); err != nil && err != io.EOF {
 			return err
 		}
 	}
 	if prop.NotNull {
-		if err := c.Sql(alterQuery+" NOTNULL true", nil); err != nil && err != io.EOF {
+		if err := c.SQL(alterQuery+" NOTNULL true", nil); err != nil && err != io.EOF {
 			return err
 		}
 	}
 	if prop.ReadOnly {
-		if err := c.Sql(alterQuery+" READONLY true", nil); err != nil && err != io.EOF {
+		if err := c.SQL(alterQuery+" READONLY true", nil); err != nil && err != io.EOF {
 			return err
 		}
 	}
@@ -417,7 +417,7 @@ func (c *Client) CreateProperty(className string, prop Property) error {
 	if prop.LinkedType != "" {
 		query += " " + prop.LinkedType
 	}
-	if err := c.Sql(query, nil); err != nil {
+	if err := c.SQL(query, nil); err != nil {
 		return err
 	}
 
@@ -430,12 +430,12 @@ func (c *Client) CreateClass(class ClassDefinition) error {
 		query += " EXTENDS " + class.SuperClass
 	}
 
-	return c.Sql(query, nil)
+	return c.SQL(query, nil)
 }
 
 func (c *Client) CreateIndex(className string, index Index) error {
 	query := fmt.Sprintf("CREATE INDEX %s ON %s (%s) %s", index.Name, className, strings.Join(index.Fields, ", "), index.Type)
-	return c.Sql(query, nil)
+	return c.SQL(query, nil)
 }
 
 func (c *Client) CreateDocumentClass(class ClassDefinition) error {
@@ -507,7 +507,7 @@ func (c *Client) CreateDatabase() (Document, error) {
 	return result, nil
 }
 
-func (c *Client) Sql(query string, result interface{}) error {
+func (c *Client) SQL(query string, result interface{}) error {
 	url := fmt.Sprintf("%s/command/%s/sql", c.url, c.database)
 	resp, err := c.Request("POST", url, bytes.NewBufferString(query))
 	if err != nil {
@@ -520,7 +520,7 @@ func (c *Client) Sql(query string, result interface{}) error {
 
 func (c *Client) Search(query string) ([]Document, error) {
 	var docs []Document
-	return docs, c.Sql(query, &docs)
+	return docs, c.SQL(query, &docs)
 }
 
 func (c *Client) Query(obj string, query *filters.SearchQuery, result interface{}) error {
@@ -544,7 +544,7 @@ func (c *Client) Query(obj string, query *filters.SearchQuery, result interface{
 		}
 	}
 
-	return c.Sql(sql, result)
+	return c.SQL(sql, result)
 }
 
 func (c *Client) Connect() error {

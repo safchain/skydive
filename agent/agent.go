@@ -54,7 +54,7 @@ type Agent struct {
 	Graph               *graph.Graph
 	WSAsyncClientPool   *shttp.WSAsyncClientPool
 	WSServer            *shttp.WSServer
-	GraphServer         *graph.GraphServer
+	GraphServer         *graph.Server
 	Root                *graph.Node
 	TopologyProbeBundle *probe.ProbeBundle
 	FlowProbeBundle     *fprobes.FlowProbeBundle
