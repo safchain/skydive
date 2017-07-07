@@ -38,6 +38,7 @@ import (
 	"github.com/skydive-project/skydive/topology/graph/traversal"
 )
 
+// Validator interface used to validate value type in Gremlin expression
 type Validator interface {
 	Validate() error
 }
@@ -101,12 +102,13 @@ func isBPFFilter(v interface{}, param string) error {
 	return nil
 }
 
-func Validate(v interface{}) error {
-	if err := skydiveValidator.Validate(v); err != nil {
+// Validate an object based on previously (at init) registered function
+func Validate(value interface{}) error {
+	if err := skydiveValidator.Validate(value); err != nil {
 		return err
 	}
 
-	if obj, ok := v.(Validator); ok {
+	if obj, ok := value.(Validator); ok {
 		return obj.Validate()
 	}
 
