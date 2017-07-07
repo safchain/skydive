@@ -34,6 +34,7 @@ import (
 	"github.com/xeipuuv/gojsonschema"
 )
 
+// TopologyServer describe a service to reply to topology queries
 type TopologyServer struct {
 	sync.RWMutex
 	shttp.DefaultWSServerEventHandler
@@ -54,6 +55,7 @@ func (t *TopologyServer) hostGraphDeleted(host string, mode int) {
 	t.Graph.DelHostGraph(host)
 }
 
+// OnUnregisterClient websocket event
 func (t *TopologyServer) OnUnregisterClient(c *shttp.WSClient) {
 	t.RLock()
 	_, ok := t.authors[c.Host]
@@ -76,6 +78,7 @@ func (t *TopologyServer) OnUnregisterClient(c *shttp.WSClient) {
 	t.Unlock()
 }
 
+// OnGraphMessage websocket event
 func (t *TopologyServer) OnGraphMessage(c *shttp.WSClient, msg shttp.WSMessage, msgType string, obj interface{}) {
 	// author if message coming from another client than analyzer
 	if c.ClientType != "" && c.ClientType != common.AnalyzerService {
@@ -158,6 +161,7 @@ func (t *TopologyServer) OnGraphMessage(c *shttp.WSClient, msg shttp.WSMessage, 
 	}
 }
 
+// NewTopologyServer create a new topology server
 func NewTopologyServer(host string, server *shttp.WSServer) (*TopologyServer, error) {
 	persistent, err := graph.BackendFromConfig()
 	if err != nil {
@@ -196,6 +200,7 @@ func NewTopologyServer(host string, server *shttp.WSServer) (*TopologyServer, er
 	return t, nil
 }
 
+// NewTopologyServerFromConfig create a new topology server based on configuration
 func NewTopologyServerFromConfig(server *shttp.WSServer) (*TopologyServer, error) {
 	host := config.GetConfig().GetString("host_id")
 	return NewTopologyServer(host, server)

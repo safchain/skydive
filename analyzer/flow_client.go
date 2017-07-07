@@ -35,12 +35,14 @@ import (
 	"github.com/skydive-project/skydive/logging"
 )
 
+// FlowClientPool describe a flow clients pool via websocket
 type FlowClientPool struct {
 	sync.RWMutex
 	shttp.DefaultWSClientEventHandler
 	flowClients []*FlowClient
 }
 
+// FlowClient descibe a flow client connection
 type FlowClient struct {
 	Addr string
 	Port int
@@ -71,6 +73,7 @@ func (c *FlowClient) close() {
 	}
 }
 
+// SendFlow send a flow to the server
 func (c *FlowClient) SendFlow(f *flow.Flow) error {
 	if c.connection == nil {
 		return errors.New("Not connected")
@@ -93,6 +96,7 @@ retry:
 	return nil
 }
 
+// SendFlows send flows to the server
 func (c *FlowClient) SendFlows(flows []*flow.Flow) {
 	for _, flow := range flows {
 		err := c.SendFlow(flow)
@@ -102,12 +106,14 @@ func (c *FlowClient) SendFlows(flows []*flow.Flow) {
 	}
 }
 
+// NewFlowClient create a flow client and create a new connection to the server
 func NewFlowClient(addr string, port int) *FlowClient {
 	FlowClient := &FlowClient{Addr: addr, Port: port}
 	FlowClient.connect()
 	return FlowClient
 }
 
+// OnConnected event
 func (p *FlowClientPool) OnConnected(c *shttp.WSAsyncClient) {
 	p.Lock()
 	defer p.Unlock()
@@ -124,6 +130,7 @@ func (p *FlowClientPool) OnConnected(c *shttp.WSAsyncClient) {
 	p.flowClients = append(p.flowClients, NewFlowClient(c.Addr, c.Port))
 }
 
+// OnDisconnected event
 func (p *FlowClientPool) OnDisconnected(c *shttp.WSAsyncClient) {
 	p.Lock()
 	defer p.Unlock()
@@ -137,6 +144,7 @@ func (p *FlowClientPool) OnDisconnected(c *shttp.WSAsyncClient) {
 	}
 }
 
+// SendFlows send flows using a random connection
 func (p *FlowClientPool) SendFlows(flows []*flow.Flow) {
 	p.RLock()
 	defer p.RUnlock()
@@ -149,6 +157,7 @@ func (p *FlowClientPool) SendFlows(flows []*flow.Flow) {
 	fc.SendFlows(flows)
 }
 
+// Close all connections
 func (p *FlowClientPool) Close() {
 	for _, fc := range p.flowClients {
 		fc.close()

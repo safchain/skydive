@@ -45,15 +45,20 @@ import (
 	"github.com/skydive-project/skydive/topology/graph"
 )
 
+// ErrFlowUDPAcceptNotSupported error the connection can't accept as it's UDP based
 var ErrFlowUDPAcceptNotSupported = errors.New("UDP connection is datagram based (not connected), accept() not supported")
 
+// FlowConnectionType describe an UDP or TLS connection
 type FlowConnectionType int
 
 const (
+	// UDP connection
 	UDP FlowConnectionType = 1 + iota
+	// TLS connection
 	TLS
 )
 
+// FlowServerConn describe a flow server connection
 type FlowServerConn struct {
 	mode      FlowConnectionType
 	udpConn   *net.UDPConn
@@ -61,6 +66,7 @@ type FlowServerConn struct {
 	tlsListen net.Listener
 }
 
+// FlowServer describe a flow server with pipeline enhancers mechanism
 type FlowServer struct {
 	Addr             string
 	Port             int
@@ -74,10 +80,12 @@ type FlowServer struct {
 	bulkDeadline     int
 }
 
+// Mode return the connection mode UDP or TLS
 func (a *FlowServerConn) Mode() FlowConnectionType {
 	return a.mode
 }
 
+// Accept connection step
 func (a *FlowServerConn) Accept() (*FlowServerConn, error) {
 	switch a.mode {
 	case TLS:
@@ -106,6 +114,7 @@ func (a *FlowServerConn) Accept() (*FlowServerConn, error) {
 	return nil, errors.New("Connection mode is not set properly")
 }
 
+// Cleanup stop listening on the connection
 func (a *FlowServerConn) Cleanup() {
 	if a.mode == TLS {
 		if err := a.tlsListen.Close(); err != nil {
@@ -114,6 +123,7 @@ func (a *FlowServerConn) Cleanup() {
 	}
 }
 
+// Close the connection
 func (a *FlowServerConn) Close() {
 	switch a.mode {
 	case TLS:
@@ -127,6 +137,7 @@ func (a *FlowServerConn) Close() {
 	}
 }
 
+// SetDeadline for the connection IO
 func (a *FlowServerConn) SetDeadline(t time.Time) {
 	switch a.mode {
 	case TLS:
@@ -140,6 +151,7 @@ func (a *FlowServerConn) SetDeadline(t time.Time) {
 	}
 }
 
+// Read data from the connection
 func (a *FlowServerConn) Read(data []byte) (int, error) {
 	switch a.mode {
 	case TLS:
@@ -152,6 +164,7 @@ func (a *FlowServerConn) Read(data []byte) (int, error) {
 	return 0, errors.New("Mode didn't exist")
 }
 
+// Timeout return true if the connection error timeouted
 func (a *FlowServerConn) Timeout(err error) bool {
 	switch a.mode {
 	case TLS:
@@ -166,6 +179,7 @@ func (a *FlowServerConn) Timeout(err error) bool {
 	return false
 }
 
+// NewFlowServerConn create a new server listening at address
 func NewFlowServerConn(addr *net.UDPAddr) (a *FlowServerConn, err error) {
 	a = &FlowServerConn{mode: UDP}
 	certPEM := config.GetConfig().GetString("analyzer.X509_cert")
@@ -219,11 +233,13 @@ func NewFlowServerConn(addr *net.UDPAddr) (a *FlowServerConn, err error) {
 	return a, err
 }
 
+// FlowClientConn describe a flow client connection
 type FlowClientConn struct {
 	udpConn       *net.UDPConn
 	tlsConnClient *tls.Conn
 }
 
+// Close the client
 func (a *FlowClientConn) Close() {
 	if a.tlsConnClient != nil {
 		if err := a.tlsConnClient.Close(); err != nil {
@@ -236,6 +252,7 @@ func (a *FlowClientConn) Close() {
 	}
 }
 
+// Write to the server
 func (a *FlowClientConn) Write(b []byte) (int, error) {
 	if a.tlsConnClient != nil {
 		return a.tlsConnClient.Write(b)
@@ -243,6 +260,7 @@ func (a *FlowClientConn) Write(b []byte) (int, error) {
 	return a.udpConn.Write(b)
 }
 
+// NewFlowClientConn create a new connection to the server at address
 func NewFlowClientConn(addr *net.UDPAddr) (a *FlowClientConn, err error) {
 	a = &FlowClientConn{}
 	certPEM := config.GetConfig().GetString("agent.X509_cert")
@@ -351,6 +369,7 @@ func (s *FlowServer) handleFlowPacket(conn *FlowServerConn) {
 	}
 }
 
+// Start the flow server
 func (s *FlowServer) Start() {
 	host := s.Addr + ":" + strconv.FormatInt(int64(s.Port), 10)
 	addr, err := net.ResolveUDPAddr("udp", host)
@@ -393,6 +412,7 @@ func (s *FlowServer) Start() {
 	}()
 }
 
+// Stop the server
 func (s *FlowServer) Stop() {
 	if atomic.CompareAndSwapInt64(&s.state, common.RunningState, common.StoppingState) {
 		s.conn.Cleanup()
@@ -400,6 +420,7 @@ func (s *FlowServer) Stop() {
 	}
 }
 
+// NewFlowServer create a new flow server listening at address/port, based on configuration
 func NewFlowServer(addr string, port int, g *graph.Graph, store storage.Storage, probe *probe.ProbeBundle) (*FlowServer, error) {
 	cache := cache.New(time.Duration(600)*time.Second, time.Duration(600)*time.Second)
 	pipeline := flow.NewEnhancerPipeline(enhancers.NewGraphFlowEnhancer(g, cache))
