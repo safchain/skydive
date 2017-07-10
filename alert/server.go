@@ -45,12 +45,13 @@ import (
 )
 
 const (
+	// Namespace Alert
 	Namespace = "Alert"
 )
 
 const (
-	WEBHOOK = 1 + iota
-	SCRIPT
+	actionWebHook = 1 + iota
+	actionScript
 )
 
 type GremlinAlert struct {
@@ -160,7 +161,7 @@ func (ga *GremlinAlert) Evaluate() (interface{}, error) {
 
 func (ga *GremlinAlert) Trigger(payload []byte) error {
 	switch ga.kind {
-	case WEBHOOK:
+	case actionWebHook:
 		client := &http.Client{}
 
 		req, err := http.NewRequest("POST", ga.data, bytes.NewReader(payload))
@@ -173,7 +174,7 @@ func (ga *GremlinAlert) Trigger(payload []byte) error {
 		if err != nil {
 			return fmt.Errorf("Error while posting alert to %s: %s", ga.data, err.Error())
 		}
-	case SCRIPT:
+	case actionScript:
 		logging.GetLogger().Debugf("Executing command '%s'", ga.data)
 
 		cmd := exec.Command(ga.data)
@@ -209,10 +210,10 @@ func NewGremlinAlert(alert *api.Alert, p *traversal.GremlinTraversalParser) (*Gr
 	}
 
 	if strings.HasPrefix(alert.Action, "http://") || strings.HasPrefix(alert.Action, "https://") {
-		ga.kind = WEBHOOK
+		ga.kind = actionWebHook
 		ga.data = alert.Action
 	} else if strings.HasPrefix(alert.Action, "file://") {
-		ga.kind = SCRIPT
+		ga.kind = actionScript
 		ga.data = alert.Action[7:]
 	}
 
