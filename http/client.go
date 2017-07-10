@@ -25,7 +25,6 @@ package http
 import (
 	"bytes"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -119,7 +118,7 @@ func (c *CrudClient) List(resource string, values interface{}) error {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return errors.New(fmt.Sprintf("Failed to list %s, %s: %s", resource, resp.Status, readBody(resp)))
+		return fmt.Errorf("Failed to list %s, %s: %s", resource, resp.Status, readBody(resp))
 	}
 
 	return common.JSONDecode(resp.Body, values)
@@ -134,7 +133,7 @@ func (c *CrudClient) Get(resource string, id string, value interface{}) error {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return errors.New(fmt.Sprintf("Failed to get %s, %s: %s", resource, resp.Status, readBody(resp)))
+		return fmt.Errorf("Failed to get %s, %s: %s", resource, resp.Status, readBody(resp))
 	}
 
 	return common.JSONDecode(resp.Body, value)
@@ -157,7 +156,7 @@ func (c *CrudClient) Create(resource string, value interface{}) error {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return errors.New(fmt.Sprintf("Failed to create %s, %s: %s", resource, resp.Status, readBody(resp)))
+		return fmt.Errorf("Failed to create %s, %s: %s", resource, resp.Status, readBody(resp))
 	}
 
 	return common.JSONDecode(resp.Body, value)
@@ -179,7 +178,7 @@ func (c *CrudClient) Update(resource string, id string, value interface{}) error
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return errors.New(fmt.Sprintf("Failed to update %s, %s: %s", resource, resp.Status, readBody(resp)))
+		return fmt.Errorf("Failed to update %s, %s: %s", resource, resp.Status, readBody(resp))
 	}
 
 	return common.JSONDecode(resp.Body, value)
@@ -195,7 +194,7 @@ func (c *CrudClient) Delete(resource string, id string) error {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return errors.New(fmt.Sprintf("Failed to delete %s, %s: %s", resource, resp.Status, readBody(resp)))
+		return fmt.Errorf("Failed to delete %s, %s: %s", resource, resp.Status, readBody(resp))
 	}
 
 	return nil

@@ -243,7 +243,7 @@ func (o *OvsSFlowProbesHandler) RegisterProbeOnBridge(bridgeUUID string, tid str
 
 	addr := common.ServiceAddress{Addr: address, Port: 0}
 	agent, err := o.allocator.Alloc(bridgeUUID, ft, bpfFilter, &addr)
-	if err != nil && err != sflow.AgentAlreadyAllocated {
+	if err != nil && err != sflow.ErrAgentAlreadyAllocated {
 		return err
 	}
 

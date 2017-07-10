@@ -43,9 +43,11 @@ const (
 )
 
 var (
-	AgentAlreadyAllocated error = errors.New("agent already allocated for this uuid")
+	// ErrAgentAlreadyAllocated error agent already allocated for this uuid
+	ErrAgentAlreadyAllocated = errors.New("agent already allocated for this uuid")
 )
 
+// SFlowAgent describe SFlow agent probe
 type SFlowAgent struct {
 	sync.RWMutex
 	UUID      string
@@ -56,12 +58,14 @@ type SFlowAgent struct {
 	BPFFilter string
 }
 
+// SFlowAgentAllocator describe an SFlow agent allocator to manage multiple SFlow agent probe
 type SFlowAgentAllocator struct {
 	sync.RWMutex
 	portAllocator *common.PortAllocator
 	Addr          string
 }
 
+// GetTarget return the current used connection
 func (sfa *SFlowAgent) GetTarget() string {
 	target := []string{sfa.Addr, strconv.FormatInt(int64(sfa.Port), 10)}
 	return strings.Join(target, ":")
@@ -127,10 +131,12 @@ func (sfa *SFlowAgent) start() error {
 	return nil
 }
 
+// Start the SFlow probe agent
 func (sfa *SFlowAgent) Start() {
 	go sfa.start()
 }
 
+// Stop the SFlow probe agent
 func (sfa *SFlowAgent) Stop() {
 	sfa.Lock()
 	defer sfa.Unlock()
@@ -140,6 +146,7 @@ func (sfa *SFlowAgent) Stop() {
 	}
 }
 
+// NewSFlowAgent create a new probe agent and populate the flowtable
 func NewSFlowAgent(u string, a *common.ServiceAddress, ft *flow.Table, bpfFilter string) *SFlowAgent {
 	return &SFlowAgent{
 		UUID:      u,
@@ -150,6 +157,7 @@ func NewSFlowAgent(u string, a *common.ServiceAddress, ft *flow.Table, bpfFilter
 	}
 }
 
+// Release a probe agent
 func (a *SFlowAgentAllocator) Release(uuid string) {
 	a.Lock()
 	defer a.Unlock()
@@ -163,6 +171,7 @@ func (a *SFlowAgentAllocator) Release(uuid string) {
 	}
 }
 
+// ReleaseAll probes agent
 func (a *SFlowAgentAllocator) ReleaseAll() {
 	a.Lock()
 	for _, agent := range a.portAllocator.PortMap {
@@ -173,6 +182,7 @@ func (a *SFlowAgentAllocator) ReleaseAll() {
 	a.portAllocator.ReleaseAll()
 }
 
+// Alloc allocate a new probe
 func (a *SFlowAgentAllocator) Alloc(uuid string, ft *flow.Table, bpfFilter string, addr *common.ServiceAddress) (agent *SFlowAgent, _ error) {
 	a.Lock()
 	defer a.Unlock()
@@ -186,7 +196,7 @@ func (a *SFlowAgentAllocator) Alloc(uuid string, ft *flow.Table, bpfFilter strin
 	}
 	a.portAllocator.RUnlock()
 	if agent != nil {
-		return agent, AgentAlreadyAllocated
+		return agent, ErrAgentAlreadyAllocated
 	}
 
 	// get port, if port is not given by user.
@@ -203,6 +213,7 @@ func (a *SFlowAgentAllocator) Alloc(uuid string, ft *flow.Table, bpfFilter strin
 	return s, nil
 }
 
+// NewSFlowAgentAllocator create a new SFlow probes agent allocator
 func NewSFlowAgentAllocator() (*SFlowAgentAllocator, error) {
 	min := config.GetConfig().GetInt("sflow.port_min")
 	max := config.GetConfig().GetInt("sflow.port_max")
