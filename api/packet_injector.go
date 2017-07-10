@@ -49,6 +49,8 @@ type PacketParamsReq struct {
 	DstIP      string
 	SrcMAC     string
 	DstMAC     string
+	SrcPort    int64
+	DstPort    int64
 	Type       string
 	Payload    string
 	TrackingID string
@@ -65,7 +67,7 @@ func (pi *PacketInjectorAPI) requestToParams(ppr *PacketParamsReq) (string, *pac
 	dstNode := pi.getNode(ppr.Dst)
 
 	ipField := "IPV4"
-	if ppr.Type == "icmp6" {
+	if ppr.Type == "icmp6" || ppr.Type == "tcp6" {
 		ipField = "IPV6"
 	}
 
@@ -121,8 +123,10 @@ func (pi *PacketInjectorAPI) requestToParams(ppr *PacketParamsReq) (string, *pac
 		SrcNodeID: srcNode.ID,
 		SrcIP:     ppr.SrcIP,
 		SrcMAC:    ppr.SrcMAC,
+		SrcPort:   ppr.SrcPort,
 		DstIP:     ppr.DstIP,
 		DstMAC:    ppr.DstMAC,
+		DstPort:   ppr.DstPort,
 		Type:      ppr.Type,
 		Payload:   ppr.Payload,
 		Count:     ppr.Count,
