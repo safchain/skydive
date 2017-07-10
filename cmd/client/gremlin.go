@@ -39,12 +39,15 @@ import (
 	"github.com/skydive-project/skydive/topology/graph"
 )
 
-var NotFound = errors.New("No result found")
+// ErrNotFound error no result found
+var ErrNotFound = errors.New("No result found")
 
+// GremlinQueryHelper describe a gremlin query request query helper mechanism
 type GremlinQueryHelper struct {
 	authOptions *shttp.AuthenticationOpts
 }
 
+// Request send a Gremlin request to the topology API
 func (g *GremlinQueryHelper) Request(query string, header http.Header) (*http.Response, error) {
 	client, err := api.NewRestClientFromConfig(g.authOptions)
 	if err != nil {
@@ -62,6 +65,7 @@ func (g *GremlinQueryHelper) Request(query string, header http.Header) (*http.Re
 	return client.Request("POST", "api/topology", contentReader, header)
 }
 
+// Query the topology API
 func (g *GremlinQueryHelper) Query(query string, values interface{}) error {
 	resp, err := g.Request(query, nil)
 	if err != nil {
@@ -81,6 +85,7 @@ func (g *GremlinQueryHelper) Query(query string, values interface{}) error {
 	return nil
 }
 
+// GetNodes from the Gremlin query
 func (g *GremlinQueryHelper) GetNodes(query string) ([]*graph.Node, error) {
 	var values []interface{}
 	if err := g.Query(query, &values); err != nil {
@@ -110,6 +115,7 @@ func (g *GremlinQueryHelper) GetNodes(query string) ([]*graph.Node, error) {
 	return nodes, nil
 }
 
+// GetNode from the Gremlin query
 func (g *GremlinQueryHelper) GetNode(query string) (node *graph.Node, _ error) {
 	nodes, err := g.GetNodes(query)
 	if err != nil {
@@ -120,14 +126,16 @@ func (g *GremlinQueryHelper) GetNode(query string) (node *graph.Node, _ error) {
 		return nodes[0], nil
 	}
 
-	return nil, NotFound
+	return nil, ErrNotFound
 }
 
+// GetFlows form the Gremlin query
 func (g *GremlinQueryHelper) GetFlows(query string) (flows []*flow.Flow, err error) {
 	err = g.Query(query, &flows)
 	return
 }
 
+// GetFlowMetric from Gremlin query
 func (g *GremlinQueryHelper) GetFlowMetric(query string) (m *flow.FlowMetric, _ error) {
 	flows, err := g.GetFlows(query)
 	if err != nil {
@@ -135,7 +143,7 @@ func (g *GremlinQueryHelper) GetFlowMetric(query string) (m *flow.FlowMetric, _ 
 	}
 
 	if len(flows) == 0 {
-		return nil, NotFound
+		return nil, ErrNotFound
 	}
 
 	return flows[0].Metric, nil
@@ -170,6 +178,7 @@ func flatMetrictoTimedMetric(flat map[string]interface{}) (*common.TimedMetric, 
 	return tm, nil
 }
 
+// GetMetrics from Gremlin query
 func (g *GremlinQueryHelper) GetMetrics(query string) (map[string][]*common.TimedMetric, error) {
 	flat := []map[string][]map[string]interface{}{}
 
@@ -197,6 +206,7 @@ func (g *GremlinQueryHelper) GetMetrics(query string) (map[string][]*common.Time
 	return result, nil
 }
 
+// GetMetric from Gremlin query
 func (g *GremlinQueryHelper) GetMetric(query string) (*common.TimedMetric, error) {
 	flat := map[string]interface{}{}
 
@@ -207,6 +217,7 @@ func (g *GremlinQueryHelper) GetMetric(query string) (*common.TimedMetric, error
 	return flatMetrictoTimedMetric(flat)
 }
 
+// NewGremlinQueryHelper create a new Gremlin query helper based on authentication
 func NewGremlinQueryHelper(authOptions *shttp.AuthenticationOpts) *GremlinQueryHelper {
 	return &GremlinQueryHelper{
 		authOptions: authOptions,
