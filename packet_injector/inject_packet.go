@@ -47,6 +47,7 @@ var (
 	}
 )
 
+// PacketParams describe the packet parameters to be injected
 type PacketParams struct {
 	SrcNodeID graph.Identifier `valid:"nonzero"`
 	SrcIP     string           `valid:"nonzero"`
@@ -60,6 +61,7 @@ type PacketParams struct {
 	Payload   string
 }
 
+// InjectPacket inject some packets based on the graph
 func InjectPacket(pp *PacketParams, g *graph.Graph) (string, error) {
 	srcIP := getIP(pp.SrcIP)
 	if srcIP == nil {
@@ -144,7 +146,7 @@ func InjectPacket(pp *PacketParams, g *graph.Graph) (string, error) {
 	buffer := gopacket.NewSerializeBuffer()
 	if err := gopacket.SerializeLayers(buffer, options, l...); err != nil {
 		rawSocket.Close()
-		return "", fmt.Errorf("Error while generating %s packet: %s\n", pp.Type, err.Error())
+		return "", fmt.Errorf("Error while generating %s packet: %s", pp.Type, err.Error())
 	}
 
 	packetData := buffer.Bytes()

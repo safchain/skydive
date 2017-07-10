@@ -34,9 +34,11 @@ import (
 )
 
 const (
-	Namespace = "Packet_Injection"
+	// Namespace Packet_Injector
+	Namespace = "Packet_Injector"
 )
 
+// PacketInjectorServer create a packet injector server API
 type PacketInjectorServer struct {
 	shttp.DefaultWSClientEventHandler
 	WSAsyncClientPool *shttp.WSAsyncClientPool
@@ -57,6 +59,7 @@ func (pis *PacketInjectorServer) injectPacket(msg shttp.WSMessage) (string, erro
 	return trackingID, nil
 }
 
+// OnMessage event, websocket PIRequest message
 func (pis *PacketInjectorServer) OnMessage(c *shttp.WSAsyncClient, msg shttp.WSMessage) {
 	switch msg.Type {
 	case "PIRequest":
@@ -74,6 +77,7 @@ func (pis *PacketInjectorServer) OnMessage(c *shttp.WSAsyncClient, msg shttp.WSM
 	}
 }
 
+// NewServer create a new packet injector server API based on websocket server
 func NewServer(wspool *shttp.WSAsyncClientPool, graph *graph.Graph) *PacketInjectorServer {
 	s := &PacketInjectorServer{
 		WSAsyncClientPool: wspool,
