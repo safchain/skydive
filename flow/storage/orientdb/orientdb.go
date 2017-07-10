@@ -228,15 +228,15 @@ func (c *OrientDBStorage) SearchMetrics(fsq filters.SearchQuery, metricFilter *f
 	return metrics, nil
 }
 
-// Start the DB
+// Start the database client
 func (c *OrientDBStorage) Start() {
 }
 
-// Stop the DB
+// Stop the database client
 func (c *OrientDBStorage) Stop() {
 }
 
-// Close the DB
+// Close the database client
 func (c *OrientDBStorage) Close() {
 }
 

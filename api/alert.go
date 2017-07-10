@@ -28,7 +28,7 @@ import (
 	"github.com/nu7hatch/gouuid"
 )
 
-// Alert is a set of parameters, the Alert Action will Trigger according to his Expression.
+// Alert is a set of parameters, the Alert Action will Trigger according to its Expression.
 type Alert struct {
 	Resource
 	UUID        string

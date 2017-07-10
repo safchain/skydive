@@ -334,7 +334,7 @@ func (o *OvsMonitor) AddMonitorHandler(handler OvsMonitorHandler) {
 	o.MonitorHandlers = append(o.MonitorHandlers, handler)
 }
 
-// ExcludeColumn exclude some column to be montiored
+// ExcludeColumn exclude some column to be monitored
 func (o *OvsMonitor) ExcludeColumn(column string) {
 	o.columnsExcluded[column] = true
 }

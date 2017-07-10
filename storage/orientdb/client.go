@@ -276,7 +276,7 @@ func NewClient(url string, database string, username string, password string) (*
 	return client, nil
 }
 
-// Request send a reques to the OrientDB server
+// Request send a request to the OrientDB server
 func (c *Client) Request(method string, url string, body io.Reader) (*http.Response, error) {
 	if body != nil {
 		body = compressBody(body)
@@ -390,7 +390,7 @@ func (c *Client) Upsert(doc Document, key string) (Document, error) {
 	return nil, err
 }
 
-// GetDocumentClass return an OrientDB docuemnt class
+// GetDocumentClass return an OrientDB document class
 func (c *Client) GetDocumentClass(name string) (*DocumentClass, error) {
 	url := fmt.Sprintf("%s/class/%s/%s", c.url, c.database, name)
 	resp, err := c.Request("GET", url, nil)

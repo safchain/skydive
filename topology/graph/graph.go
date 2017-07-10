@@ -96,7 +96,7 @@ type Node struct {
 	graphElement
 }
 
-// Edge of the graph identified by a parent and a child
+// Edge of the graph linked by a parent and a child
 type Edge struct {
 	graphElement
 	parent Identifier
@@ -129,7 +129,7 @@ type GraphContext struct {
 }
 
 // Graph describe the graph object based on events and context mechanism
-// An associate backend is used as storage
+// An associated backend is used as storage
 type Graph struct {
 	sync.RWMutex
 	backend              GraphBackend

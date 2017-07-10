@@ -312,7 +312,7 @@ func (c *ElasticSearchStorage) SearchFlows(fsq filters.SearchQuery) (*flow.FlowS
 	return flowset, nil
 }
 
-// Start the DB
+// Start the Database client
 func (c *ElasticSearchStorage) Start() {
 	go c.client.Start([]map[string][]byte{
 		{"metric": []byte(metricMapping)},
@@ -320,7 +320,7 @@ func (c *ElasticSearchStorage) Start() {
 	)
 }
 
-// Stop the DB
+// Stop the Database client
 func (c *ElasticSearchStorage) Stop() {
 	c.client.Stop()
 }

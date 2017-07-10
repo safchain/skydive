@@ -22,7 +22,7 @@
 
 package common
 
-// CaptureType describe
+// CaptureType describes a list of allowed and default captures probes
 type CaptureType struct {
 	Allowed []string
 	Default string

@@ -104,7 +104,7 @@ func (im *InterfaceMetric) GetFieldInt64(field string) (int64, error) {
 	return 0, common.ErrFieldNotFound
 }
 
-// Add do a sum opreation on interface metric
+// Add do a sum operation on interface metric
 func (im *InterfaceMetric) Add(m common.Metric) common.Metric {
 	im2 := m.(*InterfaceMetric)
 

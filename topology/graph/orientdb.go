@@ -221,7 +221,7 @@ func (o *OrientDBBackend) GetEdge(i Identifier, t *common.TimeSlice) (edges []*E
 	return
 }
 
-// GetEdgeNodes return the parents and child nodes of an edge within time slice, matching metadatas
+// GetEdgeNodes return the parents and child nodes of an edge within time slice, matching metadata
 func (o *OrientDBBackend) GetEdgeNodes(e *Edge, t *common.TimeSlice, parentMetadata, childMetadata Metadata) (parents []*Node, children []*Node) {
 	query := fmt.Sprintf("SELECT FROM Node WHERE %s AND ID in [\"%s\", \"%s\"]", o.getTimeSliceClause(t), e.parent, e.child)
 	docs, err := o.client.Search(query)

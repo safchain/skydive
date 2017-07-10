@@ -1250,7 +1250,7 @@ nodeloop:
 	return ntv
 }
 
-// InE step of an edge
+// InE step of an node
 func (tv *GraphTraversalV) InE(s ...interface{}) *GraphTraversalE {
 	if tv.error != nil {
 		return &GraphTraversalE{error: tv.error}

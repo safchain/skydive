@@ -66,7 +66,7 @@ type Agent struct {
 	TIDMapper           *topology.TIDMapper
 }
 
-// NewAnalyzerWSClientPool create a new http WebSocket client Pool
+// NewAnalyzerWSClientPool creates a new http WebSocket client Pool
 // with authentification
 func NewAnalyzerWSClientPool() *shttp.WSAsyncClientPool {
 	wspool := shttp.NewWSAsyncClientPool()
@@ -175,7 +175,7 @@ func (a *Agent) Stop() {
 	a.TIDMapper.Stop()
 }
 
-// NewAgent instanciate a new Agent aim to launch probes (topology and flow)
+// NewAgent instanciates a new Agent aim to launch probes (topology and flow)
 func NewAgent() *Agent {
 	backend, err := graph.NewMemoryBackend()
 	if err != nil {
@@ -216,8 +216,7 @@ func NewAgent() *Agent {
 	}
 }
 
-// CreateRootNode create a graph.Node based on the host properties
-// aim to have an unique ID per host per container.
+// CreateRootNode creates a graph.Node based on the host properties and aims to have an unique ID
 func CreateRootNode(g *graph.Graph) *graph.Node {
 	hostID := config.GetConfig().GetString("host_id")
 	m := graph.Metadata{"Name": hostID, "Type": "host"}
