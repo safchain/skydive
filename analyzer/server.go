@@ -45,7 +45,7 @@ import (
 	"github.com/skydive-project/skydive/topology/graph/traversal"
 )
 
-// Server describe an Analyzer servers mechanism like http, websocket, topology, ondemand probes, ...
+// Server describes an Analyzer servers mechanism like http, websocket, topology, ondemand probes, ...
 type Server struct {
 	HTTPServer        *shttp.Server
 	WSServer          *shttp.WSServer

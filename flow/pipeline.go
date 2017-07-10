@@ -27,7 +27,7 @@ type Enhancer interface {
 	Enhance(flow *Flow)
 }
 
-// EnhancerPipeline describe a list of flow enhancer
+// EnhancerPipeline describes a list of flow enhancer
 type EnhancerPipeline struct {
 	Enhancers []Enhancer
 }

@@ -38,7 +38,7 @@ import (
 	"github.com/skydive-project/skydive/topology/graph"
 )
 
-// OnDemandProbeServer describe an ondemand probe server based on websocket
+// OnDemandProbeServer describes an ondemand probe server based on websocket
 type OnDemandProbeServer struct {
 	sync.RWMutex
 	graph.DefaultGraphListener

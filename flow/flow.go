@@ -49,7 +49,7 @@ const (
 	CaptureLength uint32 = 256
 )
 
-// Packet describe one packet
+// Packet describes one packet
 type Packet struct {
 	gopacket *gopacket.Packet
 	length   int64
@@ -169,7 +169,7 @@ func (i *ICMPLayer) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// Key describe a unique flow Key
+// Key describes a unique flow Key
 type Key string
 
 func (f Key) String() string {

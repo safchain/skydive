@@ -42,7 +42,7 @@ type Resource interface {
 	SetID(string)
 }
 
-// Handler describe resources for each API
+// Handler describes resources for each API
 type Handler interface {
 	Name() string
 	New() Resource

@@ -39,7 +39,7 @@ const (
 	timeout = time.Second * 30
 )
 
-// EtcdMasterElectionListener describe the multi ETCD election mechanism
+// EtcdMasterElectionListener describes the multi ETCD election mechanism
 type EtcdMasterElectionListener interface {
 	OnStartAsMaster()
 	OnStartAsSlave()
@@ -47,7 +47,7 @@ type EtcdMasterElectionListener interface {
 	OnSwitchToSlave()
 }
 
-// EtcdMasterElector describe an ETCD master elector
+// EtcdMasterElector describes an ETCD master elector
 type EtcdMasterElector struct {
 	sync.RWMutex
 	EtcdKeyAPI etcd.KeysAPI

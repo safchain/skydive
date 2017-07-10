@@ -42,7 +42,7 @@ import (
 	"github.com/vishvananda/netns"
 )
 
-// NetNSProbe describe a netlink probe in a network namespace
+// NetNSProbe describes a netlink probe in a network namespace
 type NetNSProbe struct {
 	sync.RWMutex
 	Graph              *graph.Graph
@@ -54,7 +54,7 @@ type NetNSProbe struct {
 	rootNsDev          uint64
 }
 
-// NetNs describe a network namespace path associated with a device / inode
+// NetNs describes a network namespace path associated with a device / inode
 type NetNs struct {
 	path string
 	dev  uint64

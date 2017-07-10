@@ -34,7 +34,7 @@ var (
 	ErrNoPortLeft = errors.New("No free port left")
 )
 
-// PortAllocator describe a thread safe port list that can be allocated
+// PortAllocator describes a thread safe port list that can be allocated
 type PortAllocator struct {
 	sync.RWMutex
 	MinPort int

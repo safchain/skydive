@@ -34,7 +34,7 @@ const (
 	Namespace = "Flow"
 )
 
-// TableServer describe a mechanism to Query a flow table via Websocket
+// TableServer describes a mechanism to Query a flow table via Websocket
 type TableServer struct {
 	shttp.DefaultWSClientEventHandler
 	WSAsyncClientPool *shttp.WSAsyncClientPool

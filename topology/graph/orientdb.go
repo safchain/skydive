@@ -34,7 +34,7 @@ import (
 	"github.com/skydive-project/skydive/storage/orientdb"
 )
 
-// OrientDBBackend describe an OrientDB backend
+// OrientDBBackend describes an OrientDB backend
 type OrientDBBackend struct {
 	GraphBackend
 	client orientdb.ClientInterface

@@ -37,7 +37,7 @@ import (
 	"github.com/nlewo/contrail-introspect-cli/descriptions"
 )
 
-// OpenContrailProbe describe a probe that read OpenContrail database and update the graph
+// OpenContrailProbe describes a probe that read OpenContrail database and update the graph
 type OpenContrailProbe struct {
 	graph.DefaultGraphListener
 	graph           *graph.Graph

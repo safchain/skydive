@@ -37,21 +37,21 @@ import (
 )
 
 type (
-	// GremlinTraversalSequence describe a sequence of steps
+	// GremlinTraversalSequence describes a sequence of steps
 	GremlinTraversalSequence struct {
 		GraphTraversal *GraphTraversal
 		steps          []GremlinTraversalStep
 		extensions     []GremlinTraversalExtension
 	}
 
-	// GremlinTraversalStep describe a step
+	// GremlinTraversalStep describes a step
 	GremlinTraversalStep interface {
 		Exec(last GraphTraversalStep) (GraphTraversalStep, error)
 		Reduce(previous GremlinTraversalStep) GremlinTraversalStep
 		Context() *GremlinTraversalContext
 	}
 
-	// GremlinTraversalContext describe the context of a step
+	// GremlinTraversalContext describes the context of a step
 	GremlinTraversalContext struct {
 		StepContext GraphStepContext
 		Params      []interface{}
@@ -164,7 +164,7 @@ var (
 	ErrExecutionError = errors.New("Error while executing the query")
 )
 
-// GremlinTraversalParser describe a parser of gremlin graph expression
+// GremlinTraversalParser describes a parser of gremlin graph expression
 // The mechanism is based on Reduce and Exec steps
 type GremlinTraversalParser struct {
 	sync.RWMutex

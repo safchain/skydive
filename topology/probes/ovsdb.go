@@ -41,7 +41,7 @@ var (
 	patchMetadata = graph.Metadata{"Type": "patch"}
 )
 
-// OvsdbProbe describe a probe that read OVS database and update the graph
+// OvsdbProbe describes a probe that read OVS database and update the graph
 type OvsdbProbe struct {
 	sync.Mutex
 	Graph        *graph.Graph

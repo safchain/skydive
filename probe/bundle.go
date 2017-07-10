@@ -22,13 +22,13 @@
 
 package probe
 
-// Probe describe a Probe (topology or flow) mechanism API
+// Probe describes a Probe (topology or flow) mechanism API
 type Probe interface {
 	Start()
 	Stop()
 }
 
-// ProbeBundle describe a bundle of probes (topology of flow)
+// ProbeBundle describes a bundle of probes (topology of flow)
 type ProbeBundle struct {
 	Probes map[string]Probe
 }

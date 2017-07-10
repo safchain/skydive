@@ -51,7 +51,7 @@ const (
 	defaultSortBy = "Last"
 )
 
-// FlowTraversalExtension describe flows in a graph Gremlin language extension
+// FlowTraversalExtension describes flows in a graph Gremlin language extension
 type FlowTraversalExtension struct {
 	FlowToken        traversal.Token
 	HopsToken        traversal.Token

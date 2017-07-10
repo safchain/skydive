@@ -50,7 +50,7 @@ var (
 	ErrSyncReplyMsgMalFormed = errors.New("SyncReplyMsg malformed")
 )
 
-// SyncReplyMsg describe graph syncho message
+// SyncReplyMsg describes graph syncho message
 type SyncReplyMsg struct {
 	Nodes []*Node
 	Edges []*Edge

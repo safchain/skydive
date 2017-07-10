@@ -34,13 +34,13 @@ import (
 	"github.com/skydive-project/skydive/logging"
 )
 
-// OvsClient describe an OVS database client connection
+// OvsClient describes an OVS database client connection
 type OvsClient struct {
 	ovsdb     *libovsdb.OvsdbClient
 	connected uint64
 }
 
-// OvsMonitorHandler describe an OVS Monitor interface mechanism
+// OvsMonitorHandler describes an OVS Monitor interface mechanism
 type OvsMonitorHandler interface {
 	OnOvsBridgeAdd(monitor *OvsMonitor, uuid string, row *libovsdb.RowUpdate)
 	OnOvsBridgeDel(monitor *OvsMonitor, uuid string, row *libovsdb.RowUpdate)
@@ -53,7 +53,7 @@ type OvsMonitorHandler interface {
 	OnOvsPortUpdate(monitor *OvsMonitor, uuid string, row *libovsdb.RowUpdate)
 }
 
-// OvsMonitor describe an OVS client Monitor
+// OvsMonitor describes an OVS client Monitor
 type OvsMonitor struct {
 	sync.RWMutex
 	Protocol        string
@@ -71,7 +71,7 @@ type OvsMonitor struct {
 // ConnectionPollInterval poll OVS database every 4 seconds
 const ConnectionPollInterval time.Duration = 4 * time.Second
 
-// Notifier describe a notification based on the monitor
+// Notifier describes a notification based on the monitor
 type Notifier struct {
 	monitor *OvsMonitor
 }

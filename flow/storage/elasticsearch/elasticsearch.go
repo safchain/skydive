@@ -124,7 +124,7 @@ const metricMapping = `
 	]
 }`
 
-// ElasticSearchStorage describe a ElasticSearch database client
+// ElasticSearchStorage describes a ElasticSearch database client
 type ElasticSearchStorage struct {
 	client *esclient.ElasticSearchClient
 }

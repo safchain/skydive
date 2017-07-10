@@ -46,7 +46,7 @@ import (
 	"github.com/skydive-project/skydive/topology/graph"
 )
 
-// NeutronProbe describe a topology porbe that map neutron attribues in the graph
+// NeutronProbe describes a topology porbe that map neutron attribues in the graph
 type NeutronProbe struct {
 	graph.DefaultGraphListener
 	graph  *graph.Graph

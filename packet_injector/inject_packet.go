@@ -47,7 +47,7 @@ var (
 	}
 )
 
-// PacketParams describe the packet parameters to be injected
+// PacketParams describes the packet parameters to be injected
 type PacketParams struct {
 	SrcNodeID graph.Identifier `valid:"nonzero"`
 	SrcIP     string           `valid:"nonzero"`

@@ -42,7 +42,7 @@ var (
 	Layer2Metadata    = graph.Metadata{"RelationType": Layer2Link}
 )
 
-// NodePath describe a path in the graph between 2 nodes
+// NodePath describes a path in the graph between 2 nodes
 type NodePath []*graph.Node
 
 // Marshal Serialize the node path

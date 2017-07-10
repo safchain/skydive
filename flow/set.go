@@ -27,7 +27,7 @@ import (
 	"github.com/skydive-project/skydive/filters"
 )
 
-// MergeContext describe a mechanism to merge flow sets
+// MergeContext describes a mechanism to merge flow sets
 type MergeContext struct {
 	Sort      bool
 	SortBy    string

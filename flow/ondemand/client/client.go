@@ -39,7 +39,7 @@ import (
 	"github.com/skydive-project/skydive/topology/graph"
 )
 
-// OnDemandProbeClient describe an ondemand probe client based on a websocket
+// OnDemandProbeClient describes an ondemand probe client based on a websocket
 type OnDemandProbeClient struct {
 	sync.RWMutex
 	shttp.DefaultWSServerEventHandler

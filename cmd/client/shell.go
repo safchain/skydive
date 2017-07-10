@@ -320,7 +320,7 @@ func homeDir() (home string, err error) {
 	return
 }
 
-// Session describe a shell session
+// Session describes a shell session
 type Session struct {
 	authenticationOpts shttp.AuthenticationOpts
 	analyzerAddr       string

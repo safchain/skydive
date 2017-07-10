@@ -48,14 +48,14 @@ type Server struct {
 	handlers    map[string]Handler
 }
 
-// Info for each host describe his API version and service (agent or analyzer)
+// Info for each host describes his API version and service (agent or analyzer)
 type Info struct {
 	Host    string
 	Version string
 	Service string
 }
 
-// HandlerFunc describe an http(s) router handler callback function
+// HandlerFunc describes an http(s) router handler callback function
 type HandlerFunc func(w http.ResponseWriter, r *http.Request)
 
 func writeError(w http.ResponseWriter, status int, err error) {

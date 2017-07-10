@@ -42,7 +42,7 @@ import (
 	"github.com/skydive-project/skydive/topology/probes"
 )
 
-// OvsSFlowProbe describe a SFlow probe from OVS switch
+// OvsSFlowProbe describes a SFlow probe from OVS switch
 type OvsSFlowProbe struct {
 	ID         string
 	Interface  string
@@ -53,7 +53,7 @@ type OvsSFlowProbe struct {
 	NodeTID    string
 }
 
-// OvsSFlowProbesHandler describe a flow probe in running in the graph
+// OvsSFlowProbesHandler describes a flow probe in running in the graph
 type OvsSFlowProbesHandler struct {
 	FlowProbe
 	Graph     *graph.Graph

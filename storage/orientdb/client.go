@@ -37,7 +37,7 @@ import (
 	"github.com/skydive-project/skydive/filters"
 )
 
-// Document describe an orientdb docmuent interface
+// Document describes an orientdb docmuent interface
 type Document map[string]interface{}
 
 // Result descibe an orientdb request result
@@ -45,7 +45,7 @@ type Result struct {
 	Result interface{} `json:"result"`
 }
 
-// ClientInterface describe the mechanism API of OrientDB database client
+// ClientInterface describes the mechanism API of OrientDB database client
 type ClientInterface interface {
 	Request(method string, url string, body io.Reader) (*http.Response, error)
 	DeleteDocument(id string) error
@@ -67,7 +67,7 @@ type ClientInterface interface {
 	Connect() error
 }
 
-// Client describe a OrientDB client database
+// Client describes a OrientDB client database
 type Client struct {
 	url           string
 	authenticated bool
@@ -78,25 +78,25 @@ type Client struct {
 	client        *http.Client
 }
 
-// Session describe a OrientDB client session
+// Session describes a OrientDB client session
 type Session struct {
 	client   *Client
 	database string
 }
 
-// Error describe a OrientDB error
+// Error describes a OrientDB error
 type Error struct {
 	Code    int    `json:"code"`
 	Reason  int    `json:"reason"`
 	Content string `json:"content"`
 }
 
-// Errors describe a list of OrientDB errors
+// Errors describes a list of OrientDB errors
 type Errors struct {
 	Errors []Error `json:"errors"`
 }
 
-// Property describe a OrientDB property
+// Property describes a OrientDB property
 type Property struct {
 	Name        string `json:"name,omitempty"`
 	Type        string `json:"type,omitempty"`
@@ -109,14 +109,14 @@ type Property struct {
 	Regexp      string `json:"regexp,omitempty"`
 }
 
-// Index describe a OrientDB index
+// Index describes a OrientDB index
 type Index struct {
 	Name   string   `json:"name"`
 	Type   string   `json:"type"`
 	Fields []string `json:"fields"`
 }
 
-// ClassDefinition describe a OrientDB class definition
+// ClassDefinition describes a OrientDB class definition
 type ClassDefinition struct {
 	Name         string     `json:"name"`
 	SuperClass   string     `json:"superClass,omitempty"`
@@ -128,7 +128,7 @@ type ClassDefinition struct {
 	Indexes      []Index    `json:"indexes,omitempty"`
 }
 
-// DocumentClass describe OrientDB document
+// DocumentClass describes OrientDB document
 type DocumentClass struct {
 	Class ClassDefinition `json:"class"`
 }

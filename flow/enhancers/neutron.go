@@ -31,7 +31,7 @@ import (
 	"github.com/skydive-project/skydive/topology/graph"
 )
 
-// NeutronFlowEnhancer describe a neutron graph enhancer
+// NeutronFlowEnhancer describes a neutron graph enhancer
 type NeutronFlowEnhancer struct {
 	graph.DefaultGraphListener
 	Graph    *graph.Graph

@@ -36,7 +36,7 @@ import (
 	"github.com/skydive-project/skydive/topology/graph"
 )
 
-// PcapSocketProbe describe a TCP packet listener that inject packets in a flowtable
+// PcapSocketProbe describes a TCP packet listener that inject packets in a flowtable
 type PcapSocketProbe struct {
 	node      *graph.Node
 	state     int64
@@ -46,7 +46,7 @@ type PcapSocketProbe struct {
 	bpfFilter string
 }
 
-// PcapSocketProbeHandler describe a Pcap socket probe in the graph
+// PcapSocketProbeHandler describes a Pcap socket probe in the graph
 type PcapSocketProbeHandler struct {
 	graph         *graph.Graph
 	addr          *net.TCPAddr

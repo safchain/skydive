@@ -37,7 +37,7 @@ import (
 	"github.com/skydive-project/skydive/topology"
 )
 
-// TableClient describe a mechanism to Query a flow table via flowSet in JSON
+// TableClient describes a mechanism to Query a flow table via flowSet in JSON
 type TableClient struct {
 	shttp.DefaultWSServerEventHandler
 	WSServer       *shttp.WSServer

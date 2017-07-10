@@ -94,7 +94,7 @@ import (
 	"github.com/vishvananda/netns"
 )
 
-// RawSocket describe a raw socket C implemenation
+// RawSocket describes a raw socket C implemenation
 type RawSocket struct {
 	fd int
 }

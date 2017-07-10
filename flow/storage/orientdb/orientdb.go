@@ -36,7 +36,7 @@ import (
 	orient "github.com/skydive-project/skydive/storage/orientdb"
 )
 
-// OrientDBStorage describe a OrientDB database client
+// OrientDBStorage describes a OrientDB database client
 type OrientDBStorage struct {
 	client *orient.Client
 }

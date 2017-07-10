@@ -48,7 +48,7 @@ import (
 // ErrFlowUDPAcceptNotSupported error the connection can't accept as it's UDP based
 var ErrFlowUDPAcceptNotSupported = errors.New("UDP connection is datagram based (not connected), accept() not supported")
 
-// FlowConnectionType describe an UDP or TLS connection
+// FlowConnectionType describes an UDP or TLS connection
 type FlowConnectionType int
 
 const (
@@ -58,7 +58,7 @@ const (
 	TLS
 )
 
-// FlowServerConn describe a flow server connection
+// FlowServerConn describes a flow server connection
 type FlowServerConn struct {
 	mode      FlowConnectionType
 	udpConn   *net.UDPConn
@@ -66,7 +66,7 @@ type FlowServerConn struct {
 	tlsListen net.Listener
 }
 
-// FlowServer describe a flow server with pipeline enhancers mechanism
+// FlowServer describes a flow server with pipeline enhancers mechanism
 type FlowServer struct {
 	Addr             string
 	Port             int
@@ -233,7 +233,7 @@ func NewFlowServerConn(addr *net.UDPAddr) (a *FlowServerConn, err error) {
 	return a, err
 }
 
-// FlowClientConn describe a flow client connection
+// FlowClientConn describes a flow client connection
 type FlowClientConn struct {
 	udpConn       *net.UDPConn
 	tlsConnClient *tls.Conn

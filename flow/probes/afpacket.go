@@ -30,7 +30,7 @@ import (
 	"github.com/skydive-project/skydive/flow/probes/afpacket"
 )
 
-// AFPacketHandle describe a AF network kernel packets
+// AFPacketHandle describes a AF network kernel packets
 type AFPacketHandle struct {
 	tpacket *afpacket.TPacket
 }

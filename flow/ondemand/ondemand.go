@@ -29,7 +29,7 @@ const (
 	Namespace = "OnDemand"
 )
 
-// CaptureQuery describe a query for the capture API
+// CaptureQuery describes a query for the capture API
 type CaptureQuery struct {
 	NodeID  string
 	Capture api.Capture

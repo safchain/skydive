@@ -48,7 +48,7 @@ type packetHandle interface {
 	Close()
 }
 
-// GoPacketProbe describe a new probe that store packets from gopacket pcap library in a flowtable
+// GoPacketProbe describes a new probe that store packets from gopacket pcap library in a flowtable
 type GoPacketProbe struct {
 	handle       packetHandle
 	packetSource *gopacket.PacketSource
@@ -57,7 +57,7 @@ type GoPacketProbe struct {
 	state        int64
 }
 
-// GoPacketProbesHandler describe a flow probe handle in the graph
+// GoPacketProbesHandler describes a flow probe handle in the graph
 type GoPacketProbesHandler struct {
 	graph      *graph.Graph
 	wg         sync.WaitGroup

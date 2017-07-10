@@ -42,7 +42,7 @@ import (
 
 const indexVersion = 6
 
-// ElasticSearchClientInterface describe the mechanism API of ElasticSearch database client
+// ElasticSearchClientInterface describes the mechanism API of ElasticSearch database client
 type ElasticSearchClientInterface interface {
 	FormatFilter(filter *filters.Filter, mapKey string) map[string]interface{}
 	Index(obj string, id string, data interface{}) error
@@ -60,7 +60,7 @@ type ElasticSearchClientInterface interface {
 	Start(mappings []map[string][]byte)
 }
 
-// ElasticSearchClient describe a ElasticSearch client connection
+// ElasticSearchClient describes a ElasticSearch client connection
 type ElasticSearchClient struct {
 	connection *elastigo.Conn
 	indexer    *elastigo.BulkIndexer

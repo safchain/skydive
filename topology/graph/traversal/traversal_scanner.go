@@ -95,7 +95,7 @@ const (
 	// extensions token have to start after 1000
 )
 
-// GremlinTraversalScanner describe a buffer scanner for Gremlin expression extension
+// GremlinTraversalScanner describes a buffer scanner for Gremlin expression extension
 type GremlinTraversalScanner struct {
 	reader     *bufio.Reader
 	extensions []GremlinTraversalExtension

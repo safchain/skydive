@@ -35,7 +35,7 @@ const (
 	DefaultMode
 )
 
-// CachedBackend describe a cache mechanism in memory and/or persistent database
+// CachedBackend describes a cache mechanism in memory and/or persistent database
 type CachedBackend struct {
 	memory     *MemoryBackend
 	persistent GraphBackend

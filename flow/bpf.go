@@ -30,7 +30,7 @@ import (
 	"golang.org/x/net/bpf"
 )
 
-// BPF describe a filter
+// BPF describes a filter
 type BPF struct {
 	vm *bpf.VM
 }

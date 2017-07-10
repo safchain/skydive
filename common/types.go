@@ -45,7 +45,7 @@ var (
 	ErrFieldWrongType = errors.New("Field has wrong type")
 )
 
-// SortOrder describe ascending or descending order
+// SortOrder describes ascending or descending order
 type SortOrder string
 
 const (

@@ -29,7 +29,7 @@ import (
 	"github.com/skydive-project/skydive/topology/graph"
 )
 
-// TIDMapper describe the hostID nodes stored in a graph
+// TIDMapper describes the hostID nodes stored in a graph
 // the mapper will broadcast node event to the registered listeners
 type TIDMapper struct {
 	graph.DefaultGraphListener

@@ -38,7 +38,7 @@ const (
 	defaultPort = 6343
 )
 
-// SFlowProbesHandler describe a SFlow probe in the graph
+// SFlowProbesHandler describes a SFlow probe in the graph
 type SFlowProbesHandler struct {
 	FlowProbe
 	Graph      *graph.Graph

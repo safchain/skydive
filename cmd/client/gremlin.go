@@ -42,7 +42,7 @@ import (
 // ErrNotFound error no result found
 var ErrNotFound = errors.New("No result found")
 
-// GremlinQueryHelper describe a gremlin query request query helper mechanism
+// GremlinQueryHelper describes a gremlin query request query helper mechanism
 type GremlinQueryHelper struct {
 	authOptions *shttp.AuthenticationOpts
 }

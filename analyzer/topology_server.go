@@ -34,7 +34,7 @@ import (
 	"github.com/xeipuuv/gojsonschema"
 )
 
-// TopologyServer describe a service to reply to topology queries
+// TopologyServer describes a service to reply to topology queries
 type TopologyServer struct {
 	sync.RWMutex
 	shttp.DefaultWSServerEventHandler

@@ -22,7 +22,7 @@
 
 package common
 
-// Iterator describe a int64 iterator
+// Iterator describes a int64 iterator
 type Iterator struct {
 	at, from, to int64
 }

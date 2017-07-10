@@ -34,7 +34,7 @@ import (
 	"github.com/skydive-project/skydive/topology/graph"
 )
 
-// FlowProbeBundle describe a flow probes bundle
+// FlowProbeBundle describes a flow probes bundle
 type FlowProbeBundle struct {
 	probe.ProbeBundle
 	Graph              *graph.Graph

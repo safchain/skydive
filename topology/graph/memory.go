@@ -39,7 +39,7 @@ type MemoryBackendEdge struct {
 	*Edge
 }
 
-// MemoryBackend describe the memory backend
+// MemoryBackend describes the memory backend
 type MemoryBackend struct {
 	GraphBackend
 	nodes map[Identifier]*MemoryBackendNode

@@ -27,7 +27,7 @@ import (
 	"strings"
 )
 
-// ServiceType describe the service type (analyzer or agent)
+// ServiceType describes the service type (analyzer or agent)
 type ServiceType string
 
 const (
@@ -46,7 +46,7 @@ const (
 	StoppingState
 )
 
-// ServiceAddress describe the service listening address and port
+// ServiceAddress describes the service listening address and port
 type ServiceAddress struct {
 	Addr string
 	Port int

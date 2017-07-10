@@ -55,7 +55,7 @@ const (
 // Identifier graph ID
 type Identifier string
 
-// GraphEventListener describe the graph events interface mechanism
+// GraphEventListener describes the graph events interface mechanism
 type GraphEventListener interface {
 	OnNodeUpdated(n *Node)
 	OnNodeAdded(n *Node)
@@ -71,10 +71,10 @@ type graphEvent struct {
 	listener GraphEventListener
 }
 
-// Metadata describe the graph node metadata type
+// Metadata describes the graph node metadata type
 type Metadata map[string]interface{}
 
-// MetadataTransaction describe a metadata(s) transaction in the graph
+// MetadataTransaction describes a metadata(s) transaction in the graph
 type MetadataTransaction struct {
 	graph        *Graph
 	graphElement interface{}
@@ -123,12 +123,12 @@ type GraphBackend interface {
 	WithContext(graph *Graph, context GraphContext) (*Graph, error)
 }
 
-// GraphContext describe within time slice
+// GraphContext describes within time slice
 type GraphContext struct {
 	TimeSlice *common.TimeSlice
 }
 
-// Graph describe the graph object based on events and context mechanism
+// Graph describes the graph object based on events and context mechanism
 // An associated backend is used as storage
 type Graph struct {
 	sync.RWMutex

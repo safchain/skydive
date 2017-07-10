@@ -40,7 +40,7 @@ type fabricLink struct {
 	linkMetadata   graph.Metadata
 }
 
-// FabricProbe describe a topology probe
+// FabricProbe describes a topology probe
 type FabricProbe struct {
 	graph.DefaultGraphListener
 	Graph *graph.Graph

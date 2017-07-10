@@ -29,7 +29,7 @@ import (
 	"github.com/vishvananda/netns"
 )
 
-// NetNSContext describe a NameSpace Context switch API
+// NetNSContext describes a NameSpace Context switch API
 type NetNSContext struct {
 	origns netns.NsHandle
 	newns  netns.NsHandle

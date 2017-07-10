@@ -97,14 +97,14 @@ const graphElementMapping = `
 // ErrBadConfig elasticsearch configuration file is incorrect
 var ErrBadConfig = errors.New("elasticsearch : Config file is misconfigured, check elasticsearch key format")
 
-// ElasticSearchBackend describe a presisent backend based on ElasticSearch
+// ElasticSearchBackend describes a presisent backend based on ElasticSearch
 type ElasticSearchBackend struct {
 	GraphBackend
 	client       elasticsearch.ElasticSearchClientInterface
 	prevRevision map[Identifier]int64
 }
 
-// TimedSearchQuery describe a search query within a time slice and metadata filters
+// TimedSearchQuery describes a search query within a time slice and metadata filters
 type TimedSearchQuery struct {
 	filters.SearchQuery
 	TimeFilter     *filters.Filter

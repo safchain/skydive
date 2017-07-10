@@ -28,7 +28,7 @@ import (
 	"github.com/skydive-project/skydive/topology/graph"
 )
 
-// PeeringProbe describe graph peering based on MAC address and graph events
+// PeeringProbe describes graph peering based on MAC address and graph events
 type PeeringProbe struct {
 	graph.DefaultGraphListener
 	graph *graph.Graph

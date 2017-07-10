@@ -33,7 +33,7 @@ import (
 
 var regexpCache *cache.Cache
 
-// Getter describe filter getter fields
+// Getter describes filter getter fields
 type Getter interface {
 	GetField(field string) (interface{}, error)
 	GetFieldInt64(field string) (int64, error)

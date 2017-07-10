@@ -47,7 +47,7 @@ const (
 	maxEpollEvents = 32
 )
 
-// NetNsNetLinkProbe describe a topology probe based on netlink in a network namespace
+// NetNsNetLinkProbe describes a topology probe based on netlink in a network namespace
 type NetNsNetLinkProbe struct {
 	sync.RWMutex
 	Graph                *graph.Graph
@@ -64,7 +64,7 @@ type NetNsNetLinkProbe struct {
 	quit                 chan bool
 }
 
-// NetLinkProbe describe a list NetLink NameSpace probe to enhance the graph
+// NetLinkProbe describes a list NetLink NameSpace probe to enhance the graph
 type NetLinkProbe struct {
 	sync.RWMutex
 	Graph   *graph.Graph

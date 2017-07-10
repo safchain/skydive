@@ -34,7 +34,7 @@ import (
 	"github.com/skydive-project/skydive/config"
 )
 
-// EtcdClient describe a ETCD configuration client
+// EtcdClient describes a ETCD configuration client
 type EtcdClient struct {
 	Client  *etcd.Client
 	KeysAPI etcd.KeysAPI

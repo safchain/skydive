@@ -31,7 +31,7 @@ import (
 	"github.com/skydive-project/skydive/topology/graph"
 )
 
-// GraphFlowEnhancer describe an cache node enhancer
+// GraphFlowEnhancer describes an cache node enhancer
 type GraphFlowEnhancer struct {
 	graph.DefaultGraphListener
 	Graph    *graph.Graph

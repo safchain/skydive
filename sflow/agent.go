@@ -47,7 +47,7 @@ var (
 	ErrAgentAlreadyAllocated = errors.New("agent already allocated for this uuid")
 )
 
-// SFlowAgent describe SFlow agent probe
+// SFlowAgent describes SFlow agent probe
 type SFlowAgent struct {
 	sync.RWMutex
 	UUID      string
@@ -58,7 +58,7 @@ type SFlowAgent struct {
 	BPFFilter string
 }
 
-// SFlowAgentAllocator describe an SFlow agent allocator to manage multiple SFlow agent probe
+// SFlowAgentAllocator describes an SFlow agent allocator to manage multiple SFlow agent probe
 type SFlowAgentAllocator struct {
 	sync.RWMutex
 	portAllocator *common.PortAllocator

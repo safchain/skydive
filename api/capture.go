@@ -33,7 +33,7 @@ import (
 	"github.com/skydive-project/skydive/topology/graph"
 )
 
-// Capture describe a capture API
+// Capture describes a capture API
 type Capture struct {
 	UUID         string
 	GremlinQuery string `json:"GremlinQuery,omitempty" valid:"isGremlinExpr"`
@@ -46,7 +46,7 @@ type Capture struct {
 	Port         int    `json:"Port,omitempty"`
 }
 
-// CaptureResourceHandler describe a capture ressouce handler
+// CaptureResourceHandler describes a capture ressouce handler
 type CaptureResourceHandler struct {
 	ResourceHandler
 }

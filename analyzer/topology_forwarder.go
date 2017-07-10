@@ -38,7 +38,7 @@ import (
 	"github.com/skydive-project/skydive/topology/graph"
 )
 
-// TopologyForwarderPeer describe a topology forwarder peer
+// TopologyForwarderPeer describes a topology forwarder peer
 type TopologyForwarderPeer struct {
 	shttp.DefaultWSClientEventHandler
 	Addr        string
@@ -49,7 +49,7 @@ type TopologyForwarderPeer struct {
 	host        string
 }
 
-// TopologyForwarder describe a topology forwarder
+// TopologyForwarder describes a topology forwarder
 type TopologyForwarder struct {
 	shttp.DefaultWSServerEventHandler
 	Graph       *graph.Graph

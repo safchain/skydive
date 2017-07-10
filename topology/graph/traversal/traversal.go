@@ -40,7 +40,7 @@ const (
 	defaultSortBy = "CreatedAt"
 )
 
-// GraphTraversalStep describe a step in the graph containing Values
+// GraphTraversalStep describes a step in the graph containing Values
 type GraphTraversalStep interface {
 	Values() []interface{}
 	MarshalJSON() ([]byte, error)
@@ -63,7 +63,7 @@ func (r *GraphTraversalRange) Iterator() *common.Iterator {
 // GraphTraversalRange is within a min and a max
 type GraphTraversalRange [2]int64
 
-// GraphTraversal describe multiple step within a graph
+// GraphTraversal describes multiple step within a graph
 type GraphTraversal struct {
 	Graph              *graph.Graph
 	error              error
@@ -268,7 +268,7 @@ func SliceToMetadata(s ...interface{}) (graph.Metadata, error) {
 	return m, nil
 }
 
-// WithinMetadataMatcher describe a list of metadata that should match (within)
+// WithinMetadataMatcher describes a list of metadata that should match (within)
 type WithinMetadataMatcher struct {
 	List []interface{}
 }
@@ -278,7 +278,7 @@ func Within(s ...interface{}) *WithinMetadataMatcher {
 	return &WithinMetadataMatcher{List: s}
 }
 
-// WithoutMetadataMatcher describe a list of metadata that shouldn't match (without)
+// WithoutMetadataMatcher describes a list of metadata that shouldn't match (without)
 type WithoutMetadataMatcher struct {
 	list []interface{}
 }
@@ -288,7 +288,7 @@ func Without(s ...interface{}) *WithoutMetadataMatcher {
 	return &WithoutMetadataMatcher{list: s}
 }
 
-// NEMetadataMatcher describe a list of metadata that match NotEqual
+// NEMetadataMatcher describes a list of metadata that match NotEqual
 type NEMetadataMatcher struct {
 	value interface{}
 }
@@ -298,7 +298,7 @@ func Ne(s interface{}) *NEMetadataMatcher {
 	return &NEMetadataMatcher{value: s}
 }
 
-// LTMetadataMatcher describe a list of metadata that match LessThan
+// LTMetadataMatcher describes a list of metadata that match LessThan
 type LTMetadataMatcher struct {
 	value interface{}
 }
@@ -308,7 +308,7 @@ func Lt(s interface{}) *LTMetadataMatcher {
 	return &LTMetadataMatcher{value: s}
 }
 
-// GTMetadataMatcher describe a list of metadata that match GreaterThan
+// GTMetadataMatcher describes a list of metadata that match GreaterThan
 type GTMetadataMatcher struct {
 	value interface{}
 }
@@ -318,7 +318,7 @@ func Gt(s interface{}) *GTMetadataMatcher {
 	return &GTMetadataMatcher{value: s}
 }
 
-// LTEMetadataMatcher describe a list of metadata that match Less Than Equal
+// LTEMetadataMatcher describes a list of metadata that match Less Than Equal
 type LTEMetadataMatcher struct {
 	value interface{}
 }
@@ -328,7 +328,7 @@ func Lte(s interface{}) *LTEMetadataMatcher {
 	return &LTEMetadataMatcher{value: s}
 }
 
-// GTEMetadataMatcher describe a list of metadata that match Greater Than Equal
+// GTEMetadataMatcher describes a list of metadata that match Greater Than Equal
 type GTEMetadataMatcher struct {
 	value interface{}
 }
@@ -338,7 +338,7 @@ func Gte(s interface{}) *GTEMetadataMatcher {
 	return &GTEMetadataMatcher{value: s}
 }
 
-// InsideMetadataMatcher describe a list of metadata that match inside the range from, to
+// InsideMetadataMatcher describes a list of metadata that match inside the range from, to
 type InsideMetadataMatcher struct {
 	from interface{}
 	to   interface{}
@@ -349,7 +349,7 @@ func Inside(from, to interface{}) *InsideMetadataMatcher {
 	return &InsideMetadataMatcher{from: from, to: to}
 }
 
-// OutsideMetadataMatcher describe a list of metadata that match outside the range from, to
+// OutsideMetadataMatcher describes a list of metadata that match outside the range from, to
 type OutsideMetadataMatcher struct {
 	from interface{}
 	to   interface{}
@@ -360,7 +360,7 @@ func Outside(from, to interface{}) *OutsideMetadataMatcher {
 	return &OutsideMetadataMatcher{from: from, to: to}
 }
 
-// BetweenMetadataMatcher describe a list of metadata that match between the range from, to
+// BetweenMetadataMatcher describes a list of metadata that match between the range from, to
 type BetweenMetadataMatcher struct {
 	from interface{}
 	to   interface{}
@@ -371,7 +371,7 @@ func Between(from interface{}, to interface{}) *BetweenMetadataMatcher {
 	return &BetweenMetadataMatcher{from: from, to: to}
 }
 
-// RegexMetadataMatcher describe a list of metadata that match a regex
+// RegexMetadataMatcher describes a list of metadata that match a regex
 type RegexMetadataMatcher struct {
 	regexp  *regexp.Regexp
 	pattern string
@@ -383,7 +383,7 @@ func Regex(expr string) *RegexMetadataMatcher {
 	return &RegexMetadataMatcher{regexp: r, pattern: expr}
 }
 
-// ContainsMetadataMatcher describe a list of metadata that contains a value
+// ContainsMetadataMatcher describes a list of metadata that contains a value
 type ContainsMetadataMatcher struct {
 	value interface{}
 }
@@ -393,7 +393,7 @@ func Contains(s interface{}) *ContainsMetadataMatcher {
 	return &ContainsMetadataMatcher{value: s}
 }
 
-// Since describe a list of metadata that match since seconds
+// Since describes a list of metadata that match since seconds
 type Since struct {
 	Seconds int64
 }

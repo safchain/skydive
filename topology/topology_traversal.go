@@ -30,7 +30,7 @@ import (
 	"github.com/skydive-project/skydive/topology/graph/traversal"
 )
 
-// TopologyTraversalExtension describe a new extension to enhance the topology
+// TopologyTraversalExtension describes a new extension to enhance the topology
 type TopologyTraversalExtension struct {
 	graphPathToken traversal.Token
 }

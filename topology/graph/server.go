@@ -39,7 +39,7 @@ type ServerEventHandler interface {
 	OnGraphMessage(c *shttp.WSClient, m shttp.WSMessage, msgType string, obj interface{})
 }
 
-// Server describe a graph server based on websocket
+// Server describes a graph server based on websocket
 type Server struct {
 	shttp.DefaultWSServerEventHandler
 	WSServer      *shttp.WSServer
