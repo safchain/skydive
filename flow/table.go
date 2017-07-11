@@ -57,7 +57,7 @@ type Handler struct {
 	every    time.Duration
 }
 
-// NewFlowHandler create a flow callback handler that would be asynchronously called every time
+// NewFlowHandler create a flow callback handler that will be asynchronously called every time
 func NewFlowHandler(callback ExpireUpdateFunc, every time.Duration) *Handler {
 	return &Handler{
 		callback: callback,

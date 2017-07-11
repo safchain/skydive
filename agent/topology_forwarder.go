@@ -104,7 +104,7 @@ func (t *TopologyForwarder) OnEdgeDeleted(e *graph.Edge) {
 	t.WSAsyncClientPool.SendWSMessageToMaster(shttp.NewWSMessage(graph.Namespace, graph.EdgeDeletedMsgType, e))
 }
 
-// NewTopologyForwarder is a mechanism aim to distribute all graph node notification to WebSocket client pool.
+// NewTopologyForwarder is a mechanism aiming to distribute all graph node notifications to a WebSocket client pool
 func NewTopologyForwarder(host string, g *graph.Graph, wspool *shttp.WSAsyncClientPool) *TopologyForwarder {
 	t := &TopologyForwarder{
 		WSAsyncClientPool: wspool,
