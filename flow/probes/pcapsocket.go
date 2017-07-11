@@ -131,7 +131,7 @@ func (p *PcapSocketProbeHandler) registerProbe(n *graph.Node, ft *flow.Table, bp
 	return nil
 }
 
-// RegisterProbe register a new probe in the graph
+// RegisterProbe registers a new probe in the graph
 func (p *PcapSocketProbeHandler) RegisterProbe(n *graph.Node, capture *api.Capture, ft *flow.Table) error {
 	return p.registerProbe(n, ft, capture.BPFFilter)
 }
@@ -176,7 +176,7 @@ func (p *PcapSocketProbeHandler) Stop() {
 	p.wg.Wait()
 }
 
-// NewPcapSocketProbeHandler create a new pcap socket probe
+// NewPcapSocketProbeHandler creates a new pcap socket probe
 func NewPcapSocketProbeHandler(g *graph.Graph) (*PcapSocketProbeHandler, error) {
 	listen := config.GetConfig().GetString("agent.flow.pcapsocket.bind_address")
 	minPort := config.GetConfig().GetInt("agent.flow.pcapsocket.min_port")

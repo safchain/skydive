@@ -49,7 +49,7 @@ var AlertCmd = &cobra.Command{
 	SilenceUsage: false,
 }
 
-// AlertCreate skydive alert create command
+// AlertCreate skydive alert creates command
 var AlertCreate = &cobra.Command{
 	Use:   "create",
 	Short: "Create alert",

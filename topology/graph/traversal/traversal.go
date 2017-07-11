@@ -106,7 +106,7 @@ type MetricsTraversalStep struct {
 	error          error
 }
 
-// ParamToFilter create a filter based on parameters
+// ParamToFilter creates a filter based on parameters
 // [RegexMetadataMatcher, NE/LT/GT/GTE/LTE/Inside/Outside/Between/Within/Contains/string,int64 MetadataMatcher]
 func ParamToFilter(k string, v interface{}) (*filters.Filter, error) {
 	switch v := v.(type) {
@@ -398,26 +398,26 @@ type Since struct {
 	Seconds int64
 }
 
-// NewGraphTraversal create a new graph traversal
+// NewGraphTraversal creates a new graph traversal
 func NewGraphTraversal(g *graph.Graph, lockGraph bool) *GraphTraversal {
 	return &GraphTraversal{Graph: g, lockGraph: lockGraph}
 }
 
-// RLock read lock the graph
+// RLock reads lock the graph
 func (t *GraphTraversal) RLock() {
 	if t.lockGraph {
 		t.Graph.RLock()
 	}
 }
 
-// RUnlock read unlock the graph
+// RUnlock reads unlock the graph
 func (t *GraphTraversal) RUnlock() {
 	if t.lockGraph {
 		t.Graph.RUnlock()
 	}
 }
 
-// Values return the graph values
+// Values returns the graph values
 func (t *GraphTraversal) Values() []interface{} {
 	t.RLock()
 	defer t.RUnlock()
@@ -540,7 +540,7 @@ func (t *GraphTraversal) V(s ...interface{}) *GraphTraversalV {
 	return &GraphTraversalV{GraphTraversal: t, nodes: nodes}
 }
 
-// NewGraphTraversalV return a new traversal step
+// NewGraphTraversalV returns a new traversal step
 func NewGraphTraversalV(gt *GraphTraversal, nodes []*graph.Node, err ...error) *GraphTraversalV {
 	tv := &GraphTraversalV{
 		GraphTraversal: gt,
@@ -558,7 +558,7 @@ func (tv *GraphTraversalV) Error() error {
 	return tv.error
 }
 
-// Values return the graph values
+// Values returns the graph values
 func (tv *GraphTraversalV) Values() []interface{} {
 	tv.GraphTraversal.RLock()
 	defer tv.GraphTraversal.RUnlock()
@@ -578,12 +578,12 @@ func (tv *GraphTraversalV) MarshalJSON() ([]byte, error) {
 	return json.Marshal(values)
 }
 
-// GetNodes return the step nodes
+// GetNodes returns the step nodes
 func (tv *GraphTraversalV) GetNodes() (nodes []*graph.Node) {
 	return tv.nodes
 }
 
-// PropertyValues return at this step, the values of each metadata selected by the first key
+// PropertyValues returns at this step, the values of each metadata selected by the first key
 func (tv *GraphTraversalV) PropertyValues(k ...interface{}) *GraphTraversalValue {
 	if tv.error != nil {
 		return &GraphTraversalValue{error: tv.error}
@@ -603,7 +603,7 @@ func (tv *GraphTraversalV) PropertyValues(k ...interface{}) *GraphTraversalValue
 	return &GraphTraversalValue{GraphTraversal: tv.GraphTraversal, value: s}
 }
 
-// PropertyKeys return at this step, all the metadata keys of each metadata
+// PropertyKeys returns at this step, all the metadata keys of each metadata
 func (tv *GraphTraversalV) PropertyKeys(keys ...interface{}) *GraphTraversalValue {
 	if tv.error != nil {
 		return &GraphTraversalValue{error: tv.error}
@@ -623,7 +623,7 @@ func (tv *GraphTraversalV) PropertyKeys(keys ...interface{}) *GraphTraversalValu
 }
 
 // Sum step : key
-// return the sum of the metadata values of the first argument key
+// returns the sum of the metadata values of the first argument key
 func (tv *GraphTraversalV) Sum(keys ...interface{}) *GraphTraversalValue {
 	if tv.error != nil {
 		return &GraphTraversalValue{error: tv.error}
@@ -706,7 +706,7 @@ func (t *GraphTraversal) E(s ...interface{}) *GraphTraversalE {
 	return &GraphTraversalE{GraphTraversal: t, edges: edges}
 }
 
-// NewGraphTraversalE create a new graph traversal Edges
+// NewGraphTraversalE creates a new graph traversal Edges
 func NewGraphTraversalE(gt *GraphTraversal, edges []*graph.Edge, err ...error) *GraphTraversalE {
 	te := &GraphTraversalE{
 		GraphTraversal: gt,
@@ -724,7 +724,7 @@ func (te *GraphTraversalE) Error() error {
 	return te.error
 }
 
-// Values return the graph values
+// Values returns the graph values
 func (te *GraphTraversalE) Values() []interface{} {
 	te.GraphTraversal.RLock()
 	defer te.GraphTraversal.RUnlock()
@@ -914,7 +914,7 @@ nodeLoop:
 	return ntv
 }
 
-// Values return the graph values
+// Values returns the graph values
 func (sp *GraphTraversalShortestPath) Values() []interface{} {
 	sp.GraphTraversal.RLock()
 	defer sp.GraphTraversal.RUnlock()
@@ -938,7 +938,7 @@ func (sp *GraphTraversalShortestPath) Error() error {
 	return sp.error
 }
 
-// GetNodes : return all the nodes in single array, so it will used to find flows.
+// GetNodes : returns all the nodes in single array, so it will used to find flows.
 func (sp *GraphTraversalShortestPath) GetNodes() []*graph.Node {
 	var nodes []*graph.Node
 	for _, v := range sp.paths {
@@ -1567,7 +1567,7 @@ func (te *GraphTraversalE) OutV(s ...interface{}) *GraphTraversalV {
 	return ntv
 }
 
-// NewGraphTraversalValue create a new traversal value step
+// NewGraphTraversalValue creates a new traversal value step
 func NewGraphTraversalValue(gt *GraphTraversal, value interface{}, err ...error) *GraphTraversalValue {
 	tv := &GraphTraversalValue{
 		GraphTraversal: gt,
@@ -1728,7 +1728,7 @@ func (m *MetricsTraversalStep) Aggregates() *MetricsTraversalStep {
 	return &MetricsTraversalStep{GraphTraversal: m.GraphTraversal, metrics: map[string][]*common.TimedMetric{"Aggregated": aggregated}}
 }
 
-// Values return the graph metric values
+// Values returns the graph metric values
 func (m *MetricsTraversalStep) Values() []interface{} {
 	return []interface{}{m.metrics}
 }
@@ -1750,7 +1750,7 @@ func (m *MetricsTraversalStep) Count(s ...interface{}) *GraphTraversalValue {
 	return NewGraphTraversalValue(m.GraphTraversal, len(m.metrics))
 }
 
-// NewMetricsTraversalStep create a new tranversal metric step
+// NewMetricsTraversalStep creates a new tranversal metric step
 func NewMetricsTraversalStep(gt *GraphTraversal, metrics map[string][]*common.TimedMetric, err error) *MetricsTraversalStep {
 	return &MetricsTraversalStep{GraphTraversal: gt, metrics: metrics, error: err}
 }

@@ -419,7 +419,7 @@ func (o *OvsMonitor) StopMonitoring() {
 	}
 }
 
-// NewOvsMonitor create a new monitoring probe agent on target
+// NewOvsMonitor creates a new monitoring probe agent on target
 func NewOvsMonitor(protcol string, target string) *OvsMonitor {
 	return &OvsMonitor{
 		Protocol:        protcol,

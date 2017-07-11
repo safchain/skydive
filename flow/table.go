@@ -48,16 +48,16 @@ type TableReply struct {
 	status int
 }
 
-// ExpireUpdateFunc define expire and update callback
+// ExpireUpdateFunc defines expire and updates callback
 type ExpireUpdateFunc func(f []*Flow)
 
-// Handler define a flow callback called every time
+// Handler defines a flow callback called every time
 type Handler struct {
 	callback ExpireUpdateFunc
 	every    time.Duration
 }
 
-// NewFlowHandler create a flow callback handler that will be asynchronously called every time
+// NewFlowHandler creates a flow callback handler that will be asynchronously called every time
 func NewFlowHandler(callback ExpireUpdateFunc, every time.Duration) *Handler {
 	return &Handler{
 		callback: callback,
@@ -86,7 +86,7 @@ type Table struct {
 	pipeline      *EnhancerPipeline
 }
 
-// NewTable create a new flow table
+// NewTable creates a new flow table
 func NewTable(updateHandler *Handler, expireHandler *Handler, pipeline *EnhancerPipeline) *Table {
 	t := &Table{
 		PacketsChan:   make(chan *Packets, 1000),

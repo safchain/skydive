@@ -913,7 +913,7 @@ func (u *NetLinkProbe) Stop() {
 	}
 }
 
-// NewNetLinkProbe create a new netlink probe
+// NewNetLinkProbe creates a new netlink probe
 func NewNetLinkProbe(g *graph.Graph) (*NetLinkProbe, error) {
 	epfd, err := syscall.EpollCreate1(0)
 	if err != nil {

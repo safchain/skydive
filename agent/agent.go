@@ -128,7 +128,7 @@ func (a *Agent) Start() {
 
 	a.FlowTableAllocator = flow.NewTableAllocator(updateTime, expireTime, pipeline)
 
-	// expose a flow server through the client connections
+	// exposes a flow server through the client connections
 	flow.NewServer(a.FlowTableAllocator, a.WSAsyncClientPool)
 
 	packet_injector.NewServer(a.WSAsyncClientPool, a.Graph)
@@ -175,7 +175,7 @@ func (a *Agent) Stop() {
 	a.TIDMapper.Stop()
 }
 
-// NewAgent instanciates a new Agent aim to launch probes (topology and flow)
+// NewAgent instanciates a new Agent aiming to launch probes (topology and flow)
 func NewAgent() *Agent {
 	backend, err := graph.NewMemoryBackend()
 	if err != nil {

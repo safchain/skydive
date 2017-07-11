@@ -144,7 +144,7 @@ type Graph struct {
 // HostNodeTIDMap a map of host and node ID
 type HostNodeTIDMap map[string][]string
 
-// BuildHostNodeTIDMap create a map filled with host and associated node.ID
+// BuildHostNodeTIDMap creates a map filled with host and associated node.ID
 func BuildHostNodeTIDMap(nodes []*Node) HostNodeTIDMap {
 	hnmap := make(HostNodeTIDMap)
 	for _, node := range nodes {
@@ -432,7 +432,7 @@ func (n *Node) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// JSONRawMessage create JSON raw message
+// JSONRawMessage creates JSON raw message
 func (n *Node) JSONRawMessage() *json.RawMessage {
 	r, _ := n.MarshalJSON()
 	raw := json.RawMessage(r)
@@ -444,7 +444,7 @@ func (n *Node) Decode(i interface{}) error {
 	return n.graphElement.Decode(i)
 }
 
-// GetFieldString return the associated Field name
+// GetFieldString returns the associated Field name
 func (e *Edge) GetFieldString(name string) (string, error) {
 	switch name {
 	case "Parent":
@@ -492,7 +492,7 @@ func (e *Edge) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// JSONRawMessage create a JSON raw message
+// JSONRawMessage creates a JSON raw message
 func (e *Edge) JSONRawMessage() *json.RawMessage {
 	r, _ := e.MarshalJSON()
 	raw := json.RawMessage(r)
@@ -529,17 +529,17 @@ func (e *Edge) Decode(i interface{}) error {
 	return nil
 }
 
-// GetParent return parent
+// GetParent returns parent
 func (e *Edge) GetParent() Identifier {
 	return e.parent
 }
 
-// GetChild return child
+// GetChild returns child
 func (e *Edge) GetChild() Identifier {
 	return e.child
 }
 
-// NodeUpdated update a node
+// NodeUpdated updates a node
 func (g *Graph) NodeUpdated(n *Node) bool {
 	if node := g.GetNode(n.ID); node != nil {
 		node.metadata = n.metadata
@@ -556,7 +556,7 @@ func (g *Graph) NodeUpdated(n *Node) bool {
 	return false
 }
 
-// EdgeUpdated update an edge
+// EdgeUpdated updates an edge
 func (g *Graph) EdgeUpdated(e *Edge) bool {
 	if edge := g.GetEdge(e.ID); edge != nil {
 		edge.metadata = e.metadata
@@ -738,12 +738,12 @@ func (g *Graph) lookupShortestPath(n *Node, m Metadata, path []*Node, v map[Iden
 	return shortest
 }
 
-// LookupShortestPath return the shortest path (list of node)
+// LookupShortestPath returns the shortest path (list of node)
 func (g *Graph) LookupShortestPath(n *Node, m Metadata, em Metadata) []*Node {
 	return g.lookupShortestPath(n, m, []*Node{}, make(map[Identifier]bool), em)
 }
 
-// LookupParents return the associated parents edge of a node
+// LookupParents returns the associated parents edge of a node
 func (g *Graph) LookupParents(n *Node, f Metadata, em Metadata) (nodes []*Node) {
 	t := g.context.TimeSlice
 	for _, e := range g.backend.GetNodeEdges(n, t, em) {
@@ -758,7 +758,7 @@ func (g *Graph) LookupParents(n *Node, f Metadata, em Metadata) (nodes []*Node) 
 	return
 }
 
-// LookupFirstChild return the child
+// LookupFirstChild returns the child
 func (g *Graph) LookupFirstChild(n *Node, f Metadata) *Node {
 	nodes := g.LookupChildren(n, f, Metadata{})
 	if len(nodes) > 0 {
@@ -767,7 +767,7 @@ func (g *Graph) LookupFirstChild(n *Node, f Metadata) *Node {
 	return nil
 }
 
-// LookupChildren return a list of children nodes
+// LookupChildren returns a list of children nodes
 func (g *Graph) LookupChildren(n *Node, f Metadata, em Metadata) (nodes []*Node) {
 	t := g.context.TimeSlice
 	for _, e := range g.backend.GetNodeEdges(n, t, em) {
@@ -782,7 +782,7 @@ func (g *Graph) LookupChildren(n *Node, f Metadata, em Metadata) (nodes []*Node)
 	return nodes
 }
 
-// AreLinked return true if nodes n1, n2 are linked
+// AreLinked returns true if nodes n1, n2 are linked
 func (g *Graph) AreLinked(n1 *Node, n2 *Node, m Metadata) bool {
 	t := g.context.TimeSlice
 	for _, e := range g.backend.GetNodeEdges(n1, t, m) {
@@ -824,7 +824,7 @@ func (g *Graph) Unlink(n1 *Node, n2 *Node) {
 	}
 }
 
-// LookupFirstNode return the fist node matching metadata
+// LookupFirstNode returns the fist node matching metadata
 func (g *Graph) LookupFirstNode(m Metadata) *Node {
 	nodes := g.GetNodes(m)
 	if len(nodes) > 0 {
@@ -921,7 +921,7 @@ func (g *Graph) newNode(i Identifier, m Metadata, t time.Time, h ...string) *Nod
 	return n
 }
 
-// NewNode create a new node in the graph with attached metadata
+// NewNode creates a new node in the graph with attached metadata
 func (g *Graph) NewNode(i Identifier, m Metadata, h ...string) *Node {
 	return g.newNode(i, m, time.Now().UTC(), h...)
 }
@@ -963,7 +963,7 @@ func (g *Graph) newEdge(i Identifier, p *Node, c *Node, m Metadata, t time.Time,
 	return e
 }
 
-// NewEdge create a new edge in the graph based on Identifier, parent, child nodes and metadata
+// NewEdge creates a new edge in the graph based on Identifier, parent, child nodes and metadata
 func (g *Graph) NewEdge(i Identifier, p *Node, c *Node, m Metadata) *Edge {
 	return g.newEdge(i, p, c, m, time.Now().UTC())
 }
@@ -1020,22 +1020,22 @@ func (g *Graph) DelHostGraph(host string) {
 	}
 }
 
-// GetNodes return a list of nodes
+// GetNodes returns a list of nodes
 func (g *Graph) GetNodes(m Metadata) []*Node {
 	return g.backend.GetNodes(g.context.TimeSlice, m)
 }
 
-// GetEdges return a list of edges
+// GetEdges returns a list of edges
 func (g *Graph) GetEdges(m Metadata) []*Edge {
 	return g.backend.GetEdges(g.context.TimeSlice, m)
 }
 
-// GetEdgeNodes return a list of nodes of an edge
+// GetEdgeNodes returns a list of nodes of an edge
 func (g *Graph) GetEdgeNodes(e *Edge, parentMetadata, childMetadata Metadata) ([]*Node, []*Node) {
 	return g.backend.GetEdgeNodes(e, g.context.TimeSlice, parentMetadata, childMetadata)
 }
 
-// GetNodeEdges return a list of edges of a node
+// GetNodeEdges returns a list of edges of a node
 func (g *Graph) GetNodeEdges(n *Node, m Metadata) []*Edge {
 	return g.backend.GetNodeEdges(n, g.context.TimeSlice, m)
 }
@@ -1126,17 +1126,17 @@ func (g *Graph) WithContext(c GraphContext) (*Graph, error) {
 	return g.backend.WithContext(g, c)
 }
 
-// GetContext return the current context
+// GetContext returns the current context
 func (g *Graph) GetContext() GraphContext {
 	return g.context
 }
 
-// GetHost return the graph host
+// GetHost returns the graph host
 func (g *Graph) GetHost() string {
 	return g.host
 }
 
-// NewGraph create a new graph based on the backend
+// NewGraph creates a new graph based on the backend
 func NewGraph(host string, backend GraphBackend) *Graph {
 	return &Graph{
 		backend:   backend,
@@ -1146,19 +1146,19 @@ func NewGraph(host string, backend GraphBackend) *Graph {
 	}
 }
 
-// NewGraphFromConfig create a new graph based on configuration
+// NewGraphFromConfig creates a new graph based on configuration
 func NewGraphFromConfig(backend GraphBackend) *Graph {
 	host := config.GetConfig().GetString("host_id")
 	return NewGraph(host, backend)
 }
 
-// NewGraphWithContext create a new graph based on backedn within the context
+// NewGraphWithContext creates a new graph based on backedn within the context
 func NewGraphWithContext(hostID string, backend GraphBackend, context GraphContext) (*Graph, error) {
 	graph := NewGraph(hostID, backend)
 	return graph.WithContext(context)
 }
 
-// BackendFromConfig create a new graph backend based on configuration
+// BackendFromConfig creates a new graph backend based on configuration
 // memory, orientdb, elasticsearch backend are supported
 func BackendFromConfig() (backend GraphBackend, err error) {
 	name := config.GetConfig().GetString("graph.backend")

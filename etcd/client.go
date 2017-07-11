@@ -40,7 +40,7 @@ type EtcdClient struct {
 	KeysAPI etcd.KeysAPI
 }
 
-// GetInt64 return an int64 value from the configuration key
+// GetInt64 returns an int64 value from the configuration key
 func (client *EtcdClient) GetInt64(key string) (int64, error) {
 	resp, err := client.KeysAPI.Get(context.Background(), key, nil)
 	if err != nil {
@@ -64,7 +64,7 @@ func (client *EtcdClient) Stop() {
 	}
 }
 
-// NewEtcdClient create a new ETCD client connection to ETCD servers
+// NewEtcdClient creates a new ETCD client connection to ETCD servers
 func NewEtcdClient(etcdServers []string, clientTimeout time.Duration) (*EtcdClient, error) {
 	cfg := etcd.Config{
 		Endpoints:               etcdServers,
@@ -85,7 +85,7 @@ func NewEtcdClient(etcdServers []string, clientTimeout time.Duration) (*EtcdClie
 	}, nil
 }
 
-// NewEtcdClientFromConfig create a new ETCD client from configuration
+// NewEtcdClientFromConfig creates a new ETCD client from configuration
 func NewEtcdClientFromConfig() (*EtcdClient, error) {
 	etcdServers := config.GetEtcdServerAddrs()
 	etcdTimeout := config.GetConfig().GetInt("etcd.client_timeout")

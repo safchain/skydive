@@ -40,17 +40,17 @@ type Alert struct {
 	CreateTime  time.Time
 }
 
-// AlertResourceHandler aim to create and manage a new Alert.
+// AlertResourceHandler aims to creates and manage a new Alert.
 type AlertResourceHandler struct {
 	ResourceHandler
 }
 
-// AlertAPIHandler aim to expose the Alert API.
+// AlertAPIHandler aims to exposes the Alert API.
 type AlertAPIHandler struct {
 	BasicAPIHandler
 }
 
-// NewAlert create a New empty Alert, only UUID and CreateTime are set.
+// NewAlert creates a New empty Alert, only UUID and CreateTime are set.
 func NewAlert() *Alert {
 	id, _ := uuid.NewV4()
 
@@ -60,7 +60,7 @@ func NewAlert() *Alert {
 	}
 }
 
-// New create a new alert
+// New creates a new alert
 func (a *AlertResourceHandler) New() Resource {
 	id, _ := uuid.NewV4()
 
@@ -69,12 +69,12 @@ func (a *AlertResourceHandler) New() Resource {
 	}
 }
 
-// Name return ressource name "alert"
+// Name returns ressource name "alert"
 func (a *AlertResourceHandler) Name() string {
 	return "alert"
 }
 
-// ID return the alert ID
+// ID returns the alert ID
 func (a *Alert) ID() string {
 	return a.UUID
 }
@@ -84,7 +84,7 @@ func (a *Alert) SetID(i string) {
 	a.UUID = i
 }
 
-// RegisterAlertAPI register an Alert's API to a designated API Server
+// RegisterAlertAPI registers an Alert's API to a designated API Server
 func RegisterAlertAPI(apiServer *Server) (*AlertAPIHandler, error) {
 	alertAPIHandler := &AlertAPIHandler{
 		BasicAPIHandler: BasicAPIHandler{

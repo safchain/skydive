@@ -29,7 +29,7 @@ import (
 	"io/ioutil"
 )
 
-// SetupTLSLoadCertificate create a X509 certificate from file
+// SetupTLSLoadCertificate creates a X509 certificate from file
 func SetupTLSLoadCertificate(certPEM string) *x509.CertPool {
 	rootPEM, err := ioutil.ReadFile(certPEM)
 	if err != nil {
@@ -43,7 +43,7 @@ func SetupTLSLoadCertificate(certPEM string) *x509.CertPool {
 	return roots
 }
 
-// SetupTLSClientConfig create a client X509 certificate from public and private key
+// SetupTLSClientConfig creates a client X509 certificate from public and private key
 func SetupTLSClientConfig(certPEM string, keyPEM string) *tls.Config {
 	cert, err := tls.LoadX509KeyPair(certPEM, keyPEM)
 	if err != nil {
@@ -55,7 +55,7 @@ func SetupTLSClientConfig(certPEM string, keyPEM string) *tls.Config {
 	return cfgTLS
 }
 
-// SetupTLSServerConfig create a server X509 certificate from public and private key
+// SetupTLSServerConfig creates a server X509 certificate from public and private key
 func SetupTLSServerConfig(certPEM string, keyPEM string) *tls.Config {
 	cfgTLS := SetupTLSClientConfig(certPEM, keyPEM)
 

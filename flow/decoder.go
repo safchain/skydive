@@ -29,7 +29,7 @@ import (
 	"github.com/google/gopacket/layers"
 )
 
-// LayerTypeInGRE create a layer type, should be unique and high, so it doesn't conflict,
+// LayerTypeInGRE creates a layer type, should be unique and high, so it doesn't conflict,
 // giving it a name and a decoder to use.
 var LayerTypeInGRE = gopacket.RegisterLayerType(55555, gopacket.LayerTypeMetadata{Name: "LayerTypeInGRE", Decoder: gopacket.DecodeFunc(decodeInGRELayer)})
 
@@ -56,23 +56,23 @@ func (m inGRELayer) LayerPayload() []byte {
 	return m.payload
 }
 
-// ICMPv4 aim to store ICMP metadata aim to be used for the flow hash key
+// ICMPv4 aims to store ICMP metadata and aims to be used for the flow hash key
 type ICMPv4 struct {
 	layers.ICMPv4
 	Type ICMPType
 }
 
-// Payload return the ICMP payload
+// Payload returns the ICMP payload
 func (i *ICMPv4) Payload() []byte { return i.LayerPayload() }
 
-// ICMPv6 aim to store ICMP metadata aim to be used for the flow hash key
+// ICMPv6 aims to store ICMP metadata and aims to be used for the flow hash key
 type ICMPv6 struct {
 	layers.ICMPv6
 	Type ICMPType
 	Id   uint16
 }
 
-// Payload return the ICMP payload
+// Payload returns the ICMP payload
 func (i *ICMPv6) Payload() []byte { return i.LayerPayload() }
 
 // Try to decode data as IP4 or IP6. If data starts by 4 or 6,

@@ -28,7 +28,7 @@ import (
 	"time"
 )
 
-// TableAllocator aim to create/allocate a new flow table
+// TableAllocator aims to create/allocate a new flow table
 type TableAllocator struct {
 	sync.RWMutex
 	update   time.Duration
@@ -55,7 +55,7 @@ func (a *TableAllocator) aggregateReplies(query *TableQuery, replies []*TableRep
 	return reply
 }
 
-// QueryTable search/query witin the flow table
+// QueryTable search/query within the flow table
 func (a *TableAllocator) QueryTable(query *TableQuery) *TableReply {
 	a.RLock()
 	defer a.RUnlock()
@@ -91,7 +91,7 @@ func (a *TableAllocator) Release(t *Table) {
 	a.Unlock()
 }
 
-// NewTableAllocator create a new flow table
+// NewTableAllocator creates a new flow table
 func NewTableAllocator(update, expire time.Duration, pipeline *EnhancerPipeline) *TableAllocator {
 	return &TableAllocator{
 		update:   update,

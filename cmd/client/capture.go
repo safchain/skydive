@@ -51,7 +51,7 @@ var CaptureCmd = &cobra.Command{
 	SilenceUsage: false,
 }
 
-// CaptureCreate skydive capture create command
+// CaptureCreate skydive capture creates command
 var CaptureCreate = &cobra.Command{
 	Use:   "create",
 	Short: "Create capture",

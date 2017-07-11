@@ -41,7 +41,7 @@ var (
 	patchMetadata = graph.Metadata{"Type": "patch"}
 )
 
-// OvsdbProbe describes a probe that read OVS database and update the graph
+// OvsdbProbe describes a probe that reads OVS database and updates the graph
 type OvsdbProbe struct {
 	sync.Mutex
 	Graph        *graph.Graph
@@ -450,7 +450,7 @@ func (o *OvsdbProbe) Stop() {
 	o.OvsMon.StopMonitoring()
 }
 
-// NewOvsdbProbe create a new graph OVS database probe
+// NewOvsdbProbe creates a new graph OVS database probe
 func NewOvsdbProbe(g *graph.Graph, n *graph.Node, p string, t string) *OvsdbProbe {
 	mon := ovsdb.NewOvsMonitor(p, t)
 	mon.ExcludeColumn("statistics")
@@ -470,7 +470,7 @@ func NewOvsdbProbe(g *graph.Graph, n *graph.Node, p string, t string) *OvsdbProb
 	return o
 }
 
-// NewOvsdbProbeFromConfig create a new probe based on configuration
+// NewOvsdbProbeFromConfig creates a new probe based on configuration
 func NewOvsdbProbeFromConfig(g *graph.Graph, n *graph.Node) *OvsdbProbe {
 	address := config.GetConfig().GetString("ovs.ovsdb")
 

@@ -51,7 +51,7 @@ func initCaptureTypes() {
 	}
 }
 
-// IsCaptureAllowed return true if the node capture type exist
+// IsCaptureAllowed returns true if the node capture type exist
 func IsCaptureAllowed(nodeType string) bool {
 	_, ok := CaptureTypes[nodeType]
 	return ok

@@ -34,7 +34,7 @@ var (
 	ErrNoPortLeft = errors.New("No free port left")
 )
 
-// PortAllocator describes a thread safe port list that can be allocated
+// PortAllocator describes a threads safe port list that can be allocated
 type PortAllocator struct {
 	sync.RWMutex
 	MinPort int
@@ -42,7 +42,7 @@ type PortAllocator struct {
 	PortMap map[int]interface{}
 }
 
-// Allocate return a new unused port between min and max ports
+// Allocate returns a new unused port between min and max ports
 func (p *PortAllocator) Allocate() (int, error) {
 	p.Lock()
 	defer p.Unlock()
@@ -89,7 +89,7 @@ func (p *PortAllocator) ReleaseAll() {
 	p.PortMap = make(map[int]interface{})
 }
 
-// NewPortAllocator create a new port allocator range
+// NewPortAllocator creates a new port allocator range
 func NewPortAllocator(min, max int) (*PortAllocator, error) {
 	if min <= 0 || max < min {
 		return nil, ErrInvalidPortRange

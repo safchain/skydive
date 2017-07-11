@@ -217,7 +217,7 @@ func (g *GremlinQueryHelper) GetMetric(query string) (*common.TimedMetric, error
 	return flatMetrictoTimedMetric(flat)
 }
 
-// NewGremlinQueryHelper create a new Gremlin query helper based on authentication
+// NewGremlinQueryHelper creates a new Gremlin query helper based on authentication
 func NewGremlinQueryHelper(authOptions *shttp.AuthenticationOpts) *GremlinQueryHelper {
 	return &GremlinQueryHelper{
 		authOptions: authOptions,

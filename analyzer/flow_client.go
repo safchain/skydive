@@ -106,7 +106,7 @@ func (c *FlowClient) SendFlows(flows []*flow.Flow) {
 	}
 }
 
-// NewFlowClient creates a flow client and create a new connection to the server
+// NewFlowClient creates a flow client and creates a new connection to the server
 func NewFlowClient(addr string, port int) *FlowClient {
 	FlowClient := &FlowClient{Addr: addr, Port: port}
 	FlowClient.connect()

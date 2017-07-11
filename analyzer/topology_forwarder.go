@@ -163,7 +163,7 @@ func (a *TopologyForwarder) DisconnectAll() {
 	a.wg.Wait()
 }
 
-// NewTopologyForwarder create a new topology forwarder based graph and webserver
+// NewTopologyForwarder creates a new topology forwarder based graph and webserver
 func NewTopologyForwarder(g *graph.Graph, server *shttp.WSServer, authOptions *shttp.AuthenticationOpts) *TopologyForwarder {
 	tf := &TopologyForwarder{
 		Graph:       g,
@@ -175,7 +175,7 @@ func NewTopologyForwarder(g *graph.Graph, server *shttp.WSServer, authOptions *s
 	return tf
 }
 
-// NewTopologyForwarderFromConfig create a new topology forwarder based on configration
+// NewTopologyForwarderFromConfig creates a new topology forwarder based on configration
 func NewTopologyForwarderFromConfig(g *graph.Graph, server *shttp.WSServer) *TopologyForwarder {
 	authOptions := &shttp.AuthenticationOpts{
 		Username: config.GetConfig().GetString("auth.analyzer_username"),

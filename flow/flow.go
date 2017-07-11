@@ -61,7 +61,7 @@ type Packets struct {
 	Timestamp int64
 }
 
-// Value return int32 value of a FlowProtocol
+// Value returns int32 value of a FlowProtocol
 func (x FlowProtocol) Value() int32 {
 	return int32(x)
 }
@@ -176,7 +176,7 @@ func (f Key) String() string {
 	return string(f)
 }
 
-// KeyFromGoPacket return the unique flow key
+// KeyFromGoPacket returns the unique flow key
 // The unique key is calculated based on parentUUID, network, transport and applicable layers
 func KeyFromGoPacket(p *gopacket.Packet, parentUUID string) Key {
 	network := layerFlow((*p).NetworkLayer()).FastHash()
@@ -229,7 +229,7 @@ func networkID(p *gopacket.Packet) int64 {
 	return id
 }
 
-// NewFlow create a new empty flow
+// NewFlow creates a new empty flow
 func NewFlow() *Flow {
 	return &Flow{
 		Metric:           &FlowMetric{},
@@ -237,7 +237,7 @@ func NewFlow() *Flow {
 	}
 }
 
-// UpdateUUID update the flow UUID based on protocotols layers path and layers IDs
+// UpdateUUID updates the flow UUID based on protocotols layers path and layers IDs
 func (f *Flow) UpdateUUID(key string, L2ID int64, L3ID int64) {
 	layersPath := strings.Replace(f.LayersPath, "Dot1Q/", "", -1)
 
@@ -567,7 +567,7 @@ func PacketsFromGoPacket(packet *gopacket.Packet, outerLength int64, t int64, bp
 		switch layer.LayerType() {
 		case layers.LayerTypeGRE:
 			// If the next layer type is MPLS, we don't
-			// create the tunneling packet at this level, but at the next one.
+			// creates the tunneling packet at this level, but at the next one.
 			if i < len(packetLayers)-2 && packetLayers[i+1].LayerType() == layers.LayerTypeMPLS {
 				continue
 			}
@@ -625,7 +625,7 @@ func PacketsFromSFlowSample(sample *layers.SFlowFlowSample, t int64, bpf *BPF) [
 	return flowPacketsSet
 }
 
-// GetStringField retrun the value of a flow field
+// GetStringField returns the value of a flow field
 func (f *FlowLayer) GetStringField(field string) (string, error) {
 	if f == nil {
 		return "", common.ErrFieldNotFound
@@ -642,7 +642,7 @@ func (f *FlowLayer) GetStringField(field string) (string, error) {
 	return "", common.ErrFieldNotFound
 }
 
-// GetFieldInt64 retrun the value of a flow field
+// GetFieldInt64 returns the value of a flow field
 func (f *FlowLayer) GetFieldInt64(field string) (int64, error) {
 	if f == nil {
 		return 0, common.ErrFieldNotFound
@@ -655,7 +655,7 @@ func (f *FlowLayer) GetFieldInt64(field string) (int64, error) {
 	return 0, common.ErrFieldNotFound
 }
 
-// GetStringField retrun the value of a ICMP field
+// GetStringField returns the value of a ICMP field
 func (i *ICMPLayer) GetStringField(field string) (string, error) {
 	if i == nil {
 		return "", common.ErrFieldNotFound
@@ -669,7 +669,7 @@ func (i *ICMPLayer) GetStringField(field string) (string, error) {
 	}
 }
 
-// GetFieldInt64 retrun the value of a ICMP field
+// GetFieldInt64 returns the value of a ICMP field
 func (i *ICMPLayer) GetFieldInt64(field string) (int64, error) {
 	if i == nil {
 		return 0, common.ErrFieldNotFound
@@ -683,7 +683,7 @@ func (i *ICMPLayer) GetFieldInt64(field string) (int64, error) {
 	}
 }
 
-// GetFieldString retrun the value of a Flow field
+// GetFieldString returns the value of a Flow field
 func (f *Flow) GetFieldString(field string) (string, error) {
 	fields := strings.Split(field, ".")
 	if len(fields) < 1 {
@@ -737,7 +737,7 @@ func (f *Flow) GetFieldString(field string) (string, error) {
 	return "", common.ErrFieldNotFound
 }
 
-// GetFieldInt64 retrun the value of a Flow field
+// GetFieldInt64 returns the value of a Flow field
 func (f *Flow) GetFieldInt64(field string) (_ int64, err error) {
 	switch field {
 	case "Last":
@@ -769,7 +769,7 @@ func (f *Flow) GetFieldInt64(field string) (_ int64, err error) {
 	}
 }
 
-// GetField retrun the value of a field
+// GetField returns the value of a field
 func (f *Flow) GetField(field string) (interface{}, error) {
 	if i, err := f.GetFieldInt64(field); err == nil {
 		return i, nil
@@ -777,7 +777,7 @@ func (f *Flow) GetField(field string) (interface{}, error) {
 	return f.GetFieldString(field)
 }
 
-// GetFields retrun the list of valid field of a Flow
+// GetFields returns the list of valid field of a Flow
 func (f *Flow) GetFields() []interface{} {
 	return fields
 }

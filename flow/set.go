@@ -36,7 +36,7 @@ type MergeContext struct {
 	DedupBy   string
 }
 
-// NewFlowSet create a new empty FlowSet
+// NewFlowSet creates a new empty FlowSet
 func NewFlowSet() *FlowSet {
 	return &FlowSet{
 		Flows: make([]*Flow, 0),
@@ -232,7 +232,7 @@ func (fs *FlowSet) mergeSortedFlows(left, right []*Flow, context MergeContext) (
 	return ret, nil
 }
 
-// Slice return a slice of a FlowSet
+// Slice returns a slice of a FlowSet
 func (fs *FlowSet) Slice(from, to int) {
 	if from > len(fs.Flows) {
 		from = len(fs.Flows)

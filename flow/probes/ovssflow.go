@@ -192,7 +192,7 @@ func (o *OvsSFlowProbesHandler) registerSFlowProbeOnBridge(probe OvsSFlowProbe, 
 	return nil
 }
 
-// UnregisterSFlowProbeFromBridge unregister a flow probe from the bridge selected by UUID
+// UnregisterSFlowProbeFromBridge unregisters a flow probe from the bridge selected by UUID
 func (o *OvsSFlowProbesHandler) UnregisterSFlowProbeFromBridge(bridgeUUID string) error {
 	o.allocator.Release(bridgeUUID)
 
@@ -225,7 +225,7 @@ func (o *OvsSFlowProbesHandler) UnregisterSFlowProbeFromBridge(bridgeUUID string
 	return nil
 }
 
-// RegisterProbeOnBridge register a new probe on the OVS bridge
+// RegisterProbeOnBridge registers a new probe on the OVS bridge
 func (o *OvsSFlowProbesHandler) RegisterProbeOnBridge(bridgeUUID string, tid string, ft *flow.Table, bpfFilter string) error {
 	probe := OvsSFlowProbe{
 		ID:         probeID(bridgeUUID),
@@ -267,7 +267,7 @@ func isOvsBridge(n *graph.Node) bool {
 	return false
 }
 
-// RegisterProbe register a probe on a graph node
+// RegisterProbe registers a probe on a graph node
 func (o *OvsSFlowProbesHandler) RegisterProbe(n *graph.Node, capture *api.Capture, ft *flow.Table) error {
 	tid, _ := n.GetFieldString("TID")
 	if tid == "" {
@@ -315,7 +315,7 @@ func (o *OvsSFlowProbesHandler) Stop() {
 	o.allocator.ReleaseAll()
 }
 
-// NewOvsSFlowProbesHandler create a new OVS SFlow porbes
+// NewOvsSFlowProbesHandler creates a new OVS SFlow porbes
 func NewOvsSFlowProbesHandler(tb *probe.ProbeBundle, g *graph.Graph) (*OvsSFlowProbesHandler, error) {
 	probe := tb.GetProbe("ovsdb")
 	if probe == nil {

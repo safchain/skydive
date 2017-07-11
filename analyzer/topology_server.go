@@ -161,7 +161,7 @@ func (t *TopologyServer) OnGraphMessage(c *shttp.WSClient, msg shttp.WSMessage, 
 	}
 }
 
-// NewTopologyServer create a new topology server
+// NewTopologyServer creates a new topology server
 func NewTopologyServer(host string, server *shttp.WSServer) (*TopologyServer, error) {
 	persistent, err := graph.BackendFromConfig()
 	if err != nil {
@@ -200,7 +200,7 @@ func NewTopologyServer(host string, server *shttp.WSServer) (*TopologyServer, er
 	return t, nil
 }
 
-// NewTopologyServerFromConfig create a new topology server based on configuration
+// NewTopologyServerFromConfig creates a new topology server based on configuration
 func NewTopologyServerFromConfig(server *shttp.WSServer) (*TopologyServer, error) {
 	host := config.GetConfig().GetString("host_id")
 	return NewTopologyServer(host, server)

@@ -201,7 +201,7 @@ func (s *Server) Stop() {
 	}
 }
 
-// NewServerFromConfig create a new empty server
+// NewServerFromConfig creates a new empty server
 func NewServerFromConfig() *Server {
 	return &Server{}
 }

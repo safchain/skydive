@@ -326,7 +326,7 @@ type Session struct {
 	analyzerAddr       string
 }
 
-// NewSession create a new shell session
+// NewSession creates a new shell session
 func NewSession() (*Session, error) {
 	s := &Session{
 		analyzerAddr: "localhost:8082",

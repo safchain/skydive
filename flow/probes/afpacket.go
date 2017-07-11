@@ -35,7 +35,7 @@ type AFPacketHandle struct {
 	tpacket *afpacket.TPacket
 }
 
-// ReadPacketData read one packet
+// ReadPacketData reads one packet
 func (h *AFPacketHandle) ReadPacketData() ([]byte, gopacket.CaptureInfo, error) {
 	return h.tpacket.ReadPacketData()
 }
@@ -45,7 +45,7 @@ func (h *AFPacketHandle) Close() {
 	h.tpacket.Close()
 }
 
-// NewAFPacketHandle create a new network AF packet probe
+// NewAFPacketHandle creates a new network AF packet probe
 func NewAFPacketHandle(ifName string, snaplen int32) (*AFPacketHandle, error) {
 	tpacket, err := afpacket.NewTPacket(
 		afpacket.OptInterface(ifName),

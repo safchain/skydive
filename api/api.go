@@ -64,7 +64,7 @@ func writeError(w http.ResponseWriter, status int, err error) {
 	w.Write([]byte(err.Error()))
 }
 
-// RegisterAPIHandler register a new handler for an API
+// RegisterAPIHandler registers a new handler for an API
 func (a *Server) RegisterAPIHandler(handler Handler) error {
 	name := handler.Name()
 	title := strings.Title(name)
@@ -212,12 +212,12 @@ func (a *Server) addAPIRootRoute() {
 	a.HTTPServer.RegisterRoutes(routes)
 }
 
-// GetHandler return the hander named hname
+// GetHandler returns the hander named hname
 func (a *Server) GetHandler(hname string) Handler {
 	return a.handlers[hname]
 }
 
-// NewAPI create a new API server based on http
+// NewAPI creates a new API server based on http
 func NewAPI(server *shttp.Server, kapi etcd.KeysAPI, serviceType common.ServiceType) (*Server, error) {
 	apiServer := &Server{
 		HTTPServer:  server,
@@ -231,7 +231,7 @@ func NewAPI(server *shttp.Server, kapi etcd.KeysAPI, serviceType common.ServiceT
 	return apiServer, nil
 }
 
-// NewCrudClientFromConfig create a new REST client on /api
+// NewCrudClientFromConfig creates a new REST client on /api
 func NewCrudClientFromConfig(authOptions *shttp.AuthenticationOpts) (*shttp.CrudClient, error) {
 	sa, err := config.GetOneAnalyzerServiceAddress()
 	if err != nil && err != config.ErrNoAnalyzerSpecified {
@@ -242,7 +242,7 @@ func NewCrudClientFromConfig(authOptions *shttp.AuthenticationOpts) (*shttp.Crud
 	return shttp.NewCrudClient(sa.Addr, sa.Port, authOptions, "api"), nil
 }
 
-// NewRestClientFromConfig create a new REST client
+// NewRestClientFromConfig creates a new REST client
 func NewRestClientFromConfig(authOptions *shttp.AuthenticationOpts) (*shttp.RestClient, error) {
 	sa, err := config.GetOneAnalyzerServiceAddress()
 	if err != nil && err != config.ErrNoAnalyzerSpecified {

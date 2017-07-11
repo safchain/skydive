@@ -240,7 +240,7 @@ func (c *OrientDBStorage) Stop() {
 func (c *OrientDBStorage) Close() {
 }
 
-// New create a new OrientDB database client
+// New creates a new OrientDB database client
 func New() (*OrientDBStorage, error) {
 	addr := config.GetConfig().GetString("storage.orientdb.addr")
 	database := config.GetConfig().GetString("storage.orientdb.database")

@@ -46,12 +46,12 @@ func (e *EnhancerPipeline) Enhance(flows []*Flow) {
 	}
 }
 
-// AddEnhancer register a new flow enhancer
+// AddEnhancer registers a new flow enhancer
 func (e *EnhancerPipeline) AddEnhancer(en Enhancer) {
 	e.Enhancers = append(e.Enhancers, en)
 }
 
-// NewEnhancerPipeline register a list of flow Enhancer
+// NewEnhancerPipeline registers a list of flow Enhancer
 func NewEnhancerPipeline(enhancers ...Enhancer) *EnhancerPipeline {
 	return &EnhancerPipeline{
 		Enhancers: enhancers,

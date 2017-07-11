@@ -89,7 +89,7 @@ func (p *PeeringProbe) Stop() {
 	p.graph.RemoveEventListener(p)
 }
 
-// NewPeeringProbe create a new graph node peering probe
+// NewPeeringProbe creates a new graph node peering probe
 func NewPeeringProbe(g *graph.Graph) *PeeringProbe {
 	probe := &PeeringProbe{
 		graph: g,

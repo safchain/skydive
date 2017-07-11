@@ -325,7 +325,7 @@ func (c *ElasticSearchStorage) Stop() {
 	c.client.Stop()
 }
 
-// New create a new ElasticSearch database client
+// New creates a new ElasticSearch database client
 func New() (*ElasticSearchStorage, error) {
 	client, err := esclient.NewElasticSearchClientFromConfig()
 	if err != nil {

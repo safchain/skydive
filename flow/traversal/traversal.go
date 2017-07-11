@@ -438,7 +438,7 @@ func (f *FlowTraversalStep) propertyStringValues(field string) *traversal.GraphT
 	return traversal.NewGraphTraversalValue(f.GraphTraversal, s, nil)
 }
 
-// PropertyValues return a flow field value
+// PropertyValues returns a flow field value
 func (f *FlowTraversalStep) PropertyValues(keys ...interface{}) *traversal.GraphTraversalValue {
 	if f.error != nil {
 		return traversal.NewGraphTraversalValue(f.GraphTraversal, nil, f.error)
@@ -457,7 +457,7 @@ func (f *FlowTraversalStep) PropertyValues(keys ...interface{}) *traversal.Graph
 	return traversal.NewGraphTraversalValue(f.GraphTraversal, nil, common.ErrFieldNotFound)
 }
 
-// PropertyKeys return a flow fileds
+// PropertyKeys returns a flow fileds
 func (f *FlowTraversalStep) PropertyKeys(keys ...interface{}) *traversal.GraphTraversalValue {
 	if f.error != nil {
 		return traversal.NewGraphTraversalValue(f.GraphTraversal, nil, f.error)
@@ -473,7 +473,7 @@ func (f *FlowTraversalStep) PropertyKeys(keys ...interface{}) *traversal.GraphTr
 	return traversal.NewGraphTraversalValue(f.GraphTraversal, s, nil)
 }
 
-// Metrics return flow mertics interface counters
+// Metrics returns flow mertics interface counters
 func (f *FlowTraversalStep) Metrics() *traversal.MetricsTraversalStep {
 	if f.error != nil {
 		return traversal.NewMetricsTraversalStep(nil, nil, f.error)
@@ -534,7 +534,7 @@ func (f *FlowTraversalStep) Metrics() *traversal.MetricsTraversalStep {
 	return traversal.NewMetricsTraversalStep(f.GraphTraversal, flowMetrics, nil)
 }
 
-// Values return flows
+// Values returns flows
 func (f *FlowTraversalStep) Values() []interface{} {
 	a := make([]interface{}, len(f.flowset.Flows))
 	for i, flow := range f.flowset.Flows {
@@ -548,12 +548,12 @@ func (f *FlowTraversalStep) MarshalJSON() ([]byte, error) {
 	return json.Marshal(f.Values())
 }
 
-// Error return tranversal error
+// Error returns tranversal error
 func (f *FlowTraversalStep) Error() error {
 	return f.error
 }
 
-// NewFlowTraversalExtension create a new flow tranversal extension for Gremlin parser
+// NewFlowTraversalExtension creates a new flow tranversal extension for Gremlin parser
 func NewFlowTraversalExtension(client *flow.TableClient, storage storage.Storage) *FlowTraversalExtension {
 	return &FlowTraversalExtension{
 		FlowToken:        traversalFlowToken,
@@ -583,7 +583,7 @@ func (e *FlowTraversalExtension) ScanIdent(s string) (traversal.Token, bool) {
 	return traversal.IDENT, false
 }
 
-// ParseStep create steps from token
+// ParseStep creates steps from token
 func (e *FlowTraversalExtension) ParseStep(t traversal.Token, p traversal.GremlinTraversalContext) (traversal.GremlinTraversalStep, error) {
 	switch t {
 	case e.FlowToken:

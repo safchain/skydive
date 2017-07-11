@@ -101,7 +101,7 @@ type GremlinTraversalScanner struct {
 	extensions []GremlinTraversalExtension
 }
 
-// NewGremlinTraversalScanner create a new Gremlin expression scanner
+// NewGremlinTraversalScanner creates a new Gremlin expression scanner
 func NewGremlinTraversalScanner(r io.Reader, e []GremlinTraversalExtension) *GremlinTraversalScanner {
 	return &GremlinTraversalScanner{
 		reader:     bufio.NewReader(r),
@@ -109,7 +109,7 @@ func NewGremlinTraversalScanner(r io.Reader, e []GremlinTraversalExtension) *Gre
 	}
 }
 
-// Scan and return tokens
+// Scan and returns tokens
 func (s *GremlinTraversalScanner) Scan() (tok Token, lit string) {
 	ch := s.read()
 

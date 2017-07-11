@@ -259,7 +259,7 @@ func (probe *DockerProbe) Stop() {
 	atomic.StoreInt64(&probe.state, common.StoppedState)
 }
 
-// NewDockerProbe create a new topology Docker probe
+// NewDockerProbe creates a new topology Docker probe
 func NewDockerProbe(nsProbe *NetNSProbe, dockerURL string) (probe *DockerProbe, _ error) {
 	return &DockerProbe{
 		NetNSProbe:   nsProbe,
@@ -269,7 +269,7 @@ func NewDockerProbe(nsProbe *NetNSProbe, dockerURL string) (probe *DockerProbe, 
 	}, nil
 }
 
-// NewDockerProbeFromConfig create a new topology Docker probe based on configuration
+// NewDockerProbeFromConfig creates a new topology Docker probe based on configuration
 func NewDockerProbeFromConfig(nsProbe *NetNSProbe) (*DockerProbe, error) {
 	dockerURL := config.GetConfig().GetString("docker.url")
 	return NewDockerProbe(nsProbe, dockerURL)

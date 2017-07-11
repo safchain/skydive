@@ -38,7 +38,7 @@ const (
 	Namespace = "Packet_Injector"
 )
 
-// PacketInjectorServer create a packet injector server API
+// PacketInjectorServer creates a packet injector server API
 type PacketInjectorServer struct {
 	shttp.DefaultWSClientEventHandler
 	WSAsyncClientPool *shttp.WSAsyncClientPool
@@ -77,7 +77,7 @@ func (pis *PacketInjectorServer) OnMessage(c *shttp.WSAsyncClient, msg shttp.WSM
 	}
 }
 
-// NewServer create a new packet injector server API based on websocket server
+// NewServer creates a new packet injector server API based on websocket server
 func NewServer(wspool *shttp.WSAsyncClientPool, graph *graph.Graph) *PacketInjectorServer {
 	s := &PacketInjectorServer{
 		WSAsyncClientPool: wspool,

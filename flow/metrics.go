@@ -34,7 +34,7 @@ func (f *FlowMetric) Copy() *FlowMetric {
 	}
 }
 
-// GetFieldInt64 return the field value
+// GetFieldInt64 returns the field value
 func (f *FlowMetric) GetFieldInt64(field string) (int64, error) {
 	switch field {
 	case "ABPackets":

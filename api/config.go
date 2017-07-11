@@ -41,7 +41,7 @@ func (c *configAPI) registerEndpoints(r *shttp.Server) {
 	r.RegisterRoutes(routes)
 }
 
-// RegisterConfigAPI register a configuration endpoint (read only) in API server
+// RegisterConfigAPI registers a configuration endpoint (reads only) in API server
 func RegisterConfigAPI(r *shttp.Server) {
 	c := &configAPI{
 		cfg: config.GetConfig(),

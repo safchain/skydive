@@ -80,7 +80,7 @@ type FlowServer struct {
 	bulkDeadline     int
 }
 
-// Mode return the connection mode UDP or TLS
+// Mode returns the connection mode UDP or TLS
 func (a *FlowServerConn) Mode() FlowConnectionType {
 	return a.mode
 }
@@ -164,7 +164,7 @@ func (a *FlowServerConn) Read(data []byte) (int, error) {
 	return 0, errors.New("Mode didn't exist")
 }
 
-// Timeout return true if the connection error timeouted
+// Timeout returns true if the connection error timeouted
 func (a *FlowServerConn) Timeout(err error) bool {
 	switch a.mode {
 	case TLS:
@@ -179,7 +179,7 @@ func (a *FlowServerConn) Timeout(err error) bool {
 	return false
 }
 
-// NewFlowServerConn create a new server listening at address
+// NewFlowServerConn creates a new server listening at address
 func NewFlowServerConn(addr *net.UDPAddr) (a *FlowServerConn, err error) {
 	a = &FlowServerConn{mode: UDP}
 	certPEM := config.GetConfig().GetString("analyzer.X509_cert")
@@ -260,7 +260,7 @@ func (a *FlowClientConn) Write(b []byte) (int, error) {
 	return a.udpConn.Write(b)
 }
 
-// NewFlowClientConn create a new connection to the server at address
+// NewFlowClientConn creates a new connection to the server at address
 func NewFlowClientConn(addr *net.UDPAddr) (a *FlowClientConn, err error) {
 	a = &FlowClientConn{}
 	certPEM := config.GetConfig().GetString("agent.X509_cert")
@@ -420,7 +420,7 @@ func (s *FlowServer) Stop() {
 	}
 }
 
-// NewFlowServer create a new flow server listening at address/port, based on configuration
+// NewFlowServer creates a new flow server listening at address/port, based on configuration
 func NewFlowServer(addr string, port int, g *graph.Graph, store storage.Storage, probe *probe.ProbeBundle) (*FlowServer, error) {
 	cache := cache.New(time.Duration(600)*time.Second, time.Duration(600)*time.Second)
 	pipeline := flow.NewEnhancerPipeline(enhancers.NewGraphFlowEnhancer(g, cache))

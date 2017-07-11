@@ -107,7 +107,7 @@ func (nfe *NeutronFlowEnhancer) OnEdgeDeleted(e *graph.Edge) {
 	}
 }
 
-// NewNeutronFlowEnhancer create a new flow enhancer that will enhance A and B flow nodes TIDs
+// NewNeutronFlowEnhancer creates a new flow enhancer that will enhance A and B flow nodes TIDs
 func NewNeutronFlowEnhancer(g *graph.Graph, cache *cache.Cache) *NeutronFlowEnhancer {
 	fe := &NeutronFlowEnhancer{
 		Graph: g,

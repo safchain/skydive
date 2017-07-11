@@ -148,7 +148,7 @@ func (fb *FabricProbe) Start() {
 func (fb *FabricProbe) Stop() {
 }
 
-// NewFabricProbe create a new probe to enhance the graph
+// NewFabricProbe creates a new probe to enhance the graph
 func NewFabricProbe(g *graph.Graph) *FabricProbe {
 	fb := &FabricProbe{
 		Graph: g,

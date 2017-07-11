@@ -259,7 +259,7 @@ func getGoPacketFirstLayerType(n *graph.Node) (gopacket.LayerType, layers.LinkTy
 	return layers.LayerTypeEthernet, layers.LinkTypeEthernet
 }
 
-// RegisterProbe register a gopacket probe
+// RegisterProbe registers a gopacket probe
 func (p *GoPacketProbesHandler) RegisterProbe(n *graph.Node, capture *api.Capture, ft *flow.Table) error {
 	name, _ := n.GetFieldString("Name")
 	if name == "" {
@@ -323,7 +323,7 @@ func (p *GoPacketProbesHandler) unregisterProbe(id string) error {
 	return nil
 }
 
-// UnregisterProbe unregister gopacket probe
+// UnregisterProbe unregisters gopacket probe
 func (p *GoPacketProbesHandler) UnregisterProbe(n *graph.Node) error {
 	p.probesLock.Lock()
 	defer p.probesLock.Unlock()
@@ -351,7 +351,7 @@ func (p *GoPacketProbesHandler) Stop() {
 	p.wg.Wait()
 }
 
-// NewGoPacketProbesHandler create a new gopacket probe in the graph
+// NewGoPacketProbesHandler creates a new gopacket probe in the graph
 func NewGoPacketProbesHandler(g *graph.Graph) (*GoPacketProbesHandler, error) {
 	return &GoPacketProbesHandler{
 		graph:  g,

@@ -99,7 +99,7 @@ type RawSocket struct {
 	fd int
 }
 
-// GetFd return the file descriptor
+// GetFd returns the file descriptor
 func (s *RawSocket) GetFd() int {
 	return s.fd
 }
@@ -115,7 +115,7 @@ func (s *RawSocket) Close() error {
 	return nil
 }
 
-// NewRawSocket create a raw socket for the network interface ifName
+// NewRawSocket creates a raw socket for the network interface ifName
 func NewRawSocket(ifName string) (*RawSocket, error) {
 	li := unsafe.Pointer(C.CString(ifName))
 	defer C.free(li)

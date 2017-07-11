@@ -65,7 +65,7 @@ type SFlowAgentAllocator struct {
 	Addr          string
 }
 
-// GetTarget return the current used connection
+// GetTarget returns the current used connection
 func (sfa *SFlowAgent) GetTarget() string {
 	target := []string{sfa.Addr, strconv.FormatInt(int64(sfa.Port), 10)}
 	return strings.Join(target, ":")
@@ -146,7 +146,7 @@ func (sfa *SFlowAgent) Stop() {
 	}
 }
 
-// NewSFlowAgent create a new probe agent and populate the flowtable
+// NewSFlowAgent creates a new probe agent and populate the flowtable
 func NewSFlowAgent(u string, a *common.ServiceAddress, ft *flow.Table, bpfFilter string) *SFlowAgent {
 	return &SFlowAgent{
 		UUID:      u,
@@ -213,7 +213,7 @@ func (a *SFlowAgentAllocator) Alloc(uuid string, ft *flow.Table, bpfFilter strin
 	return s, nil
 }
 
-// NewSFlowAgentAllocator create a new SFlow probes agent allocator
+// NewSFlowAgentAllocator creates a new SFlow probes agent allocator
 func NewSFlowAgentAllocator() (*SFlowAgentAllocator, error) {
 	min := config.GetConfig().GetInt("sflow.port_min")
 	max := config.GetConfig().GetInt("sflow.port_max")

@@ -109,7 +109,7 @@ func (s *Server) AddEventHandler(h ServerEventHandler) {
 	s.eventHandlers = append(s.eventHandlers, h)
 }
 
-// NewServer create a new graph server based on a websocket server
+// NewServer creates a new graph server based on a websocket server
 func NewServer(g *Graph, server *shttp.WSServer) *Server {
 	s := &Server{
 		Graph:    g,

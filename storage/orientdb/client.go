@@ -188,7 +188,7 @@ func compressBody(body io.Reader) io.Reader {
 	return buffer
 }
 
-// FilterToExpression return a OrientDB select expression based on filters
+// FilterToExpression returns a OrientDB select expression based on filters
 func FilterToExpression(f *filters.Filter, formatter func(string) string) string {
 	if formatter == nil {
 		formatter = func(s string) string { return s }
@@ -252,7 +252,7 @@ func FilterToExpression(f *filters.Filter, formatter func(string) string) string
 	return ""
 }
 
-// NewClient create a new OrientDB database client
+// NewClient creates a new OrientDB database client
 func NewClient(url string, database string, username string, password string) (*Client, error) {
 	client := &Client{
 		url:      url,
@@ -341,7 +341,7 @@ func (c *Client) GetDocument(id string) (Document, error) {
 	return result, nil
 }
 
-// CreateDocument create an OrientDB document
+// CreateDocument creates an OrientDB document
 func (c *Client) CreateDocument(doc Document) (Document, error) {
 	url := fmt.Sprintf("%s/document/%s", c.url, c.database)
 	marshal, err := json.Marshal(doc)
@@ -390,7 +390,7 @@ func (c *Client) Upsert(doc Document, key string) (Document, error) {
 	return nil, err
 }
 
-// GetDocumentClass return an OrientDB document class
+// GetDocumentClass returns an OrientDB document class
 func (c *Client) GetDocumentClass(name string) (*DocumentClass, error) {
 	url := fmt.Sprintf("%s/class/%s/%s", c.url, c.database, name)
 	resp, err := c.Request("GET", url, nil)
@@ -427,7 +427,7 @@ func (c *Client) AlterProperty(className string, prop Property) error {
 	return nil
 }
 
-// CreateProperty create a new class property
+// CreateProperty creates a new class property
 func (c *Client) CreateProperty(className string, prop Property) error {
 	query := fmt.Sprintf("CREATE PROPERTY %s.%s %s", className, prop.Name, prop.Type)
 	if prop.LinkedClass != "" {
@@ -443,7 +443,7 @@ func (c *Client) CreateProperty(className string, prop Property) error {
 	return c.AlterProperty(className, prop)
 }
 
-// CreateClass create a new class
+// CreateClass creates a new class
 func (c *Client) CreateClass(class ClassDefinition) error {
 	query := fmt.Sprintf("CREATE CLASS %s", class.Name)
 	if class.SuperClass != "" {
@@ -453,13 +453,13 @@ func (c *Client) CreateClass(class ClassDefinition) error {
 	return c.SQL(query, nil)
 }
 
-// CreateIndex create a new Index
+// CreateIndex creates a new Index
 func (c *Client) CreateIndex(className string, index Index) error {
 	query := fmt.Sprintf("CREATE INDEX %s ON %s (%s) %s", index.Name, className, strings.Join(index.Fields, ", "), index.Type)
 	return c.SQL(query, nil)
 }
 
-// CreateDocumentClass create a new OrientDB document class
+// CreateDocumentClass creates a new OrientDB document class
 func (c *Client) CreateDocumentClass(class ClassDefinition) error {
 	if err := c.CreateClass(class); err != nil {
 		return err
@@ -495,7 +495,7 @@ func (c *Client) DeleteDocumentClass(name string) error {
 	return nil
 }
 
-// GetDatabase return the root OrientDB document
+// GetDatabase returns the root OrientDB document
 func (c *Client) GetDatabase() (Document, error) {
 	url := fmt.Sprintf("%s/database/%s", c.url, c.database)
 	resp, err := c.Request("GET", url, nil)
@@ -511,7 +511,7 @@ func (c *Client) GetDatabase() (Document, error) {
 	return result, nil
 }
 
-// CreateDatabase create the root OrientDB Document
+// CreateDatabase creates the root OrientDB Document
 func (c *Client) CreateDatabase() (Document, error) {
 	url := fmt.Sprintf("%s/database/%s/plocal", c.url, c.database)
 	resp, err := c.Request("POST", url, nil)

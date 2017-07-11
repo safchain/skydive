@@ -183,7 +183,7 @@ func (f *TableClient) LookupFlowsByNodes(hnmap topology.HostNodeTIDMap, flowSear
 	return flowset, nil
 }
 
-// NewTableClient create a new table client based on websocket
+// NewTableClient creates a new table client based on websocket
 func NewTableClient(w *shttp.WSServer) *TableClient {
 	tc := &TableClient{
 		WSServer:  w,

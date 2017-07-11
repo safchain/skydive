@@ -35,7 +35,7 @@ type BPF struct {
 	vm *bpf.VM
 }
 
-// BPFFilterToRaw create a raw binary filter from a BPF expression
+// BPFFilterToRaw creates a raw binary filter from a BPF expression
 func BPFFilterToRaw(linkType layers.LinkType, captureLength uint32, filter string) ([]bpf.RawInstruction, error) {
 	// use pcap bpf compiler to get raw bpf instruction
 	pcapBPF, err := pcap.CompileBPFFilter(linkType, int(captureLength), filter)
@@ -50,7 +50,7 @@ func BPFFilterToRaw(linkType layers.LinkType, captureLength uint32, filter strin
 	return rawBPF, nil
 }
 
-// Matches return true data match the filter
+// Matches returns true data match the filter
 func (b *BPF) Matches(data []byte) bool {
 	if b.vm == nil {
 		return true
@@ -63,7 +63,7 @@ func (b *BPF) Matches(data []byte) bool {
 	return true
 }
 
-// NewBPF create a new BPF filter
+// NewBPF creates a new BPF filter
 func NewBPF(linkType layers.LinkType, captureLength uint32, filter string) (*BPF, error) {
 	if filter == "" {
 		return &BPF{}, nil

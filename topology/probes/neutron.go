@@ -338,7 +338,7 @@ func (mapper *NeutronProbe) Stop() {
 	close(mapper.nodeUpdaterChan)
 }
 
-// NewNeutronProbe create a neutron probe that will enhance the graph
+// NewNeutronProbe creates a neutron probe that will enhance the graph
 func NewNeutronProbe(g *graph.Graph, wspool *shttp.WSAsyncClientPool, authURL, username, password, tenantName, regionName, domainName string, availability gophercloud.Availability) (*NeutronProbe, error) {
 	// only looking for interfaces matching the following regex as nova, neutron interfaces match this pattern
 	intfRegexp := regexp.MustCompile(`(tap|qr-|qg-|qvo)[a-fA-F0-9]{8}-[a-fA-F0-9]{2}`)
@@ -380,7 +380,7 @@ func NewNeutronProbe(g *graph.Graph, wspool *shttp.WSAsyncClientPool, authURL, u
 	return mapper, nil
 }
 
-// NewNeutronProbeFromConfig create a new neutron probe based on configuration
+// NewNeutronProbeFromConfig creates a new neutron probe based on configuration
 func NewNeutronProbeFromConfig(g *graph.Graph, wspool *shttp.WSAsyncClientPool) (*NeutronProbe, error) {
 	authURL := config.GetConfig().GetString("openstack.auth_url")
 	username := config.GetConfig().GetString("openstack.username")

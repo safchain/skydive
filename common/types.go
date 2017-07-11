@@ -184,7 +184,7 @@ func CrossTypeEqual(a interface{}, b interface{}) bool {
 	return result == 0
 }
 
-// MinInt64 return the lowest value
+// MinInt64 returns the lowest value
 func MinInt64(a, b int64) int64 {
 	if a < b {
 		return a
@@ -192,7 +192,7 @@ func MinInt64(a, b int64) int64 {
 	return b
 }
 
-// MaxInt64 return the biggest value
+// MaxInt64 returns the biggest value
 func MaxInt64(a, b int64) int64 {
 	if a > b {
 		return a
@@ -200,7 +200,7 @@ func MaxInt64(a, b int64) int64 {
 	return b
 }
 
-// IPv6Supported return true if the platform support IPv6
+// IPv6Supported returns true if the platform support IPv6
 func IPv6Supported() bool {
 	if _, err := os.Stat("/proc/net/if_inet6"); os.IsNotExist(err) {
 		return false
@@ -233,35 +233,35 @@ func JSONDecode(r io.Reader, i interface{}) error {
 	return decoder.Decode(i)
 }
 
-// UnixMillis return the current time in miliseconds
+// UnixMillis returns the current time in miliseconds
 func UnixMillis(t time.Time) int64 {
 	return t.UTC().UnixNano() / 1000000
 }
 
-// TimeSlice define a time boudary values
+// TimeSlice defines a time boudary values
 type TimeSlice struct {
 	Start int64 `json:"Start"`
 	Last  int64 `json:"Last"`
 }
 
-// NewTimeSlice create a new TimeSlice based on Start and Last
+// NewTimeSlice creates a new TimeSlice based on Start and Last
 func NewTimeSlice(s, l int64) *TimeSlice {
 	return &TimeSlice{Start: s, Last: l}
 }
 
-// Metric define accessors
+// Metric defines accessors
 type Metric interface {
 	GetFieldInt64(field string) (int64, error)
 	Add(m Metric) Metric
 }
 
-// TimedMetric define Metric during a time slice
+// TimedMetric defines Metric during a time slice
 type TimedMetric struct {
 	TimeSlice
 	Metric Metric
 }
 
-// GetFieldInt64 return the field value
+// GetFieldInt64 returns the field value
 func (tm *TimedMetric) GetFieldInt64(field string) (int64, error) {
 	return tm.Metric.GetFieldInt64(field)
 }

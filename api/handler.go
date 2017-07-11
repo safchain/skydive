@@ -54,7 +54,7 @@ type Handler interface {
 	AsyncWatch(f WatcherCallback) StoppableWatcher
 }
 
-// ResourceHandler aim to create new resource of an API
+// ResourceHandler aims to creates new resource of an API
 type ResourceHandler interface {
 	Name() string
 	New() Resource
@@ -97,12 +97,12 @@ func (s *BasicStoppableWatcher) Stop() {
 	s.wg.Wait()
 }
 
-// Name return the resource name
+// Name returns the resource name
 func (h *BasicAPIHandler) Name() string {
 	return h.ResourceHandler.Name()
 }
 
-// New create a new resource
+// New creates a new resource
 func (h *BasicAPIHandler) New() Resource {
 	return h.ResourceHandler.New()
 }
@@ -133,7 +133,7 @@ func (h *BasicAPIHandler) collectNodes(flatten map[string]Resource, nodes etcd.N
 	}
 }
 
-// Index return the list of resource available in Etcd
+// Index returns the list of resource available in Etcd
 func (h *BasicAPIHandler) Index() map[string]Resource {
 	etcdPath := fmt.Sprintf("/%s/", h.ResourceHandler.Name())
 
@@ -183,7 +183,7 @@ func (h *BasicAPIHandler) Delete(id string) error {
 	return nil
 }
 
-// AsyncWatch register a new resource watcher
+// AsyncWatch registers a new resource watcher
 func (h *BasicAPIHandler) AsyncWatch(f WatcherCallback) StoppableWatcher {
 	etcdPath := fmt.Sprintf("/%s/", h.ResourceHandler.Name())
 

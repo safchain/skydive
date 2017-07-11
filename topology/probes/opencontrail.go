@@ -37,7 +37,7 @@ import (
 	"github.com/nlewo/contrail-introspect-cli/descriptions"
 )
 
-// OpenContrailProbe describes a probe that read OpenContrail database and update the graph
+// OpenContrailProbe describes a probe that reads OpenContrail database and updates the graph
 type OpenContrailProbe struct {
 	graph.DefaultGraphListener
 	graph           *graph.Graph
@@ -95,7 +95,7 @@ func (mapper *OpenContrailProbe) retrieveMetadata(metadata graph.Metadata, itf c
 	return e, nil
 }
 
-// Since the node update is triggered by a netlink message, it happens
+// Since the node updates is triggered by a netlink message, it happens
 // the contrail vrouter agent doesn't have interface informations yet:
 // for instance, the tap is first created by nova and this information
 // is then propagated to contrail. We then retry to get interface from
@@ -285,7 +285,7 @@ func (mapper *OpenContrailProbe) Stop() {
 	close(mapper.nodeUpdaterChan)
 }
 
-// NewOpenContrailProbeFromConfig create a new OpenContrail probe based on configuration
+// NewOpenContrailProbeFromConfig creates a new OpenContrail probe based on configuration
 func NewOpenContrailProbeFromConfig(g *graph.Graph, r *graph.Node) *OpenContrailProbe {
 	host := config.GetConfig().GetString("opencontrail.host")
 	port := config.GetConfig().GetInt("opencontrail.port")

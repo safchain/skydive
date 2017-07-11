@@ -162,7 +162,7 @@ func (t *TIDMapper) OnEdgeDeleted(e *graph.Edge) {
 	t.Graph.DelMetadata(children[0], "TID")
 }
 
-// NewTIDMapper create a new node mapper in the graph g
+// NewTIDMapper creates a new node mapper in the graph g
 func NewTIDMapper(g *graph.Graph) *TIDMapper {
 	return &TIDMapper{
 		Graph: g,

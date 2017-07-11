@@ -41,7 +41,7 @@ type FlowProbeBundle struct {
 	FlowTableAllocator *flow.TableAllocator
 }
 
-// FlowProbeInterface define flow probe mechanism
+// FlowProbeInterface defines flow probe mechanism
 type FlowProbeInterface interface {
 	probe.Probe
 	RegisterProbe(n *graph.Node, capture *api.Capture, ft *flow.Table) error
@@ -79,7 +79,7 @@ func (fp *FlowProbe) AsyncFlowPipeline(flows []*flow.Flow) {
 	fp.flowClientPool.SendFlows(flows)
 }
 
-// UnregisterAllProbes unregister all registered probes
+// UnregisterAllProbes unregisters all registered probes
 func (fpb *FlowProbeBundle) UnregisterAllProbes() {
 	fpb.Graph.Lock()
 	defer fpb.Graph.Unlock()
@@ -92,7 +92,7 @@ func (fpb *FlowProbeBundle) UnregisterAllProbes() {
 	}
 }
 
-// NewFlowProbeBundleFromConfig create a new flow probes bundle from configuration
+// NewFlowProbeBundleFromConfig creates a new flow probes bundle from configuration
 // valid flow probes are : pcapsocket, ovsflow, gopacket, sflow
 func NewFlowProbeBundleFromConfig(tb *probe.ProbeBundle, g *graph.Graph, fta *flow.TableAllocator, fcpool *analyzer.FlowClientPool) *FlowProbeBundle {
 	list := config.GetConfig().GetStringSlice("agent.flow.probes")

@@ -768,12 +768,12 @@ func (s *GremlinTraversalSequence) Exec() (GraphTraversalStep, error) {
 	return res, nil
 }
 
-// AddTraversalExtension register a new gremlin traversal extension
+// AddTraversalExtension registers a new gremlin traversal extension
 func (p *GremlinTraversalParser) AddTraversalExtension(e GremlinTraversalExtension) {
 	p.extensions = append(p.extensions, e)
 }
 
-// NewGremlinTraversalParser create a new gremlin language parser on the graph
+// NewGremlinTraversalParser creates a new gremlin language parser on the graph
 func NewGremlinTraversalParser(g *graph.Graph) *GremlinTraversalParser {
 	return &GremlinTraversalParser{
 		Graph: g,
@@ -1093,7 +1093,7 @@ func (p *GremlinTraversalParser) parserStep() (GremlinTraversalStep, error) {
 	return nil, fmt.Errorf("Expected step function, got: %s", lit)
 }
 
-// Parse the Gremlin language and return a traversal sequence
+// Parse the Gremlin language and returns a traversal sequence
 func (p *GremlinTraversalParser) Parse(r io.Reader, lockGraph bool) (*GremlinTraversalSequence, error) {
 	p.Lock()
 	defer p.Unlock()

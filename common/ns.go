@@ -56,7 +56,7 @@ func (n *NetNSContext) Close() {
 	runtime.UnlockOSThread()
 }
 
-// NewNetNsContext create a new NameSpace context base on path
+// NewNetNsContext creates a new NameSpace context base on path
 func NewNetNsContext(path string) (*NetNSContext, error) {
 	runtime.LockOSThread()
 

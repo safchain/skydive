@@ -29,7 +29,7 @@ import (
 	"github.com/skydive-project/skydive/filters"
 )
 
-// NewFilterForMetadata create a new filter based on metadata
+// NewFilterForMetadata creates a new filter based on metadata
 func NewFilterForMetadata(m Metadata) (*filters.Filter, error) {
 	var termFilters []*filters.Filter
 	for k, v := range m {
@@ -57,7 +57,7 @@ func NewFilterForMetadata(m Metadata) (*filters.Filter, error) {
 	return filters.NewAndFilter(termFilters...), nil
 }
 
-// NewFilterForEdge create a filter based on parent or child
+// NewFilterForEdge creates a filter based on parent or child
 func NewFilterForEdge(parent Identifier, child Identifier) *filters.Filter {
 	return filters.NewOrFilter(
 		filters.NewTermStringFilter("Parent", string(parent)),
@@ -65,7 +65,7 @@ func NewFilterForEdge(parent Identifier, child Identifier) *filters.Filter {
 	)
 }
 
-// NewFilterForTimeSlice create a filter based on a time slice between CreatedAt and DeletedAt
+// NewFilterForTimeSlice creates a filter based on a time slice between CreatedAt and DeletedAt
 // time.Now() is used as reference if t == nil
 func NewFilterForTimeSlice(t *common.TimeSlice) *filters.Filter {
 	if t == nil {
@@ -81,7 +81,7 @@ func NewFilterForTimeSlice(t *common.TimeSlice) *filters.Filter {
 	)
 }
 
-// NewFilterForTime create a filter including time slice t
+// NewFilterForTime creates a filter including time slice t
 func NewFilterForTime(t time.Time) *filters.Filter {
 	u := common.UnixMillis(t)
 	return NewFilterForTimeSlice(common.NewTimeSlice(u, u))

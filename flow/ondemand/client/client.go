@@ -125,7 +125,7 @@ func (o *OnDemandProbeClient) registerProbes(nodes []interface{}, capture *api.C
 				nps[nodeID] = nodeProbe{string(nodeID), host, capture}
 			}
 		case []*graph.Node:
-			// case of shortestpath that return a list of nodes
+			// case of shortestpath that returns a list of nodes
 			for _, node := range i.([]*graph.Node) {
 				if nodeID, host, ok := toRegister(node, capture); ok {
 					nps[nodeID] = nodeProbe{string(nodeID), host, capture}
@@ -334,7 +334,7 @@ func (o *OnDemandProbeClient) Stop() {
 	o.elector.Stop()
 }
 
-// NewOnDemandProbeClient create a new ondemand probe client based on Capture API, graph and websocket
+// NewOnDemandProbeClient creates a new ondemand probe client based on Capture API, graph and websocket
 func NewOnDemandProbeClient(g *graph.Graph, ch *api.CaptureAPIHandler, w *shttp.WSServer, etcdClient *etcd.EtcdClient) *OnDemandProbeClient {
 	resources := ch.Index()
 	captures := make(map[string]*api.Capture)

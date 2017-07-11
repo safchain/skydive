@@ -49,7 +49,7 @@ type Storage interface {
 	Stop()
 }
 
-// NewStorage create a new flow storage based on the backend
+// NewStorage creates a new flow storage based on the backend
 func NewStorage(backend string) (s Storage, err error) {
 	switch backend {
 	case "elasticsearch":
@@ -75,7 +75,7 @@ func NewStorage(backend string) (s Storage, err error) {
 	return
 }
 
-// NewStorageFromConfig create a new storage based configuration
+// NewStorageFromConfig creates a new storage based configuration
 func NewStorageFromConfig() (s Storage, err error) {
 	return NewStorage(config.GetConfig().GetString("analyzer.storage.backend"))
 }

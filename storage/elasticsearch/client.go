@@ -146,7 +146,7 @@ func (c *ElasticSearchClient) start(mappings []map[string][]byte) error {
 	return nil
 }
 
-// FormatFilter create a ElasticSearch request based on filters
+// FormatFilter creates a ElasticSearch request based on filters
 func (c *ElasticSearchClient) FormatFilter(filter *filters.Filter, mapKey string) map[string]interface{} {
 	prefix := mapKey
 	if prefix != "" {
@@ -275,13 +275,13 @@ func (c *ElasticSearchClient) FormatFilter(filter *filters.Filter, mapKey string
 	return nil
 }
 
-// Index return the skydive index
+// Index returns the skydive index
 func (c *ElasticSearchClient) Index(obj string, id string, data interface{}) error {
 	_, err := c.connection.Index("skydive", obj, id, nil, data)
 	return err
 }
 
-// BulkIndex return the bulk index from the indexer
+// BulkIndex returns the bulk index from the indexer
 func (c *ElasticSearchClient) BulkIndex(obj string, id string, data interface{}) error {
 	return c.indexer.Index("skydive", obj, id, "", "", nil, data)
 }
@@ -384,7 +384,7 @@ func (c *ElasticSearchClient) Started() bool {
 	return c.started.Load() == true
 }
 
-// NewElasticSearchClient create a new ElasticSearch client
+// NewElasticSearchClient creates a new ElasticSearch client
 func NewElasticSearchClient(addr string, port string, maxConns int, retrySeconds int, bulkMaxDocs int, bulkMaxDelay int) (*ElasticSearchClient, error) {
 	c := elastigo.NewConn()
 
@@ -410,7 +410,7 @@ func NewElasticSearchClient(addr string, port string, maxConns int, retrySeconds
 	return client, nil
 }
 
-// NewElasticSearchClientFromConfig create a new ElasticSearch client based on configuration
+// NewElasticSearchClientFromConfig creates a new ElasticSearch client based on configuration
 func NewElasticSearchClientFromConfig() (*ElasticSearchClient, error) {
 	elasticonfig := strings.Split(config.GetConfig().GetString("storage.elasticsearch.host"), ":")
 	if len(elasticonfig) != 2 {

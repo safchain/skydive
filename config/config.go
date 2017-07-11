@@ -201,7 +201,7 @@ func SetDefault(key string, value interface{}) {
 	cfg.SetDefault(key, value)
 }
 
-// GetAnalyzerServiceAddresses return a list of connectable Analyzers
+// GetAnalyzerServiceAddresses returns a list of connectable Analyzers
 func GetAnalyzerServiceAddresses() ([]common.ServiceAddress, error) {
 	var addresses []common.ServiceAddress
 	for _, a := range GetConfig().GetStringSlice("analyzers") {
@@ -221,7 +221,7 @@ func GetAnalyzerServiceAddresses() ([]common.ServiceAddress, error) {
 	return addresses, nil
 }
 
-// GetOneAnalyzerServiceAddress return a random connectable Analyzer
+// GetOneAnalyzerServiceAddress returns a random connectable Analyzer
 func GetOneAnalyzerServiceAddress() (common.ServiceAddress, error) {
 	addresses, err := GetAnalyzerServiceAddresses()
 	if err != nil {
@@ -235,7 +235,7 @@ func GetOneAnalyzerServiceAddress() (common.ServiceAddress, error) {
 	return addresses[rand.Intn(len(addresses))], nil
 }
 
-// GetEtcdServerAddrs return the ETCD server address specified in the configuration file or embedded
+// GetEtcdServerAddrs returns the ETCD server address specified in the configuration file or embedded
 func GetEtcdServerAddrs() []string {
 	etcdServers := GetConfig().GetStringSlice("etcd.servers")
 	if len(etcdServers) > 0 {
@@ -247,7 +247,7 @@ func GetEtcdServerAddrs() []string {
 	return []string{"http://localhost:2379"}
 }
 
-// IsTLSenabled return true is the analyzer certificates are set
+// IsTLSenabled returns true is the analyzer certificates are set
 func IsTLSenabled() bool {
 	certPEM := GetConfig().GetString("analyzer.X509_cert")
 	keyPEM := GetConfig().GetString("analyzer.X509_key")

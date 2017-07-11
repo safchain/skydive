@@ -121,7 +121,7 @@ func (p *PcapInject) FeedFlowTable() {
 	}
 }
 
-// NewPcapInject read a pcap from a file reader and inject it in a flow table
+// NewPcapInject reads a pcap from a file reader and inject it in a flow table
 func NewPcapInject(r io.ReadCloser, packetsChan chan *Packets, replay bool, bpfFilter string) (*PcapInject, error) {
 	handle, err := pcapgo.NewReader(r)
 	if err != nil {

@@ -67,7 +67,7 @@ func (p NodePath) Marshal() string {
 	return path
 }
 
-// GraphPath return a string representation of the shortestpath between 2 host on the same owner
+// GraphPath returns a string representation of the shortestpath between 2 host on the same owner
 func GraphPath(g *graph.Graph, n *graph.Node) string {
 	nodes := g.LookupShortestPath(n, graph.Metadata{"Type": "host"}, graph.Metadata{"RelationType": "ownership"})
 	if len(nodes) > 0 {
@@ -76,7 +76,7 @@ func GraphPath(g *graph.Graph, n *graph.Node) string {
 	return ""
 }
 
-// NamespaceFromNode return the namespace name and the path of a node in the graph
+// NamespaceFromNode returns the namespace name and the path of a node in the graph
 func NamespaceFromNode(g *graph.Graph, n *graph.Node) (string, string, error) {
 	name, _ := n.GetFieldString("Name")
 	if name == "" {
@@ -112,7 +112,7 @@ func NamespaceFromNode(g *graph.Graph, n *graph.Node) (string, string, error) {
 	return "", "", nil
 }
 
-// NewNetNSContextByNode create a new network namespace context based on the node
+// NewNetNSContextByNode creates a new network namespace context based on the node
 func NewNetNSContextByNode(g *graph.Graph, n *graph.Node) (*common.NetNSContext, error) {
 	name, path, err := NamespaceFromNode(g, n)
 	if err != nil || name == "" || path == "" {
@@ -126,7 +126,7 @@ func NewNetNSContextByNode(g *graph.Graph, n *graph.Node) (*common.NetNSContext,
 // HostNodeTIDMap a map that store the value node TID and the key node host
 type HostNodeTIDMap map[string][]string
 
-// BuildHostNodeTIDMap create a new node and host (key) map
+// BuildHostNodeTIDMap creates a new node and host (key) map
 func BuildHostNodeTIDMap(nodes []*graph.Node) HostNodeTIDMap {
 	hnmap := make(HostNodeTIDMap)
 	for _, node := range nodes {
@@ -137,7 +137,7 @@ func BuildHostNodeTIDMap(nodes []*graph.Node) HostNodeTIDMap {
 	return hnmap
 }
 
-// HaveOwnershipLink return true parent and child have the same ownership
+// HaveOwnershipLink returns true parent and child have the same ownership
 func HaveOwnershipLink(g *graph.Graph, parent *graph.Node, child *graph.Node, metadata graph.Metadata) bool {
 	// do not add or change original metadata
 	m := metadata.Clone()
@@ -163,7 +163,7 @@ func AddOwnershipLink(g *graph.Graph, parent *graph.Node, child *graph.Node, met
 	return g.Link(parent, child, m)
 }
 
-// HaveLayer2Link return true if parent and child have the same layer 2
+// HaveLayer2Link returns true if parent and child have the same layer 2
 func HaveLayer2Link(g *graph.Graph, node1 *graph.Node, node2 *graph.Node, metadata graph.Metadata) bool {
 	// do not add or change original metadata
 	m := metadata.Clone()

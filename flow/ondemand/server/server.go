@@ -253,7 +253,7 @@ func (o *OnDemandProbeServer) Stop() {
 	o.Graph.RemoveEventListener(o)
 }
 
-// NewOnDemandProbeServer create a new Ondemand probes server based on graph and websocket
+// NewOnDemandProbeServer creates a new Ondemand probes server based on graph and websocket
 func NewOnDemandProbeServer(fb *probes.FlowProbeBundle, g *graph.Graph, wspool *shttp.WSAsyncClientPool) (*OnDemandProbeServer, error) {
 	return &OnDemandProbeServer{
 		Graph:             g,

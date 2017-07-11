@@ -328,7 +328,7 @@ func (b *ElasticSearchBackend) GetEdge(i Identifier, t *common.TimeSlice) []*Edg
 	})
 }
 
-// MetadataUpdated update a node metadata in the database
+// MetadataUpdated updates a node metadata in the database
 func (b *ElasticSearchBackend) MetadataUpdated(i interface{}) bool {
 	if !b.updateTimes(i) {
 		return false
@@ -437,7 +437,7 @@ func (b *ElasticSearchBackend) SearchEdges(tsq *TimedSearchQuery) (edges []*Edge
 	return
 }
 
-// GetEdges return a list of edges within time slice, matching metadata
+// GetEdges returns a list of edges within time slice, matching metadata
 func (b *ElasticSearchBackend) GetEdges(t *common.TimeSlice, m Metadata) []*Edge {
 	filter, err := NewFilterForMetadata(m)
 	if err != nil {
@@ -451,7 +451,7 @@ func (b *ElasticSearchBackend) GetEdges(t *common.TimeSlice, m Metadata) []*Edge
 	})
 }
 
-// GetNodes return a list of nodes within time slice, matching metadata
+// GetNodes returns a list of nodes within time slice, matching metadata
 func (b *ElasticSearchBackend) GetNodes(t *common.TimeSlice, m Metadata) []*Node {
 	filter, err := NewFilterForMetadata(m)
 	if err != nil {
@@ -465,7 +465,7 @@ func (b *ElasticSearchBackend) GetNodes(t *common.TimeSlice, m Metadata) []*Node
 	})
 }
 
-// GetEdgeNodes return the parents and child nodes of an edge within time slice, matching metadatas
+// GetEdgeNodes returns the parents and child nodes of an edge within time slice, matching metadatas
 func (b *ElasticSearchBackend) GetEdgeNodes(e *Edge, t *common.TimeSlice, parentMetadata, childMetadata Metadata) (parents []*Node, children []*Node) {
 	for _, parent := range b.GetNode(e.parent, t) {
 		if parent.MatchMetadata(parentMetadata) {
@@ -482,7 +482,7 @@ func (b *ElasticSearchBackend) GetEdgeNodes(e *Edge, t *common.TimeSlice, parent
 	return
 }
 
-// GetNodeEdges return a list of a node edges within time slice
+// GetNodeEdges returns a list of a node edges within time slice
 func (b *ElasticSearchBackend) GetNodeEdges(n *Node, t *common.TimeSlice, m Metadata) (edges []*Edge) {
 	metadataFilter, err := NewFilterForMetadata(m)
 	if err != nil {
@@ -521,7 +521,7 @@ func newElasticSearchBackend(client elasticsearch.ElasticSearchClientInterface) 
 	}, nil
 }
 
-// NewElasticSearchBackend create a new graph backend and connect to an ElasticSearch database
+// NewElasticSearchBackend creates a new graph backend and connect to an ElasticSearch database
 func NewElasticSearchBackend(addr string, port string, maxConns int, retrySeconds int, bulkMaxDocs int, bulkMaxDelay int) (*ElasticSearchBackend, error) {
 	client, err := elasticsearch.NewElasticSearchClient(addr, port, maxConns, retrySeconds, bulkMaxDocs, bulkMaxDelay)
 	if err != nil {
@@ -531,7 +531,7 @@ func NewElasticSearchBackend(addr string, port string, maxConns int, retrySecond
 	return newElasticSearchBackend(client)
 }
 
-// NewElasticSearchBackendFromConfig create a new graph backend based on configuration file parameters
+// NewElasticSearchBackendFromConfig creates a new graph backend based on configuration file parameters
 func NewElasticSearchBackendFromConfig() (*ElasticSearchBackend, error) {
 	addr := config.GetConfig().GetString("storage.elasticsearch.host")
 	c := strings.Split(addr, ":")

@@ -35,7 +35,7 @@ import (
 	"github.com/skydive-project/skydive/validator"
 )
 
-// PacketInjectorAPI expose the packet injector API
+// PacketInjectorAPI exposes the packet injector API
 type PacketInjectorAPI struct {
 	PIClient *packet_injector.PacketInjectorClient
 	Graph    *graph.Graph
@@ -197,7 +197,7 @@ func (pi *PacketInjectorAPI) registerEndpoints(r *shttp.Server) {
 	r.RegisterRoutes(routes)
 }
 
-// RegisterPacketInjectorAPI register a new packet injector ressource in the API
+// RegisterPacketInjectorAPI registers a new packet injector ressource in the API
 func RegisterPacketInjectorAPI(pic *packet_injector.PacketInjectorClient, g *graph.Graph, r *shttp.Server) {
 	pia := &PacketInjectorAPI{
 		PIClient: pic,

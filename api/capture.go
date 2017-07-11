@@ -57,7 +57,7 @@ type CaptureAPIHandler struct {
 	Graph *graph.Graph
 }
 
-// NewCapture create a new capture
+// NewCapture creates a new capture
 func NewCapture(query string, bpfFilter string) *Capture {
 	id, _ := uuid.NewV4()
 
@@ -68,12 +68,12 @@ func NewCapture(query string, bpfFilter string) *Capture {
 	}
 }
 
-// Name return "capture"
+// Name returns "capture"
 func (c *CaptureResourceHandler) Name() string {
 	return "capture"
 }
 
-// New create a new capture resource
+// New creates a new capture resource
 func (c *CaptureResourceHandler) New() Resource {
 	id, _ := uuid.NewV4()
 
@@ -119,7 +119,7 @@ func (c *CaptureAPIHandler) Decorate(resource Resource) {
 	capture.PCAPSocket = pcapSocket
 }
 
-// ID return the capture Identifier
+// ID returns the capture Identifier
 func (c *Capture) ID() string {
 	return c.UUID
 }
@@ -142,7 +142,7 @@ func (c *CaptureAPIHandler) Create(r Resource) error {
 	return c.BasicAPIHandler.Create(r)
 }
 
-// RegisterCaptureAPI register an new resource, capture
+// RegisterCaptureAPI registers an new resource, capture
 func RegisterCaptureAPI(apiServer *Server, g *graph.Graph) (*CaptureAPIHandler, error) {
 	captureAPIHandler := &CaptureAPIHandler{
 		BasicAPIHandler: BasicAPIHandler{

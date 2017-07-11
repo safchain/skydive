@@ -46,7 +46,7 @@ type MemoryBackend struct {
 	edges map[Identifier]*MemoryBackendEdge
 }
 
-// MetadataUpdated return true
+// MetadataUpdated returns true
 func (m *MemoryBackend) MetadataUpdated(i interface{}) bool {
 	return true
 }
@@ -82,7 +82,7 @@ func (m *MemoryBackend) GetEdge(i Identifier, t *common.TimeSlice) []*Edge {
 	return nil
 }
 
-// GetEdgeNodes return a list of nodes of an edge
+// GetEdgeNodes returns a list of nodes of an edge
 func (m *MemoryBackend) GetEdgeNodes(e *Edge, t *common.TimeSlice, parentMetadata, childMetadata Metadata) ([]*Node, []*Node) {
 	var parent *MemoryBackendNode
 	if n, ok := m.nodes[e.parent]; ok && n.MatchMetadata(parentMetadata) {
@@ -119,7 +119,7 @@ func (m *MemoryBackend) GetNode(i Identifier, t *common.TimeSlice) []*Node {
 	return nil
 }
 
-// GetNodeEdges return a list of edges of a node
+// GetNodeEdges returns a list of edges of a node
 func (m *MemoryBackend) GetNodeEdges(n *Node, t *common.TimeSlice, meta Metadata) []*Edge {
 	edges := []*Edge{}
 
@@ -180,7 +180,7 @@ func (m MemoryBackend) GetEdges(t *common.TimeSlice, metadata Metadata) (edges [
 	return
 }
 
-// WithContext return a graph based on context
+// WithContext returns a graph based on context
 func (m *MemoryBackend) WithContext(graph *Graph, context GraphContext) (*Graph, error) {
 	if context.TimeSlice != nil {
 		return nil, errors.New("Memory backend does not support history")
@@ -188,7 +188,7 @@ func (m *MemoryBackend) WithContext(graph *Graph, context GraphContext) (*Graph,
 	return graph, nil
 }
 
-// NewMemoryBackend create a new graph memory backend
+// NewMemoryBackend creates a new graph memory backend
 func NewMemoryBackend() (*MemoryBackend, error) {
 	return &MemoryBackend{
 		nodes: make(map[Identifier]*MemoryBackendNode),

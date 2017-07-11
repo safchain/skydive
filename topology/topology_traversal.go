@@ -60,14 +60,14 @@ func (p *graphPathTraversalStep) Error() error {
 	return nil
 }
 
-// NewTopologyTraversalExtension return a new graph traversal mechanism externsion
+// NewTopologyTraversalExtension returns a new graph traversal mechanism externsion
 func NewTopologyTraversalExtension() *TopologyTraversalExtension {
 	return &TopologyTraversalExtension{
 		graphPathToken: traversal.Token(1000),
 	}
 }
 
-// ScanIdent return an associated graph token
+// ScanIdent returns an associated graph token
 func (e *TopologyTraversalExtension) ScanIdent(s string) (traversal.Token, bool) {
 	switch s {
 	case "GRAPHPATH":

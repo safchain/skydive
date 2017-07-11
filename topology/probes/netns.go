@@ -249,7 +249,7 @@ func (u *NetNSProbe) Stop() {
 	u.NetLinkProbe.Stop()
 }
 
-// NewNetNSProbe create a new network namespace probe
+// NewNetNSProbe creates a new network namespace probe
 func NewNetNSProbe(g *graph.Graph, n *graph.Node, nlProbe *NetLinkProbe, runPath ...string) (*NetNSProbe, error) {
 	if uid := os.Geteuid(); uid != 0 {
 		return nil, errors.New("NetNS probe has to be run as root")
@@ -282,7 +282,7 @@ func NewNetNSProbe(g *graph.Graph, n *graph.Node, nlProbe *NetLinkProbe, runPath
 	}, nil
 }
 
-// NewNetNSProbeFromConfig create a new network namespace probe based on configuration
+// NewNetNSProbeFromConfig creates a new network namespace probe based on configuration
 func NewNetNSProbeFromConfig(g *graph.Graph, n *graph.Node, nlProbe *NetLinkProbe) (*NetNSProbe, error) {
 	path := config.GetConfig().GetString("netns.run_path")
 	return NewNetNSProbe(g, n, nlProbe, path)

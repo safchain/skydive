@@ -37,7 +37,7 @@ import (
 	"github.com/skydive-project/skydive/validator"
 )
 
-// TopologyAPI expose the topology query API
+// TopologyAPI exposes the topology query API
 type TopologyAPI struct {
 	gremlinParser *traversal.GremlinTraversalParser
 }
@@ -179,7 +179,7 @@ func (t *TopologyAPI) registerEndpoints(r *shttp.Server) {
 	r.RegisterRoutes(routes)
 }
 
-// RegisterTopologyAPI register a new topology query API
+// RegisterTopologyAPI registers a new topology query API
 func RegisterTopologyAPI(r *shttp.Server, parser *traversal.GremlinTraversalParser) {
 	t := &TopologyAPI{
 		gremlinParser: parser,

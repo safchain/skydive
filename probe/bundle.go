@@ -55,7 +55,7 @@ func (p *ProbeBundle) GetProbe(name string) Probe {
 	return nil
 }
 
-// NewProbeBundle create a new probe bundle
+// NewProbeBundle creates a new probe bundle
 func NewProbeBundle(p map[string]Probe) *ProbeBundle {
 	return &ProbeBundle{
 		Probes: p,

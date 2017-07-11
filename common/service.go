@@ -56,7 +56,7 @@ func (st ServiceType) String() string {
 	return string(st)
 }
 
-// ServiceAddressFromString return a service address from a string, could be IPv4 or IPv6
+// ServiceAddressFromString returns a service address from a string, could be IPv4 or IPv6
 func ServiceAddressFromString(addressPort string) (ServiceAddress, error) {
 	/* Backward compatibility for old format like : listen = 1234 */
 	if !strings.ContainsAny(addressPort, ".:") {

@@ -171,7 +171,7 @@ func (c *CachedBackend) GetEdgeNodes(e *Edge, t *common.TimeSlice, parentMetadat
 	return nil, nil
 }
 
-// MetadataUpdated update metadata
+// MetadataUpdated updates metadata
 func (c *CachedBackend) MetadataUpdated(i interface{}) bool {
 	mode := c.cacheMode.Load()
 
@@ -187,7 +187,7 @@ func (c *CachedBackend) MetadataUpdated(i interface{}) bool {
 	return r
 }
 
-// GetNodes return a list of nodes with a time slice, matching metadata
+// GetNodes returns a list of nodes with a time slice, matching metadata
 func (c *CachedBackend) GetNodes(t *common.TimeSlice, m Metadata) []*Node {
 	mode := c.cacheMode.Load()
 
@@ -202,7 +202,7 @@ func (c *CachedBackend) GetNodes(t *common.TimeSlice, m Metadata) []*Node {
 	return []*Node{}
 }
 
-// GetEdges return a list of edges with a time slice, matching metadata
+// GetEdges returns a list of edges with a time slice, matching metadata
 func (c *CachedBackend) GetEdges(t *common.TimeSlice, m Metadata) []*Edge {
 	mode := c.cacheMode.Load()
 
@@ -217,12 +217,12 @@ func (c *CachedBackend) GetEdges(t *common.TimeSlice, m Metadata) []*Edge {
 	return []*Edge{}
 }
 
-// WithContext return a graph matching the context, usually within time slice
+// WithContext returns a graph matching the context, usually within time slice
 func (c *CachedBackend) WithContext(graph *Graph, context GraphContext) (*Graph, error) {
 	return c.persistent.WithContext(graph, context)
 }
 
-// NewCachedBackend create new graph cache mechanism
+// NewCachedBackend creates new graph cache mechanism
 func NewCachedBackend(persistent GraphBackend) (*CachedBackend, error) {
 	memory, err := NewMemoryBackend()
 	if err != nil {

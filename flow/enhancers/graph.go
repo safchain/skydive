@@ -107,7 +107,7 @@ func (gfe *GraphFlowEnhancer) OnEdgeDeleted(e *graph.Edge) {
 	}
 }
 
-// NewGraphFlowEnhancer create a new flow enhancer that will enhance A and B flow nodes TIDs
+// NewGraphFlowEnhancer creates a new flow enhancer that will enhance A and B flow nodes TIDs
 func NewGraphFlowEnhancer(g *graph.Graph, cache *cache.Cache) *GraphFlowEnhancer {
 	fe := &GraphFlowEnhancer{
 		Graph: g,

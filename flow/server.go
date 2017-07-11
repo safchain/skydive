@@ -62,7 +62,7 @@ func (s *TableServer) OnMessage(c *shttp.WSAsyncClient, msg shttp.WSMessage) {
 	}
 }
 
-// NewServer create a new flow table query server based on websocket
+// NewServer creates a new flow table query server based on websocket
 func NewServer(allocator *TableAllocator, wspool *shttp.WSAsyncClientPool) *TableServer {
 	s := &TableServer{
 		TableAllocator:    allocator,
