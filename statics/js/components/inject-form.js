@@ -31,13 +31,13 @@ Vue.component('inject-form', {
         <label for="inject-count">Nb. of packets</label>\
         <input id="inject-count" type="number" class="form-control input-sm" v-model="count" min="1" />\
       </div>\
-      <div v-if="true">\
+      <div v-if="type === \'icmp4\' || type === \'icmp6\'">\
         <div class="form-group">\
           <label for="inject-count">ICMP Identifier</label>\
           <input id="inject-id" type="number" class="form-control input-sm" v-model="id" min="0" />\
         </div>\
       </div>\
-      <div v-if="true">\
+      <div v-if="type === \'tcp4\' || type === \'tcp6\'">\
         <div class="form-group">\
           <label for="src-port">Src Port</label>\
           <input id="src-port" type="number" class="form-control input-sm" v-model="port1" min="0" />\
