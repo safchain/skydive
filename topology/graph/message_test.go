@@ -37,7 +37,7 @@ func TestNullNodesEdges(t *testing.T) {
 
 	msg := shttp.WSMessage{
 		Namespace: Namespace,
-		Type:      SyncReplyMsgType,
+		Type:      SyncMsgType,
 		UUID:      "aaa",
 		Obj:       &raw,
 		Status:    http.StatusOK,
@@ -53,7 +53,7 @@ func TestNullNodesEdges(t *testing.T) {
 
 	msg = shttp.WSMessage{
 		Namespace: Namespace,
-		Type:      SyncReplyMsgType,
+		Type:      SyncMsgType,
 		UUID:      "bbb",
 		Obj:       &raw,
 		Status:    http.StatusOK,
@@ -71,7 +71,7 @@ func TestID(t *testing.T) {
 
 	msg := shttp.WSMessage{
 		Namespace: Namespace,
-		Type:      SyncReplyMsgType,
+		Type:      SyncMsgType,
 		UUID:      "aaa",
 		Obj:       &raw,
 		Status:    http.StatusOK,
@@ -87,7 +87,7 @@ func TestID(t *testing.T) {
 
 	msg = shttp.WSMessage{
 		Namespace: Namespace,
-		Type:      SyncReplyMsgType,
+		Type:      SyncMsgType,
 		UUID:      "aaa",
 		Obj:       &raw,
 		Status:    http.StatusOK,
@@ -105,7 +105,7 @@ func TestHost(t *testing.T) {
 
 	msg := shttp.WSMessage{
 		Namespace: Namespace,
-		Type:      SyncReplyMsgType,
+		Type:      SyncMsgType,
 		UUID:      "aaa",
 		Obj:       &raw,
 		Status:    http.StatusOK,

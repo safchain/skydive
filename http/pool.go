@@ -98,6 +98,14 @@ func (a *WSClientPool) RemoveClient(client WSClient) {
 	}
 }
 
+// GetClients returns all the clients
+func (a *WSClientPool) GetClients() (clients []WSClient) {
+	a.RLock()
+	clients = append(clients, a.clients...)
+	a.RUnlock()
+	return
+}
+
 // Connect all clients
 func (a *WSClientPool) ConnectAll() {
 	a.RLock()

@@ -74,7 +74,7 @@ func (s *Server) initialize() (err error) {
 
 	s.WSServer = shttp.NewWSMessageServer(shttp.NewWSServerFromConfig(s.HTTPServer, "/ws"))
 
-	if s.TopologyServer, err = NewTopologyServerFromConfig(s.WSServer); err != nil {
+	if s.TopologyServer, err = NewTopologyServer(s.WSServer); err != nil {
 		return
 	}
 

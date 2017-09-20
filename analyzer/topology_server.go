@@ -23,10 +23,10 @@
 package analyzer
 
 import (
+	"net/http"
 	"sync"
 
 	"github.com/skydive-project/skydive/common"
-	"github.com/skydive-project/skydive/config"
 	shttp "github.com/skydive-project/skydive/http"
 	"github.com/skydive-project/skydive/logging"
 	"github.com/skydive-project/skydive/statics"
@@ -38,11 +38,11 @@ import (
 type TopologyServer struct {
 	sync.RWMutex
 	shttp.DefaultWSClientEventHandler
-	Graph       *graph.Graph
-	GraphServer *graph.Server
-	cached      *graph.CachedBackend
-	nodeSchema  gojsonschema.JSONLoader
-	edgeSchema  gojsonschema.JSONLoader
+	WSServer   *shttp.WSMessageServer
+	Graph      *graph.Graph
+	cached     *graph.CachedBackend
+	nodeSchema gojsonschema.JSONLoader
+	edgeSchema gojsonschema.JSONLoader
 	// map used to store agent which uses this analyzer as master
 	// basically sending graph messages
 	authors map[string]bool
@@ -80,8 +80,29 @@ func (t *TopologyServer) OnDisconnected(c shttp.WSClient) {
 	t.Unlock()
 }
 
-// OnGraphMessage websocket event
-func (t *TopologyServer) OnGraphMessage(c shttp.WSClient, msg shttp.WSMessage, msgType string, obj interface{}) {
+// OnWSMessage websocket event
+func (t *TopologyServer) OnWSMessage(c shttp.WSClient, msg shttp.WSMessage) {
+	msgType, obj, err := graph.UnmarshalWSMessage(msg)
+	if err != nil {
+		logging.GetLogger().Errorf("Graph: Unable to parse the event %v: %s", msg, err.Error())
+		return
+	}
+
+	if msgType == graph.SyncRequestMsgType {
+		t.Graph.RLock()
+		context, status := obj.(graph.GraphContext), http.StatusOK
+		g, err := t.Graph.WithContext(context)
+		if err != nil {
+			logging.GetLogger().Errorf("analyzer is unable to get a graph with context %+v: %s", context, err.Error())
+			g, status = nil, http.StatusBadRequest
+		}
+		reply := msg.Reply(g, graph.SyncReplyMsgType, status)
+		c.Send(reply)
+		t.Graph.RUnlock()
+
+		return
+	}
+
 	clientType := c.GetClientType()
 
 	// author if message coming from another client than analyzer
@@ -136,8 +157,8 @@ func (t *TopologyServer) OnGraphMessage(c shttp.WSClient, msg shttp.WSMessage, m
 	defer t.cached.SetMode(graph.DefaultMode)
 
 	switch msgType {
-	case graph.SyncReplyMsgType:
-		r := obj.(*graph.SyncReplyMsg)
+	case graph.SyncMsgType, graph.SyncReplyMsgType:
+		r := obj.(*graph.SyncMsg)
 		for _, n := range r.Nodes {
 			if t.Graph.GetNode(n.ID) == nil {
 				t.Graph.NodeAdded(n)
@@ -161,10 +182,16 @@ func (t *TopologyServer) OnGraphMessage(c shttp.WSClient, msg shttp.WSMessage, m
 	case graph.EdgeAddedMsgType:
 		t.Graph.EdgeAdded(obj.(*graph.Edge))
 	}
+
+	for _, client := range t.WSServer.GetClients() {
+		if client.GetClientType() != common.AgentService {
+			client.Send(msg)
+		}
+	}
 }
 
 // NewTopologyServer creates a new topology server
-func NewTopologyServer(host string, server *shttp.WSMessageServer) (*TopologyServer, error) {
+func NewTopologyServer(server *shttp.WSMessageServer) (*TopologyServer, error) {
 	persistent, err := graph.BackendFromConfig()
 	if err != nil {
 		return nil, err
@@ -176,7 +203,6 @@ func NewTopologyServer(host string, server *shttp.WSMessageServer) (*TopologySer
 	}
 
 	g := graph.NewGraphFromConfig(cached)
-	graphServer := graph.NewServer(g, server)
 
 	nodeSchema, err := statics.Asset("statics/schemas/node.schema")
 	if err != nil {
@@ -189,21 +215,15 @@ func NewTopologyServer(host string, server *shttp.WSMessageServer) (*TopologySer
 	}
 
 	t := &TopologyServer{
-		Graph:       g,
-		GraphServer: graphServer,
-		cached:      cached,
-		authors:     make(map[string]bool),
-		nodeSchema:  gojsonschema.NewBytesLoader(nodeSchema),
-		edgeSchema:  gojsonschema.NewBytesLoader(edgeSchema),
+		Graph:      g,
+		WSServer:   server,
+		cached:     cached,
+		authors:    make(map[string]bool),
+		nodeSchema: gojsonschema.NewBytesLoader(nodeSchema),
+		edgeSchema: gojsonschema.NewBytesLoader(edgeSchema),
 	}
-	graphServer.AddEventHandler(t)
 	server.AddEventHandler(t)
+	server.AddMessageHandler(t, []string{graph.Namespace})
 
 	return t, nil
-}
-
-// NewTopologyServerFromConfig creates a new topology server based on configuration
-func NewTopologyServerFromConfig(server *shttp.WSMessageServer) (*TopologyServer, error) {
-	host := config.GetConfig().GetString("host_id")
-	return NewTopologyServer(host, server)
 }

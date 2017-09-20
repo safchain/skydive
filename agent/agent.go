@@ -54,7 +54,7 @@ type Agent struct {
 	Graph               *graph.Graph
 	WSAsyncClientPool   *shttp.WSMessageClientPool
 	WSServer            *shttp.WSMessageServer
-	GraphServer         *graph.Server
+	TopologyServer      *TopologyServer
 	Root                *graph.Node
 	TopologyProbeBundle *probe.ProbeBundle
 	FlowProbeBundle     *fprobes.FlowProbeBundle
@@ -204,15 +204,15 @@ func NewAgent() *Agent {
 	root := CreateRootNode(g)
 	api.RegisterTopologyAPI(hserver, tr)
 
-	gserver := graph.NewServer(g, wsServer)
+	tserver := NewTopologyServer(g, wsServer)
 
 	return &Agent{
-		Graph:       g,
-		WSServer:    wsServer,
-		GraphServer: gserver,
-		Root:        root,
-		HTTPServer:  hserver,
-		TIDMapper:   tm,
+		Graph:          g,
+		WSServer:       wsServer,
+		TopologyServer: tserver,
+		Root:           root,
+		HTTPServer:     hserver,
+		TIDMapper:      tm,
 	}
 }
 

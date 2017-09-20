@@ -48,7 +48,7 @@ func (t *TopologyForwarder) triggerResync() {
 	t.masterElection.SendMessageToMaster(shttp.NewWSMessage(graph.Namespace, graph.HostGraphDeletedMsgType, t.Host))
 
 	// re-add all the nodes and edges
-	t.masterElection.SendMessageToMaster(shttp.NewWSMessage(graph.Namespace, graph.SyncReplyMsgType, t.Graph))
+	t.masterElection.SendMessageToMaster(shttp.NewWSMessage(graph.Namespace, graph.SyncMsgType, t.Graph))
 }
 
 // OnNewMaster websocket event handler

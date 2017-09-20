@@ -52,10 +52,11 @@ type TopologyForwarderPeer struct {
 // TopologyForwarder describes a topology forwarder
 type TopologyForwarder struct {
 	shttp.DefaultWSClientEventHandler
-	Graph       *graph.Graph
-	AuthOptions *shttp.AuthenticationOpts
-	peers       []*TopologyForwarderPeer
-	wg          sync.WaitGroup
+	Graph           *graph.Graph
+	WSMessageServer *shttp.WSMessageServer
+	AuthOptions     *shttp.AuthenticationOpts
+	peers           []*TopologyForwarderPeer
+	wg              sync.WaitGroup
 }
 
 func (p *TopologyForwarderPeer) getHostID() string {
@@ -100,7 +101,7 @@ func (p *TopologyForwarderPeer) OnConnected(c shttp.WSClient) {
 	defer p.Graph.RUnlock()
 
 	// re-added all the nodes and edges
-	p.wsclient.Send(shttp.NewWSMessage(graph.Namespace, graph.SyncReplyMsgType, p.Graph))
+	p.wsclient.Send(shttp.NewWSMessage(graph.Namespace, graph.SyncMsgType, p.Graph))
 }
 
 func (p *TopologyForwarderPeer) connect(wg *sync.WaitGroup) {
@@ -126,18 +127,24 @@ func (p *TopologyForwarderPeer) disconnect() {
 }
 
 func (a *TopologyForwarder) forwardMessage(c shttp.WSClient, msg shttp.WSMessage) {
-	for _, peer := range a.peers {
+	for _, client := range a.WSMessageServer.GetClients() {
+		if client.GetClientType() != common.AgentService {
+			client.Send(msg)
+		}
+	}
+
+	/*for _, peer := range a.peers {
 		// we forward message whether the service is not an analyzer or the HostID is not the same
 		// so that we forward all external messages to skydive and we avoid loop.
 		if peer.wsclient != nil && (c.GetClientType() != common.AnalyzerService || peer.host != c.GetHost()) {
 			peer.wsclient.Send(msg)
 		}
-	}
+	}*/
 }
 
 // OnMessage websocket event
 func (a *TopologyForwarder) OnWSMessage(c shttp.WSClient, msg shttp.WSMessage) {
-	a.forwardMessage(c, msg)
+	//a.forwardMessage(c, msg)
 }
 
 func (a *TopologyForwarder) addPeer(addr string, port int, g *graph.Graph) {
@@ -177,9 +184,10 @@ func (a *TopologyForwarder) OnDisconnected(c shttp.WSClient) {
 // NewTopologyForwarder creates a new topology forwarder based graph and webserver
 func NewTopologyForwarder(g *graph.Graph, server *shttp.WSMessageServer, authOptions *shttp.AuthenticationOpts) *TopologyForwarder {
 	tf := &TopologyForwarder{
-		Graph:       g,
-		AuthOptions: authOptions,
-		peers:       make([]*TopologyForwarderPeer, 0),
+		Graph:           g,
+		WSMessageServer: server,
+		AuthOptions:     authOptions,
+		peers:           make([]*TopologyForwarderPeer, 0),
 	}
 	server.AddMessageHandler(tf, []string{graph.Namespace})
 	server.AddEventHandler(tf)
