@@ -24,7 +24,9 @@ package http
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
+	"reflect"
 	"strconv"
 	"sync"
 	"sync/atomic"
@@ -117,36 +119,40 @@ func (d *DefaultWSClientEventHandler) OnConnected(c WSClient) {
 func (d *DefaultWSClientEventHandler) OnDisconnected(c WSClient) {
 }
 
-// Return the hostname of the connection
+// GetHost returns the hostname of the connection
 func (c *WSAsyncClient) GetHost() string {
 	return c.Host
 }
 
-// Return the address and the port of the remote end
+// GetAddrPort returns the address and the port of the remote end
 func (c *WSAsyncClient) GetAddrPort() (string, int) {
 	return c.Addr, c.Port
 }
 
-// Return the connection status
+// IsConnected returns the connection status
 func (c *WSAsyncClient) IsConnected() bool {
 	return c.connected.Load() == true
 }
 
-// Add a message to the send queue
+// Send adds a message to the send queue
 func (c *WSAsyncClient) Send(m Message) {
+	fmt.Printf("############### Send: %v\n", m)
+
 	if c.running.Load() == false {
+		fmt.Printf("FFFFFFFFFFFFFF Send: %v\n", m)
 		return
 	}
 
+	fmt.Printf("MMMMMMMM Send: %v\n", m)
 	c.send <- m.Bytes()
 }
 
-// Return the client type
+// GetClientType returns the client type
 func (c *WSAsyncClient) GetClientType() common.ServiceType {
 	return c.ClientType
 }
 
-// Send a message directly over the wire
+// SendMessage sends a message directly over the wire
 func (c *WSAsyncClient) SendMessage(msg []byte) error {
 	if !c.IsConnected() {
 		return errors.New("Not connected")
@@ -158,6 +164,8 @@ func (c *WSAsyncClient) SendMessage(msg []byte) error {
 	if err != nil {
 		return err
 	}
+
+	fmt.Printf("RRRRRRRRRRRRRRRRRRRRRR: %v\n", string(msg))
 
 	if _, err = w.Write(msg); err != nil {
 		return err
@@ -269,6 +277,8 @@ func (c *WSAsyncClient) run() {
 		case <-c.quit:
 			return
 		case m := <-c.send:
+			fmt.Printf("JJJJJJJJJJJJJJJJJJJJ: %v", string(m))
+
 			err := c.SendMessage(m)
 			if err != nil {
 				logging.GetLogger().Errorf("Error while writing to the WebSocket: %s", err.Error())
@@ -276,7 +286,9 @@ func (c *WSAsyncClient) run() {
 		case m := <-c.read:
 			c.RLock()
 			for _, l := range c.eventHandlers {
+				fmt.Printf("IIIIIIIIIIIIIIIIIIIIII %v, %v\n", string(m), reflect.TypeOf(l).Elem().Name())
 				l.OnMessage(c, WSRawMessage(m))
+				fmt.Printf("OOOOOOOOOOOOOOOOOOOOOO %v, %v\n", string(m), reflect.TypeOf(l).Elem().Name())
 			}
 			c.RUnlock()
 		case <-c.ticker.C:
@@ -285,6 +297,7 @@ func (c *WSAsyncClient) run() {
 	}
 }
 
+// SendPing sends a ping message
 func (c *WSAsyncClient) SendPing() {
 	c.wsConn.SetWriteDeadline(time.Now().Add(writeWait))
 	if err := c.wsConn.WriteMessage(websocket.PingMessage, []byte{}); err != nil {
@@ -302,7 +315,7 @@ func (c *WSAsyncClient) Connect() {
 	}()
 }
 
-// Register a new event handler
+// AddEventHandler registers a new event handler
 func (c *WSAsyncClient) AddEventHandler(h WSClientEventHandler) {
 	c.Lock()
 	c.eventHandlers = append(c.eventHandlers, h)
@@ -365,7 +378,7 @@ func NewWSAsyncClientFromConnection(host string, clientType common.ServiceType, 
 	return c
 }
 
-// NewWSAsyncClientFromConnection creates a client based on the configuration
+// NewWSAsyncClientFromConfig creates a client based on the configuration
 func NewWSAsyncClientFromConfig(clientType common.ServiceType, addr string, port int, path string, authClient *AuthenticationClient) *WSAsyncClient {
 	host := config.GetConfig().GetString("host_id")
 	return NewWSAsyncClient(host, clientType, addr, port, path, authClient)

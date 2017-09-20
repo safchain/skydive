@@ -24,7 +24,9 @@ package http
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
+	"runtime/debug"
 	"sync"
 	"time"
 
@@ -123,6 +125,8 @@ type WSMessageAsyncClient struct {
 }
 
 func (c *WSMessageAsyncClient) Send(m Message) {
+	fmt.Printf("ZZZZZZZZZZZZZZZz: %v\n", m)
+
 	if msg, ok := m.(WSMessage); ok {
 		if _, ok := c.nsSubscribed[msg.Namespace]; !ok {
 			if _, ok := c.nsSubscribed[WilcardNamespace]; !ok {
@@ -130,6 +134,11 @@ func (c *WSMessageAsyncClient) Send(m Message) {
 			}
 		}
 	}
+	fmt.Printf("HHHHHHHHHHHHHHHHHHH: %v, %v\n", c.GetClientType(), m)
+	if c.GetClientType() == "agent" {
+		debug.PrintStack()
+	}
+
 	c.WSAsyncClient.Send(m)
 }
 
@@ -181,6 +190,8 @@ func (c *WSMessageAsyncClient) OnWSMessage(client WSClient, msg WSMessage) {
 	c.replyChanMutex.RLock()
 	if ch, ok := c.replyChan[msg.UUID]; ok {
 		ch <- &msg
+	} else {
+		fmt.Printf("MMMMMMMMMMMMMMMM: %v\n", msg)
 	}
 	c.replyChanMutex.RUnlock()
 }
@@ -205,6 +216,7 @@ func (c *WSMessageAsyncClient) Request(msg *WSMessage, timeout time.Duration) (*
 	case resp := <-ch:
 		return resp, nil
 	case <-time.After(timeout):
+		fmt.Printf("TTTTTTTTTTTTTTT: %v\n", msg)
 		return nil, common.ErrTimeout
 	}
 }
