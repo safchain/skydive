@@ -58,7 +58,7 @@ type SyncMsg struct {
 }
 
 // UnmarshalWSMessage deserialize the websocket message
-func UnmarshalWSMessage(msg shttp.WSMessage) (string, interface{}, error) {
+func UnmarshalWSMessage(msg shttp.WSJSONMessage) (string, interface{}, error) {
 	var obj interface{}
 	if err := common.JSONDecode(bytes.NewReader([]byte(*msg.Obj)), &obj); err != nil {
 		return "", msg, err

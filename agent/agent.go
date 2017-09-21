@@ -50,10 +50,10 @@ import (
 
 // Agent object started on each hosts/namespaces
 type Agent struct {
-	shttp.DefaultWSClientEventHandler
+	shttp.DefaultWSSpeakerEventHandler
 	Graph               *graph.Graph
-	WSAsyncClientPool   *shttp.WSMessageClientPool
-	WSServer            *shttp.WSMessageServer
+	WSJSONClientPool    *shttp.WSJSONClientPool
+	WSServer            *shttp.WSJSONMessageServer
 	TopologyServer      *TopologyServer
 	Root                *graph.Node
 	TopologyProbeBundle *probe.ProbeBundle
@@ -66,10 +66,10 @@ type Agent struct {
 	TIDMapper           *topology.TIDMapper
 }
 
-// NewAnalyzerWSClientPool creates a new http WebSocket client Pool
+// NewAnalyzerWSJSONClientPool creates a new http WebSocket client Pool
 // with authentification
-func NewAnalyzerWSClientPool() *shttp.WSMessageClientPool {
-	wspool := shttp.NewWSMessageClientPool(shttp.NewWSClientPool())
+func NewAnalyzerWSJSONClientPool() *shttp.WSJSONClientPool {
+	pool := shttp.NewWSJSONClientPool()
 
 	authOptions := &shttp.AuthenticationOpts{
 		Username: config.GetConfig().GetString("auth.analyzer_username"),
@@ -84,12 +84,11 @@ func NewAnalyzerWSClientPool() *shttp.WSMessageClientPool {
 
 	for _, sa := range addresses {
 		authClient := shttp.NewAuthenticationClient(sa.Addr, sa.Port, authOptions)
-		client := shttp.NewWSAsyncClientFromConfig(common.AgentService, sa.Addr, sa.Port, "/ws", authClient)
-		wsClient := shttp.NewWSMessageAsyncClient(client)
-		wspool.AddClient(wsClient)
+		c := shttp.NewWSClientFromConfig(common.AgentService, sa.Addr, sa.Port, "/ws", authClient)
+		pool.AddClient(c)
 	}
 
-	return wspool
+	return pool
 }
 
 // Start the agent services
@@ -99,12 +98,12 @@ func (a *Agent) Start() {
 	go a.HTTPServer.ListenAndServe()
 	a.WSServer.Start()
 
-	a.WSAsyncClientPool = NewAnalyzerWSClientPool()
-	if a.WSAsyncClientPool == nil {
+	a.WSJSONClientPool = NewAnalyzerWSJSONClientPool()
+	if a.WSJSONClientPool == nil {
 		os.Exit(1)
 	}
 
-	NewTopologyForwarderFromConfig(a.Graph, a.WSAsyncClientPool.WSClientPool)
+	NewTopologyForwarderFromConfig(a.Graph, a.WSJSONClientPool)
 
 	a.TopologyProbeBundle, err = NewTopologyProbeBundleFromConfig(a.Graph, a.Root)
 	if err != nil {
@@ -129,23 +128,23 @@ func (a *Agent) Start() {
 	a.FlowTableAllocator = flow.NewTableAllocator(updateTime, expireTime, pipeline)
 
 	// exposes a flow server through the client connections
-	flow.NewServer(a.FlowTableAllocator, a.WSAsyncClientPool)
+	flow.NewServer(a.FlowTableAllocator, a.WSJSONClientPool)
 
-	packet_injector.NewServer(a.WSAsyncClientPool, a.Graph)
+	packet_injector.NewServer(a.Graph, a.WSJSONClientPool)
 
-	a.FlowClientPool = analyzer.NewFlowClientPool(a.WSAsyncClientPool)
+	a.FlowClientPool = analyzer.NewFlowClientPool(a.WSJSONClientPool)
 
 	a.FlowProbeBundle = fprobes.NewFlowProbeBundle(a.TopologyProbeBundle, a.Graph, a.FlowTableAllocator, a.FlowClientPool)
 	a.FlowProbeBundle.Start()
 
-	if a.OnDemandProbeServer, err = ondemand.NewOnDemandProbeServer(a.FlowProbeBundle, a.Graph, a.WSAsyncClientPool); err != nil {
+	if a.OnDemandProbeServer, err = ondemand.NewOnDemandProbeServer(a.FlowProbeBundle, a.Graph, a.WSJSONClientPool); err != nil {
 		logging.GetLogger().Errorf("Unable to start on-demand flow probe %s", err.Error())
 		os.Exit(1)
 	}
 	a.OnDemandProbeServer.Start()
 
 	// everything is ready, then initiate the websocket connection
-	go a.WSAsyncClientPool.ConnectAll()
+	go a.WSJSONClientPool.ConnectAll()
 }
 
 // Stop agent services
@@ -157,7 +156,9 @@ func (a *Agent) Stop() {
 	a.TopologyProbeBundle.Stop()
 	a.HTTPServer.Stop()
 	a.WSServer.Stop()
-	a.WSAsyncClientPool.DisconnectAll()
+
+	//a.WSAsyncClientPool.DisconnectAll()
+
 	if a.FlowClientPool != nil {
 		a.FlowClientPool.Close()
 	}
@@ -196,7 +197,7 @@ func NewAgent() *Agent {
 		panic(err)
 	}
 
-	wsServer := shttp.NewWSMessageServer(shttp.NewWSServerFromConfig(hserver, "/ws"))
+	wsServer := shttp.NewWSJSONMessageServer(shttp.NewWSServerFromConfig(hserver, "/ws"))
 
 	tr := traversal.NewGremlinTraversalParser(g)
 	tr.AddTraversalExtension(topology.NewTopologyTraversalExtension())

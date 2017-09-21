@@ -32,12 +32,12 @@ import (
 
 // TopologyServer describes a graph server based on websocket
 type TopologyServer struct {
-	WSServer *shttp.WSMessageServer
+	WSServer *shttp.WSJSONMessageServer
 	Graph    *graph.Graph
 }
 
 // OnWSMessage event
-func (t *TopologyServer) OnWSMessage(c shttp.WSClient, msg shttp.WSMessage) {
+func (t *TopologyServer) OnWSJSONMessage(c shttp.WSSpeaker, msg shttp.WSJSONMessage) {
 	msgType, obj, err := graph.UnmarshalWSMessage(msg)
 	if err != nil {
 		logging.GetLogger().Errorf("Graph: Unable to parse the event %v: %s", msg, err.Error())
@@ -61,41 +61,41 @@ func (t *TopologyServer) OnWSMessage(c shttp.WSClient, msg shttp.WSMessage) {
 
 // OnNodeUpdated event
 func (t *TopologyServer) OnNodeUpdated(n *graph.Node) {
-	t.WSServer.QueueBroadcastMessage(shttp.NewWSMessage(graph.Namespace, graph.NodeUpdatedMsgType, n))
+	t.WSServer.QueueBroadcastMessage(shttp.NewWSJSONMessage(graph.Namespace, graph.NodeUpdatedMsgType, n))
 }
 
 // OnNodeAdded event
 func (t *TopologyServer) OnNodeAdded(n *graph.Node) {
-	t.WSServer.QueueBroadcastMessage(shttp.NewWSMessage(graph.Namespace, graph.NodeAddedMsgType, n))
+	t.WSServer.QueueBroadcastMessage(shttp.NewWSJSONMessage(graph.Namespace, graph.NodeAddedMsgType, n))
 }
 
 // OnNodeDeleted event
 func (t *TopologyServer) OnNodeDeleted(n *graph.Node) {
-	t.WSServer.QueueBroadcastMessage(shttp.NewWSMessage(graph.Namespace, graph.NodeDeletedMsgType, n))
+	t.WSServer.QueueBroadcastMessage(shttp.NewWSJSONMessage(graph.Namespace, graph.NodeDeletedMsgType, n))
 }
 
 // OnEdgeUpdated event
 func (t *TopologyServer) OnEdgeUpdated(e *graph.Edge) {
-	t.WSServer.QueueBroadcastMessage(shttp.NewWSMessage(graph.Namespace, graph.EdgeUpdatedMsgType, e))
+	t.WSServer.QueueBroadcastMessage(shttp.NewWSJSONMessage(graph.Namespace, graph.EdgeUpdatedMsgType, e))
 }
 
 // OnEdgeAdded event
 func (t *TopologyServer) OnEdgeAdded(e *graph.Edge) {
-	t.WSServer.QueueBroadcastMessage(shttp.NewWSMessage(graph.Namespace, graph.EdgeAddedMsgType, e))
+	t.WSServer.QueueBroadcastMessage(shttp.NewWSJSONMessage(graph.Namespace, graph.EdgeAddedMsgType, e))
 }
 
 // OnEdgeDeleted event
 func (t *TopologyServer) OnEdgeDeleted(e *graph.Edge) {
-	t.WSServer.QueueBroadcastMessage(shttp.NewWSMessage(graph.Namespace, graph.EdgeDeletedMsgType, e))
+	t.WSServer.QueueBroadcastMessage(shttp.NewWSJSONMessage(graph.Namespace, graph.EdgeDeletedMsgType, e))
 }
 
 // NewTopologyServer creates a new topology graph server based on a websocket server
-func NewTopologyServer(g *graph.Graph, server *shttp.WSMessageServer) *TopologyServer {
+func NewTopologyServer(g *graph.Graph, server *shttp.WSJSONMessageServer) *TopologyServer {
 	t := &TopologyServer{
 		Graph:    g,
 		WSServer: server,
 	}
 	t.Graph.AddEventListener(t)
-	server.AddMessageHandler(t, []string{graph.Namespace})
+	server.AddJSONMessageHandler(t, []string{graph.Namespace})
 	return t
 }
