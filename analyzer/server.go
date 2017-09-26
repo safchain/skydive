@@ -303,7 +303,9 @@ func NewServerFromConfig() (*Server, error) {
 	}
 
 	api.RegisterTopologyAPI(hserver, g, tr)
-	api.RegisterPacketInjectorAPI(piClient, g, hserver)
+	if config.GetConfig().GetBool("analyzer.inject_enabled") {
+		api.RegisterPacketInjectorAPI(piClient, g, hserver)
+	}
 	api.RegisterPcapAPI(hserver, storage)
 	api.RegisterConfigAPI(hserver)
 	api.RegisterStatusAPI(hserver, s)
