@@ -220,13 +220,20 @@ func (pi *PacketInjectorAPI) getNode(gremlinQuery string) *graph.Node {
 	return nil
 }
 
-func (pi *PacketInjectorAPI) registerEndpoints(r *shttp.Server) {
+func (pi *PacketInjectorAPI) registerEndpoints(r *shttp.Server, enabled bool) {
+	handlerFnc := pi.injectPacket
+	if !enabled {
+		handlerFnc = func(w http.ResponseWriter, r *auth.AuthenticatedRequest) {
+			w.WriteHeader(http.StatusMethodNotAllowed)
+		}
+	}
+
 	routes := []shttp.Route{
 		{
 			Name:        "InjectPacket",
 			Method:      "POST",
 			Path:        "/api/injectpacket",
-			HandlerFunc: pi.injectPacket,
+			HandlerFunc: handlerFnc,
 		},
 	}
 
@@ -234,11 +241,11 @@ func (pi *PacketInjectorAPI) registerEndpoints(r *shttp.Server) {
 }
 
 // RegisterPacketInjectorAPI registers a new packet injector resource in the API
-func RegisterPacketInjectorAPI(pic *packet_injector.PacketInjectorClient, g *graph.Graph, r *shttp.Server) {
+func RegisterPacketInjectorAPI(pic *packet_injector.PacketInjectorClient, g *graph.Graph, r *shttp.Server, enabled bool) {
 	pia := &PacketInjectorAPI{
 		PIClient: pic,
 		Graph:    g,
 	}
 
-	pia.registerEndpoints(r)
+	pia.registerEndpoints(r, enabled)
 }

@@ -129,11 +129,11 @@ var TopologyComponent = {
       </div>\
       <div id="right-panel" class="col-sm-5 fill">\
         <tabs v-if="isAnalyzer">\
-          <tab-pane title="Captures">\
+          <tab-pane title="Captures" v-if="isCaptureEnabled">\
             <capture-list></capture-list>\
             <capture-form v-if="topologyMode ===  \'live\'"></capture-form>\
           </tab-pane>\
-          <tab-pane title="Generator" v-if="topologyMode ===  \'live\'">\
+          <tab-pane title="Generator" v-if="topologyMode ===  \'live\' && isPacketInjectEnabled">\
             <inject-form></inject-form>\
           </tab-pane>\
           <tab-pane title="Flows">\
@@ -194,6 +194,8 @@ var TopologyComponent = {
       topologyHumanTimeContext: "",
       isTopologyOptionsVisible: false,
       isSSHEnabled: false,
+      isCaptureEnabled: true,
+      isPacketInjectEnabled: true,
     };
   },
 
@@ -259,6 +261,16 @@ var TopologyComponent = {
     $.when(this.$getConfigValue('analyzer.ssh_enabled').
       then(function(sshEnabled) {
         self.isSSHEnabled = sshEnabled;
+    }));
+
+    $.when(this.$getConfigValue('analyzer.capture_enabled').
+      then(function(captureEnabled) {
+        self.isCaptureEnabled = captureEnabled;
+    }));
+
+    $.when(this.$getConfigValue('analyzer.inject_enabled').
+      then(function(injectEnabled) {
+        self.isPacketInjectEnabled = injectEnabled;
     }));
   },
 

@@ -246,7 +246,7 @@ func NewServerFromConfig() (*Server, error) {
 		return nil, err
 	}
 
-	captureAPIHandler, err := api.RegisterCaptureAPI(apiServer, g)
+	captureAPIHandler, err := api.RegisterCaptureAPI(apiServer, g, config.GetConfig().GetBool("analyzer.capture_enabled"))
 	if err != nil {
 		return nil, err
 	}
@@ -303,9 +303,7 @@ func NewServerFromConfig() (*Server, error) {
 	}
 
 	api.RegisterTopologyAPI(hserver, g, tr)
-	if config.GetConfig().GetBool("analyzer.inject_enabled") {
-		api.RegisterPacketInjectorAPI(piClient, g, hserver)
-	}
+	api.RegisterPacketInjectorAPI(piClient, g, hserver, config.GetConfig().GetBool("analyzer.inject_enabled"))
 	api.RegisterPcapAPI(hserver, storage)
 	api.RegisterConfigAPI(hserver)
 	api.RegisterStatusAPI(hserver, s)

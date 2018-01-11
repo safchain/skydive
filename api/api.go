@@ -64,6 +64,48 @@ func writeError(w http.ResponseWriter, status int, err error) {
 	w.Write([]byte(err.Error()))
 }
 
+func (a *Server) RegisterNotAllowedAPIHandler(handler Handler) {
+	name := handler.Name()
+	title := strings.Title(name)
+
+	routes := []shttp.Route{
+		{
+			Name:   title + "Index",
+			Method: "GET",
+			Path:   "/api/" + name,
+			HandlerFunc: func(w http.ResponseWriter, r *auth.AuthenticatedRequest) {
+				w.WriteHeader(http.StatusMethodNotAllowed)
+			},
+		},
+		{
+			Name:   title + "Show",
+			Method: "GET",
+			Path:   shttp.PathPrefix(fmt.Sprintf("/api/%s/", name)),
+			HandlerFunc: func(w http.ResponseWriter, r *auth.AuthenticatedRequest) {
+				w.WriteHeader(http.StatusMethodNotAllowed)
+			},
+		},
+		{
+			Name:   title + "Insert",
+			Method: "POST",
+			Path:   "/api/" + name,
+			HandlerFunc: func(w http.ResponseWriter, r *auth.AuthenticatedRequest) {
+				w.WriteHeader(http.StatusMethodNotAllowed)
+			},
+		},
+		{
+			Name:   title + "Delete",
+			Method: "DELETE",
+			Path:   shttp.PathPrefix(fmt.Sprintf("/api/%s/", name)),
+			HandlerFunc: func(w http.ResponseWriter, r *auth.AuthenticatedRequest) {
+				w.WriteHeader(http.StatusMethodNotAllowed)
+			},
+		},
+	}
+
+	a.HTTPServer.RegisterRoutes(routes)
+}
+
 // RegisterAPIHandler registers a new handler for an API
 func (a *Server) RegisterAPIHandler(handler Handler) error {
 	name := handler.Name()

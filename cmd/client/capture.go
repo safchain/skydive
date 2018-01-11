@@ -71,10 +71,6 @@ var CaptureCreate = &cobra.Command{
 		}
 	},
 	Run: func(cmd *cobra.Command, args []string) {
-		if !config.GetConfig().GetBool("analyzer.capture_enabled") {
-			logging.GetLogger().Critical("Violation of disabled capturing is detected!")
-			os.Exit(1)
-		}
 		client, err := api.NewCrudClientFromConfig(&AuthenticationOpts)
 		if err != nil {
 			logging.GetLogger().Critical(err.Error())
