@@ -31,6 +31,7 @@ import (
 	"github.com/skydive-project/skydive/topology/probes/istio"
 	"github.com/skydive-project/skydive/topology/probes/k8s"
 	"github.com/skydive-project/skydive/topology/probes/peering"
+	"github.com/skydive-project/skydive/topology/probes/stub"
 )
 
 // NewTopologyProbeBundleFromConfig creates a new topology server probes from configuration
@@ -53,6 +54,8 @@ func NewTopologyProbeBundleFromConfig(g *graph.Graph) (*probe.Bundle, error) {
 			probes[t], err = k8s.NewK8sProbe(g)
 		case "istio":
 			probes[t], err = istio.NewIstioProbe(g)
+		case "stub":
+			probes[t], err = stub.NewProbe(g)
 		default:
 			logging.GetLogger().Errorf("unknown probe type: %s", t)
 			continue
