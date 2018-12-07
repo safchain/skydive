@@ -83,7 +83,7 @@ type baseConnectionMetadata struct {
 
 // easyjson:json
 type localConnectionMetadata struct {
-	IP                  string
+	IP string
 	baseConnectionMetadata
 }
 
@@ -101,7 +101,6 @@ type baseNSMMetadata struct {
 	Payload        string
 	Source         interface{}
 	Destination    interface{}
-	Directed       string
 }
 
 // easyjson:json
@@ -157,9 +156,9 @@ func (pair *localConnectionPair) onEventUpdate(g *graph.Graph) {
 						Labels:              pair.dst.GetLabels(),
 					},
 				},
-				Directed: "true",
 			},
 		},
+		"Directed": "true",
 	}
 	if !g.AreLinked(s, d, nil) {
 		g.NewEdge(
@@ -209,9 +208,8 @@ func (pair *remoteConnectionPair) onEventUpdate(g *graph.Graph) {
 						Labels:              pair.dst.GetLabels(),
 					},
 				},
-				Directed: "true",
 			},
-			Via:	remoteConnectionMetadata{
+			Via: remoteConnectionMetadata{
 				baseConnectionMetadata: baseConnectionMetadata{
 					MechanismType:       pair.bridge.GetMechanism().GetType().String(),
 					MechanismParameters: pair.bridge.GetMechanism().GetParameters(),
@@ -222,6 +220,7 @@ func (pair *remoteConnectionPair) onEventUpdate(g *graph.Graph) {
 				NetworkServiceEndpoint: pair.bridge.GetNetworkServiceEndpointName(),
 			},
 		},
+		"Directed": "true",
 	}
 	if !g.AreLinked(s, d, nil) {
 		g.NewEdge(

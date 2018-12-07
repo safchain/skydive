@@ -216,6 +216,10 @@ var TopologyComponent = {
                 title="Source">\
           <object-detail :object="currentEdgeSrc"></object-detail>\
         </panel>\
+        <panel id="edge-via-metadata" v-if="currentEdgeVia"\
+                title="Via">\
+          <object-detail :object="currentEdgeVia"></object-detail>\
+        </panel>\
         <panel id="edge-dst-metadata" v-if="currentEdgeDst"\
           title="Destination">\
           <object-detail :object="currentEdgeDst"></object-detail>\
@@ -444,7 +448,7 @@ var TopologyComponent = {
     currentEdgeMetadata: function() {
       if (!this.currentEdge) return null;
       return this.extractMetadata(this.currentEdge.metadata,
-        ['Directed', 'Source', 'Destination']);
+        ['Directed', 'NSM.Source', 'NSM.Via', 'NSM.Destination']);
     },
 
     currentNodeMetadata: function() {
@@ -465,20 +469,26 @@ var TopologyComponent = {
     },
 
     currentEdgeSrc: function() {
-      if (!this.currentEdgeMetadata || !this.currentEdge.metadata.Source) return null;
-      return this.currentEdge.metadata.Source;
+      if (!this.currentEdgeMetadata || !this.currentEdge.metadata.NSM || !this.currentEdge.metadata.NSM.Source) return null;
+      return this.currentEdge.metadata.NSM.Source;
     },
 
+    currentEdgeVia: function() {
+      if (!this.currentEdgeMetadata || !this.currentEdge.metadata.NSM || !this.currentEdge.metadata.NSM.Via) return null;
+      return this.currentEdge.metadata.NSM.Via;
+    },
+
+
     currentEdgeDst: function() {
-      if (!this.currentEdgeMetadata || !this.currentEdge.metadata.Destination) return null;
-      return this.currentEdge.metadata.Destination;
+      if (!this.currentEdgeMetadata || !this.currentEdge.metadata.NSM || !this.currentEdge.metadata.NSM.Destination) return null;
+      return this.currentEdge.metadata.NSM.Destination;
     },
 
     currentNodeK8s: function() {
       if (!this.currentNodeMetadata || !this.currentNode.metadata.K8s) return null;
       return this.currentNode.metadata.K8s;
     },
- 
+
     currentNodeFeatures: function() {
       if (!this.currentNodeMetadata || !this.currentNode.metadata.Features) return null;
       return this.currentNode.metadata.Features;
@@ -624,7 +634,7 @@ var TopologyComponent = {
 
     gremlinK8sTypes: function(types) {
         return "G.V()"
-          + ".Has('Manager', Regex('k8s|istio'))" 
+          + ".Has('Manager', Regex('k8s|istio'))"
           + ".Has('Namespace', Ne('kube-system')).Has('Namespace', Ne('istio-system'))"
           + ".Has('Type', Regex('" + types.join("|") + "'))";
     },
