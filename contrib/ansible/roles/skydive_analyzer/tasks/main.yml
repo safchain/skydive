@@ -27,6 +27,7 @@
     - config
 
 - include: keystone.yml
+  delegate_to: localhost
   when: skydive_auth_type == "keystone"
   tags:
     - keystone
