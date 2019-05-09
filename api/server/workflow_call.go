@@ -21,8 +21,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"strings"
 
+	"github.com/gorilla/mux"
 	"github.com/skydive-project/skydive/js"
 	"github.com/skydive-project/skydive/rbac"
 
@@ -46,7 +46,6 @@ func (wc *WorkflowCallAPIHandler) executeWorkflow(w http.ResponseWriter, r *auth
 		return
 	}
 
-	uriSegments := strings.Split(r.URL.Path, "/")
 	decoder := json.NewDecoder(r.Body)
 	var wfCall types.WorkflowCall
 	if err := decoder.Decode(&wfCall); err != nil {
@@ -54,7 +53,10 @@ func (wc *WorkflowCallAPIHandler) executeWorkflow(w http.ResponseWriter, r *auth
 		return
 	}
 
-	workflow, err := wc.getWorkflow(uriSegments[3])
+	vars := mux.Vars(&r.Request)
+	id := vars["ID"]
+
+	workflow, err := wc.getWorkflow(id)
 	if err != nil {
 		writeError(w, http.StatusBadRequest, err)
 		return
@@ -68,6 +70,7 @@ func (wc *WorkflowCallAPIHandler) executeWorkflow(w http.ResponseWriter, r *auth
 
 	runtime.Start()
 	RegisterAPIServer(runtime, wc.graph, wc.parser, wc.apiServer)
+
 	ottoResult, err := runtime.ExecFunction(workflow.Source, wfCall.Params...)
 	if err != nil {
 		writeError(w, http.StatusBadRequest, err)
@@ -100,7 +103,7 @@ func (wc *WorkflowCallAPIHandler) registerEndPoints(s *shttp.Server, authBackend
 		{
 			Name:        "WorkflowCall",
 			Method:      "POST",
-			Path:        "/api/workflow/{workflowID}/call",
+			Path:        "/api/workflow/{ID}/call",
 			HandlerFunc: wc.executeWorkflow,
 		},
 	}

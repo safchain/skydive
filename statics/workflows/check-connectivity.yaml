@@ -12,27 +12,27 @@ Parameters:
 Source: |
     function CheckConnectivity(from, to) {
         try {
-        var capture = new Capture();
-        capture.GremlinQuery = "G.V().Has('TID', '" + from + "').ShortestPathTo(Metadata('TID', '" + to + "'))";
+            var capture = new Capture();
+            capture.GremlinQuery = "G.V().Has('TID', '" + from + "').ShortestPathTo(Metadata('TID', '" + to + "'))";
 
-        var packetInjection = new PacketInjection();
-        packetInjection.Src = "G.V().Has('TID', '" + from + "')"
-        packetInjection.Dst = "G.V().Has('TID', '" + to + "')"
-        packetInjection.Type = "icmp4"
-        packetInjection.ICMPID = Math.floor(Math.random() * 1000);
-        packetInjection.Count = 5
+            var packetInjection = new PacketInjection();
+            packetInjection.Src = "G.V().Has('TID', '" + from + "')"
+            packetInjection.Dst = "G.V().Has('TID', '" + to + "')"
+            packetInjection.Type = "icmp4"
+            packetInjection.ICMPID = Math.floor(Math.random() * 1000);
+            packetInjection.Count = 5
 
-        capture = client.captures.create(capture)
-        sleep(1000)
-        client.packetInjections.create(packetInjection)
-        sleep(1000)
+            capture = client.captures.create(capture)
+            sleep(1000)
+            client.packetInjections.create(packetInjection)
+            sleep(1000)
 
-        var flows = client.G.Flows().Has("ICMP.ID", packetInjection.ICMPID).result()
-        console.log(flows)
-        return {
-                "State": flows.length > 0 && flows[0].Metric.ABPackets > 0 && flows[0].Metric.BAPackets > 0,
-                "Flows": flows
-          };
+            var flows = client.G.Flows().Has("ICMP.ID", packetInjection.ICMPID).result()
+            console.log(flows)
+            return {
+                    "State": flows.length > 0 && flows[0].Metric.ABPackets > 0 && flows[0].Metric.BAPackets > 0,
+                    "Flows": flows
+                };
         } catch (e) {
             console.log(e)
         } finally {

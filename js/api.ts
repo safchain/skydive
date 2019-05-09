@@ -78,9 +78,8 @@ if (jsEnv) {
             } else {
                 data = null
             }
-            return data
-        }
-        catch(e) {
+            return {'then': function(data) { return data } }
+        } catch(e) {
             throw e
         }
     }
@@ -188,27 +187,35 @@ export class API<T extends APIObject> {
 
     create(obj: T) {
         let resource = this.Resource;
-        var data = this.client.request("/api/" + resource, "POST", JSON.stringify(obj), {})
-        return SerializationHelper.toInstance(new (<any>obj.constructor)(), data);
+        return this.client.request("/api/" + resource, "POST", JSON.stringify(obj), {})
+            .then(function (data) {
+                return SerializationHelper.toInstance(new (<any>obj.constructor)(), data);
+            })
     }
 
     list() {
         let resource = this.Resource;
         let factory = this.Factory;
-        let data = this.client.request('/api/' + resource, "GET", "", {})
-        let resources = {};
-        for (var obj in data) {
-            let resource = SerializationHelper.toInstance(new factory(), data[obj]);
-            resources[obj] = resource
-        }
-        return resources
+
+        return this.client.request('/api/' + resource, "GET", "", {})
+            .then(function (data) {
+                let resources = {};
+                for (var obj in data) {
+                    let resource = SerializationHelper.toInstance(new factory(), data[obj]);
+                    resources[obj] = resource
+                }
+                return resources
+            });
     }
 
     get(id) {
         let resource = this.Resource;
         let factory = this.Factory;
-        let data = this.client.request('/api/' + resource + "/" + id, "GET", "", {})
-        return SerializationHelper.toInstance(new factory(), data)
+
+        return this.client.request('/api/' + resource + "/" + id, "GET", "", {})
+            .then(function (data) {
+                return SerializationHelper.toInstance(new factory(), data)
+            })
     }
 
     delete(id: string) {
@@ -247,13 +254,15 @@ export class GremlinAPI {
     }
 
     query(s: string) {
-        let data = this.client.request('/api/topology', "POST", JSON.stringify({'GremlinQuery': s}), {})
-        if (data === null) return [];
-
-        // Result can be [Node] or [[Node, Node]]
-        if (data.length > 0 && data[0] instanceof Array)
-            data = data[0]
-        return data
+        return this.client.request('/api/topology', "POST", JSON.stringify({'GremlinQuery': s}), {})
+            .then(function (data) {
+                if (data === null)
+                    return [];
+                // Result can be [Node] or [[Node, Node]]
+                if (data.length > 0 && data[0] instanceof Array)
+                    data = data[0];
+                return data
+            });
     }
 
     G() : G {
@@ -920,5 +929,5 @@ export class Client {
 }
 
 export function sleep(time) {
-  sleep(time)
+    return new Promise(function(resolve) { return setTimeout(resolve, time); })
 }
