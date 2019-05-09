@@ -28,6 +28,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/skydive-project/skydive/api/server"
 	api "github.com/skydive-project/skydive/api/server"
 	"github.com/skydive-project/skydive/api/types"
 	"github.com/skydive-project/skydive/common"
@@ -402,13 +403,10 @@ func (a *Server) Stop() {
 func NewServer(apiServer *api.Server, pool ws.StructSpeakerPool, graph *graph.Graph, parser *traversal.GremlinTraversalParser, etcdClient *etcd.Client) (*Server, error) {
 	election := etcdClient.NewElection("alert-server")
 
-	runtime, err := js.NewRuntime()
+	runtime, err := server.NewWorkflowRuntime(graph, parser, apiServer)
 	if err != nil {
 		return nil, err
 	}
-
-	runtime.Start()
-	api.RegisterAPIServer(runtime, graph, parser, apiServer)
 
 	as := &Server{
 		MasterElection: election,

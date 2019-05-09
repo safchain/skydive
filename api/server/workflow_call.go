@@ -38,6 +38,7 @@ type WorkflowCallAPIHandler struct {
 	apiServer *Server
 	graph     *graph.Graph
 	parser    *traversal.GremlinTraversalParser
+	runtime   *js.Runtime
 }
 
 func (wc *WorkflowCallAPIHandler) executeWorkflow(w http.ResponseWriter, r *auth.AuthenticatedRequest) {
@@ -62,16 +63,7 @@ func (wc *WorkflowCallAPIHandler) executeWorkflow(w http.ResponseWriter, r *auth
 		return
 	}
 
-	runtime, err := js.NewRuntime()
-	if err != nil {
-		writeError(w, http.StatusFailedDependency, err)
-		return
-	}
-
-	runtime.Start()
-	RegisterAPIServer(runtime, wc.graph, wc.parser, wc.apiServer)
-
-	ottoResult, err := runtime.ExecFunction(workflow.Source, wfCall.Params...)
+	ottoResult, err := wc.runtime.ExecFunction(workflow.Source, wfCall.Params...)
 	if err != nil {
 		writeError(w, http.StatusBadRequest, err)
 		return
@@ -112,11 +104,19 @@ func (wc *WorkflowCallAPIHandler) registerEndPoints(s *shttp.Server, authBackend
 }
 
 // RegisterWorkflowCallAPI registers a new workflow  call api handler
-func RegisterWorkflowCallAPI(s *shttp.Server, authBackend shttp.AuthenticationBackend, apiServer *Server, g *graph.Graph, tr *traversal.GremlinTraversalParser) {
+func RegisterWorkflowCallAPI(s *shttp.Server, authBackend shttp.AuthenticationBackend, apiServer *Server, g *graph.Graph, tr *traversal.GremlinTraversalParser) error {
+	runtime, err := NewWorkflowRuntime(g, tr, apiServer)
+	if err != nil {
+		return err
+	}
+
 	workflowCallAPIHandler := &WorkflowCallAPIHandler{
 		apiServer: apiServer,
 		graph:     g,
 		parser:    tr,
+		runtime:   runtime,
 	}
 	workflowCallAPIHandler.registerEndPoints(s, authBackend)
+
+	return nil
 }
